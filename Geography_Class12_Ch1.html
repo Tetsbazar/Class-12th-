@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Bazar - Class 12 Geography Chapter 1</title>
+<link href="https://fonts.googleapis.com/css?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #1a7a4a; --primary-hover: #2aad68; --accent: #f9a825;
+  --bg-main: #f0faf4; --bg-card: #ffffff; --bg-selected: #e8f4ec;
+  --text-main: #1c2e24; --text-meta: #5a7a66; --border-color: #c5dccb;
+  --alert-danger: #dc3545; --correct: #28a745;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Tiro Bangla', serif; background: var(--bg-main); color: var(--text-main); line-height: 1.6; }
+.en-font { font-family: 'Syne', sans-serif; }
+.hidden { display: none !important; }
+
+.top-bar { background: var(--primary); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.logo { font-size: 1.5rem; font-weight: 800; cursor: pointer; }
+.logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 8px; font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 5px; }
+.timer-box.danger { background: var(--alert-danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+.user-info { background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 20px; font-size: 0.95rem; }
+
+.main-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+
+/* Hub View */
+.hub-header { text-align: center; margin-bottom: 30px; }
+.hub-header h1 { color: var(--primary); font-size: 1.8rem; margin-bottom: 10px; }
+.set-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+.set-card { background: var(--bg-card); border: 2px solid var(--border-color); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; }
+.set-card:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(26,122,74,0.1); }
+.set-icon { font-size: 2.5rem; margin-bottom: 10px; }
+.set-name { font-size: 1.3rem; font-weight: bold; color: var(--text-main); margin-bottom: 5px; font-family: 'Syne', sans-serif;}
+.set-topic { font-size: 0.95rem; color: var(--text-meta); margin-bottom: 15px; height: 40px; }
+.set-meta-info { display: flex; justify-content: center; gap: 10px; font-size: 0.85rem; font-weight: bold; color: var(--primary); }
+.set-meta-info span { background: var(--bg-main); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border-color); }
+.attempt-badge { position: absolute; top: 10px; right: 10px; background: #ffeeba; color: #856404; font-size: 0.8rem; font-weight: bold; padding: 3px 8px; border-radius: 10px; }
+.attempt-badge.locked { background: var(--alert-danger); color: white; border: none; }
+
+/* Quiz View */
+.quiz-info { background: var(--bg-card); border: 1px solid var(--border-color); padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; color: var(--primary); font-size: 1.1rem; }
+.q-block { background: var(--bg-card); border: 1px solid var(--border-color); padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+.q-text { font-size: 1.2rem; font-weight: bold; color: var(--text-main); margin-bottom: 15px; line-height: 1.5; }
+.options-grid { display: flex; flex-direction: column; gap: 10px; }
+.opt { display: flex; align-items: center; gap: 15px; padding: 12px 15px; border: 2px solid var(--border-color); border-radius: 10px; cursor: pointer; transition: 0.2s; font-size: 1.05rem; }
+.opt:hover:not(.selected):not(.correct):not(.wrong) { background: var(--bg-main); border-color: var(--primary); }
+.opt.selected { background: var(--bg-selected); border-color: var(--primary); }
+.opt-circle { min-width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: 'Syne', sans-serif; color: var(--text-meta); flex-shrink: 0; }
+.opt.selected .opt-circle { background: var(--primary); color: white; border-color: var(--primary); }
+.opt.correct { background: #e8f7ef; border-color: var(--correct); }
+.opt.correct .opt-circle { background: var(--correct); border-color: var(--correct); color: white; }
+.opt.wrong { background: #fdf0f0; border-color: var(--alert-danger); }
+.opt.wrong .opt-circle { background: var(--alert-danger); border-color: var(--alert-danger); color: white; }
+.explanation { margin-top: 15px; padding: 15px; background: #e8f4ec; border-left: 4px solid var(--primary); border-radius: 0 8px 8px 0; font-size: 0.95rem; color: #2c4035; line-height: 1.5;}
+
+.btn-submit { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 1.2rem; font-weight: bold; font-family: 'Tiro Bangla', serif; cursor: pointer; margin-top: 10px; box-shadow: 0 4px 10px rgba(26,122,74,0.2); transition: 0.2s; }
+.btn-submit:hover { background: var(--primary-hover); transform: translateY(-2px); }
+.btn-primary { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-family: 'Tiro Bangla', serif; cursor: pointer; font-size: 1rem; transition: 0.2s; font-weight: bold;}
+.btn-primary:hover { background: var(--primary-hover); }
+
+/* Modals */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; overflow-y: auto;}
+.modal-box { background: white; padding: 2.5rem; border-radius: 16px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.2); margin: auto;}
+.modal-box input { width: 100%; padding: 12px 15px; margin: 10px 0; border: 1.5px solid var(--border-color); border-radius: 8px; font-size: 1rem; font-family: 'Syne', sans-serif; box-sizing: border-box; outline: none; transition: 0.2s; }
+.modal-box input:focus { border-color: var(--primary); }
+
+.result-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 1000; overflow-y: auto; padding: 20px; }
+.result-box { background: white; padding: 2.5rem 2rem; border-radius: 16px; width: 100%; max-width: 450px; text-align: center; margin: auto; }
+.result-score { font-size: 4rem; font-weight: 800; color: var(--primary); line-height: 1; margin: 15px 0; }
+.result-bars { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; }
+.result-bar { background: var(--bg-main); padding: 15px; border-radius: 12px; width: 100px; border: 1px solid var(--border-color); }
+
+/* WhatsApp Button */
+.wa-btn { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; background: #25D366; color: white; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; font-family: 'Syne', sans-serif; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); width: 100%; box-sizing: border-box; transition: 0.2s;}
+.wa-btn:hover { background: #128C7E; transform: translateY(-2px); }
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+<div class="logo en-font" onclick="window.location.reload()">Test<span>Bazar</span></div>
+<div class="timer-box en-font hidden" id="timerBox"> <span id="timerDisplay">10:00</span></div>
+<div class="user-info en-font" id="userDisplay" style="font-weight: bold;">Guest</div>
+</header>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay hidden" id="loginModal">
+<div class="modal-box">
+<h2 style="color: var(--primary); margin-top:0;">লগইন করুন</h2>
+<p style="color: var(--text-meta); margin-bottom: 15px; font-size: 0.9rem;">Test শুরু করতে আপনার ইউজারনেম ও পাসওয়ার্ড দিন</p>
+<div id="loginSetName" style="background: var(--bg-main); padding: 8px; border-radius: 8px; font-weight:bold; color:var(--primary); margin-bottom: 15px; font-family: 'Syne', sans-serif; font-size: 0.95rem;">Set Name</div>
+<input type="text" id="loginUsername" placeholder="Username">
+<input type="password" id="loginPassword" placeholder="Password" onkeydown="if(event.key==='Enter') doLogin()">
+<div id="loginError" class="hidden" style="color: var(--alert-danger); margin: 10px 0; font-weight:bold; font-size: 0.9rem;"></div>
+<div style="display: flex; gap: 10px; margin-top:15px; justify-content: center;">
+<button class="btn-primary" style="width: 100%; padding: 12px;" onclick="doLogin()">লগইন করুন</button>
+<button class="btn-primary" style="background: var(--alert-danger); width: 100%; padding: 12px;" onclick="closeLogin()">বাতিল</button>
+</div>
+<div style="margin-top: 25px; padding-top: 20px; border-top: 1.5px dashed var(--border-color); font-size: 0.9rem; color: var(--text-meta);">
+ইউজারনেম ও পাসওয়ার্ড না থাকলে মেসেজ করুন:
+<a href="https://wa.me/918710032880?text=Hello%20Test%20Bazar,%20I%20need%20a%20username%20and%20password." target="_blank" class="wa-btn">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0.068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 1614.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.921-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.566.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.2-.099-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg> WhatsApp: 8710032880</a>
+</div>
+</div>
+</div>
+
+<div class="main-container">
+<!-- HUB VIEW -->
+<div id="hubView">
+<div class="hub-header">
+<h1 style="color: var(--primary); margin-bottom: 10px;">ভূগোল - Class 12 Chapter 1</h1>
+<p style="color: var(--text-meta);">ইউনিট ১: ভূসংস্থান বা Geotectonic (প্রথম ৪টি সেট)</p>
+</div>
+<div class="set-grid" id="setGrid"></div>
+<div style="text-align:center; margin-top:40px;">
+<button class="btn-primary" style="background:var(--text-meta); width: auto; padding: 12px 25px;" onclick="window.history.back()">< Main Dashboard-এ ফিরুন</button>
+</div>
+</div>
+
+<!-- QUIZ VIEW -->
+<div id="quizView" class="hidden">
+<div class="quiz-info">
+<div id="quizTitle">Set Name</div>
+<div id="quizMetaInfo" class="en-font">15 Questions | 10 Mins</div>
+</div>
+<div id="quizList"></div>
+<button class="btn-submit" id="submitTestBtn" onclick="submitQuiz()">Test জমা দিন ও ফলাফল দেখুন</button>
+</div>
+</div>
+
+<!-- RESULT MODAL -->
+<div class="result-overlay hidden" id="resultModal">
+<div class="result-box">
+<div style="font-size: 3.5rem; margin-bottom:0; line-height: 1;" id="resultIcon"></div>
+<h2 style="margin:10px 0; color: var(--text-main);">আপনার ফলাফল</h2>
+<div class="result-score en-font" id="finalScore">100%</div>
+<div id="resultGrade" style="font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; color: var(--accent);">অসাধারণ!</div>
+<div class="result-bars">
+<div class="result-bar">
+<div style="font-size: 1.8rem; font-weight: 800; color:var(--primary);" class="en-font" id="rbCorrect">0</div>
+<div style="font-size: 0.9rem; font-weight: 600; color: var(--text-meta);">সঠিক</div>
+</div>
+<div class="result-bar">
+<div style="font-size:1.8rem; font-weight: 800; color:var(--alert-danger);" class="en-font" id="rbWrong">0</div>
+<div style="font-size: 0.9rem; font-weight: 600; color: var(--text-meta);">ভুল / স্কিপ</div>
+</div>
+</div>
+<p style="background: var(--bg-main); padding: 10px; border-radius: 8px; color:var(--text-meta); font-weight:bold; font-size:0.95rem; margin-bottom:25px;" id="attemptInfo" class="en-font">বাকি আছে 9 বার</p>
+<div style="display: flex; flex-direction:column; gap:10px;">
+<button class="btn-primary" style="background: #28a745; width: 100%; padding: 14px; font-size: 1.05rem;" onclick="closeResultModal()">উত্তর ও ব্যাখ্যা দেখুন</button>
+<button class="btn-primary" style="background: #17a2b8; width: 100%; padding: 14px; font-size: 1.05rem;" onclick="restartQuiz()">আবার চেষ্টা করো</button>
+<button class="btn-primary" style="background: var(--text-meta); width: 100%; padding: 14px; font-size: 1.05rem;" onclick="window.location.reload()">Chapter Hub-এ ফিরুন</button>
+</div>
+</div>
+</div>
+
+<script>
+const STORAGE_KEY_ATTEMPTS = "testBazarAttemptsGeo12thCh1";
+const MAX_ATTEMPTS = 10;
+const TIME_LIMIT = 10 * 60; // 10 Minutes
+
+const QUIZ_SETS = {
+  1: {
+    name: "সেট ১", icon: "🌍", topic: "মহাদেশীয় চলন ও প্যানজিয়া",
+    questions: [
+      { q: "১. সর্বপ্রথম সুসংগতভাবে পৃথিবীর মহাদেশসমূহের চলন মতবাদটি কে প্রতিষ্ঠা করেন?", opts: ["ফ্রান্সিস বেকন", "স্নাইডার পেলিগ্রিনি", "আলফ্রেড ওয়েগনার", "আর্থার হোমস"], ans: 2, exp: "<b>ব্যাখ্যা:</b> ১৯১২ সালে জার্মান জলবায়ুবিদ ও আবহবিদ আলফ্রেড ওয়েগনার সর্বপ্রথম সুসংগতভাবে পৃথিবীর মহাদেশসমূহের চলন বা মহীসঞ্চরণ মতবাদটি উপস্থাপন করেন।" },
+      { q: "২. কার্বোনিফেরাস যুগের আগে পৃথিবীর সমস্ত ভূভাগ একত্রে একটি অতিকায় মহাদেশ রূপে অবস্থান করত, ওয়েগনার এর কী নাম দিয়েছিলেন?", opts: ["প্যানথালাসা", "লরেশিয়া", "গন্ডোয়ানাল্যান্ড", "প্যানজিয়া"], ans: 3, exp: "<b>ব্যাখ্যা:</b> কার্বোনিফেরাস যুগের আগে অর্থাৎ প্রায় ৩৫ কোটি বছর পূর্বে পৃথিবীর সমস্ত ভূভাগ একত্রে এক বিরাট মহাদেশ রূপে অবস্থান করত। ওয়েগনার এই অতিকায় মহাদেশের নাম দিয়েছিলেন 'প্যানজিয়া', যা একটি গ্রিক শব্দ এবং এর অর্থ 'সমগ্র পৃথিবী'।" },
+      { q: "৩. ওয়েগনারের মতে চন্দ্র ও সূর্যের মিলিত আকর্ষণে সৃষ্ট জোয়ারি শক্তির প্রভাবে মহাদেশগুলি কোন্ দিক থেকে কোন্ দিকে সরে যাচ্ছে?", opts: ["পশ্চিম থেকে পূর্বে", "পূর্ব থেকে পশ্চিমে", "উত্তর থেকে দক্ষিণে", "দক্ষিণ থেকে উত্তরে"], ans: 1, exp: "<b>ব্যাখ্যা:</b> ওয়েগনার মহাদেশীয় চলনের কারণ হিসেবে জোয়ারি শক্তির কথা বলেছিলেন, যার প্রভাবে উত্তর ও দক্ষিণ আমেরিকা মহাদেশ পূর্ব থেকে পশ্চিমদিকে সরে যাচ্ছে বলে তিনি মনে করতেন।" },
+      { q: "৪. পুরাচুম্বকত্ব (Paleomagnetism) তত্ত্বের প্রবর্তক কে ছিলেন?", opts: ["কিথ রানকর্ন ও প্যাট্রিক ব্ল‍্যাক্টে", "আর্থার হোমস", "ফ্রান্সিস বেকন", "আলফ্রেড ওয়েগনার"], ans: 0, exp: "<b>ব্যাখ্যা:</b> বিংশ শতাব্দীর মাঝামাঝি সময়ে দুই ইংরেজ পদার্থবিদ কিথ রানকর্ন ও প্যাট্রিক ব্ল‍্যাক্টে পুরাচুম্বকত্ব বা পেলিওম্যাগনেটিজম তত্ত্বের প্রবর্তন করেন।" },
+      { q: "৫. 'প্যানথালাসা' কথাটির অর্থ কী?", opts: ["সম্মিলিত মহাদেশ", "সম্মিলিত ভূত্বক", "সম্মিলিত মহাসাগর", "অগভীর সাগর"], ans: 2, exp: "<b>ব্যাখ্যা:</b> প্যানজিয়ার চারিদিকে সমগ্র জলভাগ নিয়ে যে একটিমাত্র বিশাল মহাসাগর ছিল, ওয়েগনার তাকে প্যানথালাসা নাম দেন, যার অর্থ হলো সম্মিলিত মহাসাগর।" },
+      { q: "৬. প্যানজিয়ার উত্তরে লরেশিয়া এবং দক্ষিণে গন্ডোয়ানাল্যান্ডের মাঝখানে বিষুবরেখা বরাবর পূর্ব-পশ্চিমে বিস্তৃত অগভীর সমুদ্রটির নাম কী ছিল?", opts: ["প্রশান্ত মহাসাগর", "টেথিস", "সুমেরু", "আটলান্টিক"], ans: 1, exp: "<b>ব্যাখ্যা:</b> দুই বৃহৎ ভূখণ্ড উত্তরে লরেশিয়া ও দক্ষিণে গন্ডোয়ানাল্যান্ডের মাঝখানে বিষুবরেখা বরাবর পূর্ব-পশ্চিমে বিস্তৃত টেথিস নামক একটি অগভীর সমুদ্র অবস্থান করত।" },
+      { q: "৭. পার্মিয়ান ও ট্রায়াসিক যুগে গন্ডোয়ানাল্যান্ডে পাওয়া 'গ্লোসোপটেরিস' (Glossopteris) মূলত কীসের জীবাশ্ম?", opts: ["ক্ষুদ্রাকার জলজ সরীসৃপের", "ফার্ন-জাতীয় উদ্ভিদের", "ক্যাঙারুসম প্রাণীর", "মেরুভল্লুকের"], ans: 1, exp: "<b>ব্যাখ্যা:</b> গ্লোসোপটেরিস হলো একপ্রকার ফার্ন-জাতীয় উদ্ভিদের পাতার জীবাশ্ম, যা পার্মিয়ান ও ট্রায়াসিক যুগে গন্ডোয়ানাল্যান্ড মহাদেশের বিভিন্ন অংশে পাওয়া যেত।" },
+      { q: "৮. পুরাচুম্বকত্ব গবেষণায় 'কুরি বিন্দু' (Curie Point) কী নির্দেশ করে?", opts: ["শিলার উৎপত্তির তাপমাত্রা", "যে তাপমাত্রায় চৌম্বক পদার্থের চুম্বকত্ব নষ্ট হয়", "পৃথিবীর কেন্দ্রের তাপমাত্রা", "শিলার গলনাঙ্ক"], ans: 1, exp: "<b>ব্যাখ্যা:</b> প্রচণ্ড তাপে লৌহসমৃদ্ধ খনিজগুলি যে তাপমাত্রা অতিক্রম করলে তাদের চুম্বক ধর্ম নষ্ট হয়ে যায়, তাকে কুরি বিন্দু বলে। লোহার কুরি বিন্দু ৭৭০°C।" },
+      { q: "৯. ওয়েগনারের মতে মহাদেশীয় ভূত্বক বা 'সিয়াল' স্তরটি কোন্ স্তরের উপর ভাসমান অবস্থায় রয়েছে?", opts: ["ক্রাস্ট", "ম্যাগমা", "নিফে", "সিমা"], ans: 3, exp: "<b>ব্যাখ্যা:</b> ওয়েগনার বিশ্বাস করতেন যে, হালকা মহাদেশীয় খণ্ডগুলি বা সিয়াল স্তর ভারী মহাসাগরীয় ভূত্বক বা সিমা স্তরের উপর ভাসমান অবস্থায় রয়েছে।" },
+      { q: "১০. মহাদেশীয় চলন তত্ত্বে 'জিগ-স-ফিট' (Jig-Saw-Fit) বলতে কী বোঝায়?", opts: ["সমুদ্রের জলের বিস্তার", "মেরুভ্রমণ", "আটলান্টিকের বিপরীত উপকূলরেখার নিখুঁত জোড়া লাগা", "জোয়ারি শক্তির প্রভাব"], ans: 2, exp: "<b>ব্যাখ্যা:</b> কোনো কঠিন বস্তু ভেঙে দু-টুকরো হলে যেমন জোড়া লাগানো যায়, তেমনি আটলান্টিক মহাসাগরের দুই দিকে থাকা আফ্রিকা ও দক্ষিণ আমেরিকার উপকূলরেখা নিখুঁতভাবে জোড়া লাগার প্রক্রিয়াকে জিগ-স-ফিট বলে।" },
+      { q: "১১. উত্তর আমেরিকা এবং উত্তর ইউরোপের বেশ কিছু শীতল জলবায়ু অঞ্চলে পুরু কয়লার স্তরের উপস্থিতি থেকে কী প্রমাণিত হয়?", opts: ["এগুলি অতীতে নিরক্ষীয় বা ক্রান্তীয় অঞ্চলে ছিল", "এগুলি চিরকালই শীতল অঞ্চলে ছিল", "এগুলি মেরু অঞ্চলে ছিল", "এগুলি সমুদ্রের তলদেশে ছিল"], ans: 0, exp: "<b>ব্যাখ্যা:</b> ক্রান্তীয় ঘন অরণ্য মাটি চাপা পড়ে কয়লার সৃষ্টি হয়। বর্তমানের শীতল জলবায়ুর দেশে পুরু কয়লার স্তরের উপস্থিতি প্রমাণ করে যে অতীতে তারা ক্রান্তীয় অঞ্চলে একত্রে অবস্থান করত।" },
+      { q: "১২. প্লবতা ও অভিকর্ষীয় কেন্দ্রের বৈষম্যের কারণে মহাদেশগুলি কোন্ দিকে সরতে থাকে?", opts: ["মেরুর দিকে", "পূর্ব দিকে", "পশ্চিম দিকে", "নিরক্ষরেখার দিকে"], ans: 3, exp: "<b>ব্যাখ্যা:</b> পৃথিবীর আকৃতি উপগোলক হওয়ায় মহাদেশীয় ভূত্বকের ভরকেন্দ্র এবং প্লবতাকেন্দ্র এক নয়। প্লবতাকেন্দ্র ভরকেন্দ্রের নীচে অবস্থান করায় যে বৈষম্যমূলক বলের সৃষ্টি হয়, তার কারণে মহাদেশগুলি নিরক্ষরেখার দিকে সরতে থাকে।" },
+      { q: "১৩. ১৯১৫ সালে আলফ্রেড ওয়েগনার জার্মান ভাষায় মহীসঞ্চরণ মতবাদের ওপর যে বিখ্যাত বইটি প্রকাশ করেন, তার নাম কী?", opts: ["নোভাম অরগ্যানাম", "Die Entstehung der Kontinente Und Ozeane", "আওয়ার ওয়ান্ডারিং কন্টিনেন্টস", "প্রিন্সিপিয়া"], ans: 1, exp: "<b>ব্যাখ্যা:</b> ওয়েগনার ১৯১১ থেকে ১৯১৫ সাল পর্যন্ত গবেষণা চালিয়ে ১৯১৫ সালে জার্মান ভাষায় 'Die Entstehung der Kontinente Und Ozeane' বইটি প্রকাশ করে মহীসঞ্চরণ মতবাদ দেন।" },
+      { q: "১৪. ওয়েগনারের প্রস্তাবিত জোয়ারি শক্তি ও বৈষম্যমূলক অভিকর্ষ শক্তির ধারণাকে অবাস্তব বলে কে অস্বীকার করেছিলেন?", opts: ["আর্থার হোমস", "হ্যারল্ড জেফ্রিস", "এফ বি টেলর", "স্নাইডার পেলিগ্রিনি"], ans: 1, exp: "<b>ব্যাখ্যা:</b> বিজ্ঞানী এইচ জেফ্রিস এই ধারণা অস্বীকার করেন এবং বলেন যে জোয়ারি শক্তি ও অভিকর্ষ শক্তির প্রভাবে মহাদেশ সরানোর তত্ত্বটি এতই নগণ্য যে তা চলনের জন্য দায়ী হতে পারে না।" },
+      { q: "১৫. মেসোজোয়িক মহাযুগের অন্তর্গত কোন্ উপযুগের শুরু থেকে প্যানজিয়ার ভাঙন শুরু হয়েছিল বলে মনে করা হয়?", opts: ["ক্রিটেশিয়াস", "জুরাসিক", "ট্রায়াসিক", "কার্বোনিফেরাস"], ans: 2, exp: "<b>ব্যাখ্যা:</b> প্যানজিয়ার ভাঙন শুরু হয় প্রায় ২০-২৩ কোটি বছর আগে, অর্থাৎ মেসোজোয়িক মহাযুগের অন্তর্গত ট্রায়াসিক যুগের শুরু থেকে।" }
+    ]
+  },
+  2: {
+    name: "সেট ২", icon: "🧭", topic: "মহাদেশীয় চলনের প্রমাণ ও পাত সংস্থান",
+    questions: [
+      { q: "১. ১৬২০ সালে কোন্ বইটির মাধ্যমে ফ্রান্সিস বেকন প্রথম দেখিয়েছিলেন যে আফ্রিকা ও দক্ষিণ আমেরিকার উপকূলরেখা খাঁজে খাঁজে মিলে যায়?", opts: ["প্রিন্সিপিয়া", "নোভাম অরগ্যানাম", "আওয়ার ওয়ান্ডারিং কন্টিনেন্টস", "প্যানজিয়া"], ans: 1, exp: "<b>ব্যাখ্যা:</b> ১৬২০ সালে বিজ্ঞানী ফ্রান্সিস বেকন তাঁর রচিত 'নোভাম অরগ্যানাম' বইতে মানচিত্রের সাহায্যে প্রথম এই সাদৃশ্যের কথা তুলে ধরেন।" },
+      { q: "২. প্যানজিয়ার উত্তরাংশের নাম কী ছিল, যা উত্তর আমেরিকা, ইউরোপ ও এশিয়ার উত্তর অংশ নিয়ে গঠিত ছিল?", opts: ["গন্ডোয়ানাল্যান্ড", "লরেন্সীয় শিল্ড", "প্যানথালাসা", "লরেশিয়া"], ans: 3, exp: "<b>ব্যাখ্যা:</b> প্যানজিয়ার উত্তরাংশের নাম ছিল লরেশিয়া বা আঙ্গারাল্যান্ড, যা উত্তর আমেরিকা, ইউরোপ এবং এশিয়ার উত্তর অংশ নিয়ে গঠিত ছিল।" },
+      { q: "৩. মেসোসরাস (Mesosaurus) জীবাশ্ম মূলত কোথায় পাওয়া গেছে?", opts: ["শুধুমাত্র অস্ট্রেলিয়ায়", "আফ্রিকা ও দক্ষিণ আমেরিকায়", "ভারত ও মাদাগাস্কারে", "শুধুমাত্র অ্যান্টার্কটিকায়"], ans: 1, exp: "<b>ব্যাখ্যা:</b> মেসোসরাস নামক ক্ষুদ্রাকার স্থলজীবী বা জলজ সরীসৃপের জীবাশ্ম শুধুমাত্র আফ্রিকা ও দক্ষিণ আমেরিকায় পাওয়া যায়, যা প্রমাণ করে এই দুটি মহাদেশ একসময় একত্রে ছিল।" },
+      { q: "৪. গ্লোসোপটেরিস (Glossopteris) জীবাশ্ম প্রধানত কোথায় পাওয়া গেছে?", opts: ["উত্তর আমেরিকা ও ইউরোপ", "ভারত, অস্ট্রেলিয়া, অ্যান্টার্কটিকা প্রভৃতি গন্ডোয়ানাল্যান্ডের অংশে", "শুধুমাত্র গ্রিনল্যান্ডে", "শুধুমাত্র আফ্রিকায়"], ans: 1, exp: "<b>ব্যাখ্যা:</b> গ্লোসোপটেরিস হলো ফার্ন-জাতীয় উদ্ভিদের জীবাশ্ম, যা পার্মিয়ান ও ট্রায়াসিক যুগে ভারত, অস্ট্রেলিয়া, অ্যান্টার্কটিকা, আফ্রিকা ও দক্ষিণ আমেরিকায় পাওয়া যেত।" },
+      { q: "৫. ওয়েগনারের মতে প্যানজিয়া ভাঙতে শুরু করে আজ থেকে প্রায় কত বছর আগে?", opts: ["৩৫ কোটি বছর", "২৩ কোটি বছর", "১০ কোটি বছর", "৫ কোটি বছর"], ans: 1, exp: "<b>ব্যাখ্যা:</b> কার্বোনিফেরাস যুগের আগে মহাদেশগুলি একত্রে ছিল (৩৫ কোটি বছর)। এর ভাঙন শুরু হয় মেসোজোয়িক যুগের শুরু থেকে অর্থাৎ প্রায় ২৩ কোটি বছর আগে।" },
+      { q: "৬. ভারতীয় উপদ্বীপ ক্রমশ উত্তরে সরতে সরতে এশিয়া ভূখণ্ডে ধাক্কা খাওয়ার ফলে কোন্ পর্বতের সৃষ্টি হয়?", opts: ["আল্পস", "আন্দিজ", "রকি", "হিমালয়"], ans: 3, exp: "<b>ব্যাখ্যা:</b> ভারতীয় উপদ্বীপ ক্রমশ উত্তরে সরে প্রায় ৫ কোটি বছর আগে এশিয়া ভূখণ্ডে ধাক্কা খায় এবং মধ্যবর্তী টেথিসের পলিরাশি স্তূপীকৃত হয়ে হিমালয় পর্বতের সৃষ্টি হয়।" },
+      { q: "৭. আলফ্রেড ওয়েগনার মূলত কোন্ পেশার সাথে যুক্ত ছিলেন?", opts: ["ঐতিহাসিক", "জলবায়ুবিদ ও আবহবিদ", "প্রাণীবিজ্ঞানী", "জ্যোতির্বিদ"], ans: 1, exp: "<b>ব্যাখ্যা:</b> আলফ্রেড ওয়েগনার ছিলেন একজন প্রখ্যাত জার্মান জলবায়ুবিদ, আবহবিদ এবং মেরু গবেষণার পথিকৃৎ।" },
+      { q: "৮. আপাত মেরু পরিভ্রমণ রেখা (Apparent Polar Wandering Curve) থেকে কী প্রমাণিত হয়?", opts: ["পৃথিবীর চৌম্বক মেরুর স্থান পরিবর্তন", "মহাদেশগুলির স্থান পরিবর্তন", "সমুদ্রতলের প্রসারণ", "জোয়ারি শক্তির প্রভাব"], ans: 1, exp: "<b>ব্যাখ্যা:</b> বাস্তবে চুম্বক মেরুর স্থান পরিবর্তন অসম্ভব, তাই মেরু ভ্রমণরেখা থেকে প্রমাণিত হয় যে মেরুর সাপেক্ষে মহাদেশগুলিই স্থান পরিবর্তন করছে।" },
+      { q: "৯. কানাডার উত্তরে বরফের তলায় কোন্ খনির সন্ধান পাওয়া গেছে, যা উষ্ণ ক্রান্তীয় জলবায়ুর প্রমাণ দেয়?", opts: ["লোহা", "কয়লা", "পটাশিয়াম", "সোনা"], ans: 2, exp: "<b>ব্যাখ্যা:</b> পটাশিয়াম কেবল উষ্ণ বায়ুমণ্ডলে বা বিষুব অঞ্চলে উৎপন্ন হতে পারে। কানাডার বরফের নিচে এই খনির আবিষ্কার মহাদেশীয় চলনকে প্রমাণ করে।" },
+      { q: "১০. প্রবাল দ্বীপগুলি মূলত কোথায় জন্মায়, যার সাপেক্ষে মহাদেশীয় চলন প্রমাণিত হয়?", opts: ["মেরু অঞ্চলে", "শীতল সমুদ্রে", "নিরক্ষীয় উষ্ণ অগভীর সমুদ্রে", "গভীর মহাসাগরে"], ans: 2, exp: "<b>ব্যাখ্যা:</b> প্রবাল জন্ম নিতে পারে একমাত্র নিরক্ষীয় উষ্ণ অগভীর সমুদ্রে। নিরক্ষরেখার অনেক উত্তরে শীতল অঞ্চলে এর সন্ধান প্রমাণ করে যে অঞ্চলটি আগে নিরক্ষীয় অঞ্চলে ছিল।" },
+      { q: "১১. ওয়েগনারের মতে মহাদেশীয় চলনে প্লবতা বল ও অভিকর্ষ বলের পার্থক্য সবচেয়ে তীব্র ছিল কোন্ অক্ষরেখায়?", opts: ["০° (নিরক্ষরেখায়)", "৪৫° উত্তর অক্ষরেখায়", "২৩½° উত্তর অক্ষরেখায়", "মেরু অঞ্চলে"], ans: 1, exp: "<b>ব্যাখ্যা:</b> পৃথিবীর উপগোলক আকৃতির জন্য মহাদেশীয় ভূত্বকের ভরকেন্দ্র এবং প্লবতাকেন্দ্রের বৈষম্যে নিরক্ষরেখামুখী বলের সৃষ্টি হয়, যা ৪৫° উত্তর অক্ষরেখায় সবচেয়ে বেশি তীব্র ছিল।" },
+      { q: "১২. অতীতে একত্রে থাকার প্রমাণস্বরূপ উত্তর আমেরিকার পূর্ব উপকূলের অ্যাপালেশিয়ান পর্বতের সাথে কোন্ পর্বতের সাদৃশ্য পাওয়া যায়?", opts: ["হিমালয়", "আন্দিজ", "ইউরোপের পশ্চিম উপকূলের ক্যালিডোনিয়ান পর্বত", "রকি পর্বত"], ans: 2, exp: "<b>ব্যাখ্যা:</b> উত্তর আমেরিকার পূর্ব উপকূলের অ্যাপালেশিয়ান পর্বত এবং ইউরোপের পশ্চিম উপকূলের ক্যালিডোনিয়ান পর্বতমালা জোড়া লাগালে একটি অবিচ্ছিন্ন পর্বতশ্রেণি তৈরি হয়।" },
+      { q: "১৩. বর্তমানে গন্ডোয়ানাল্যান্ডের অন্তর্গত নয় এমন একটি মহাদেশ হলো—", opts: ["অ্যান্টার্কটিকা", "অস্ট্রেলিয়া", "উত্তর আমেরিকা", "আফ্রিকা"], ans: 2, exp: "<b>ব্যাখ্যা:</b> উত্তর আমেরিকা লরেশিয়ার অংশ ছিল। গন্ডোয়ানাল্যান্ড গঠিত হয়েছিল দক্ষিণ আমেরিকা, আফ্রিকা, ভারত, অস্ট্রেলিয়া ও অ্যান্টার্কটিকা নিয়ে।" },
+      { q: "১৪. আধুনিক পাত ভূগাঠনিক তত্ত্ব অনুযায়ী মহাদেশীয় খণ্ডগুলি বা সিয়াল কোন্ স্তরের ওপর ভাসছে?", opts: ["সিমা", "ম্যাগমা", "নিফে", "অ্যাসথেনোস্ফিয়ার"], ans: 3, exp: "<b>ব্যাখ্যা:</b> ওয়েগনার বলেছিলেন সিয়াল সিমার ওপর ভাসছে, কিন্তু আধুনিক তত্ত্বে জানা গেছে যে সিয়াল ও সিমা উভয়েই অ্যাসথেনোস্ফিয়ারের ওপর ভাসমান।" },
+      { q: "১৫. বর্তমানে প্রশান্ত মহাসাগর কোন্ আদিম জলভাগের অবশিষ্ট অংশ?", opts: ["টেথিস", "আটলান্টিক", "প্যানজিয়া", "প্যানথালাসা"], ans: 3, exp: "<b>ব্যাখ্যা:</b> প্যানজিয়ার চতুর্দিকে যে প্যানথালাসা মহাসাগর ছিল, তা বর্তমানে প্রশান্ত মহাসাগর রূপে অবশিষ্ট রয়েছে।" }
+    ]
+  },
+  3: {
+    name: "সেট ৩", icon: "🌋", topic: "মহাদেশীয় পার্শ্বগতি ও তাপীয় পরিচলন স্রোত",
+    questions: [
+      { q: "১. ১৯১০ সালে টার্সিয়ারি যুগের পর্বতমালার বিন্যাস দেখে মহাদেশের পার্শ্বগতির (Lateral movement) প্রমাণ প্রথম কে দিয়েছিলেন?", opts: ["এফ বি টেলর", "আলফ্রেড ওয়েগনার", "স্নাইডার পেলিগ্রিনি", "আর্থার হোমস"], ans: 0, exp: "<b>ব্যাখ্যা:</b> ১৯১০ সালে মার্কিন ভূতত্ত্ববিদ এফ বি টেলর টার্সিয়ারি যুগের পর্বতমালার বিন্যাস ও এক দিকে বেঁকে থাকা দেখে প্রথম মহাদেশের পার্শ্বগতির কথা বলেছিলেন।" },
+      { q: "২. দক্ষিণ আমেরিকা ও আফ্রিকার মধ্যে বিশাল ফাটল সৃষ্টি হয়ে দুই মহাদেশ বিপরীতমুখী যাত্রা শুরু করায় কোন্ মহাসাগরের সৃষ্টি হয়?", opts: ["উত্তর আটলান্টিক", "দক্ষিণ আটলান্টিক", "প্রশান্ত", "ভারত"], ans: 1, exp: "<b>ব্যাখ্যা:</b> ১৩.৫ কোটি বছর আগে দক্ষিণ আমেরিকা ও আফ্রিকার মধ্যে এক বিশাল ফাটলের সৃষ্টি হয় এবং বিপরীতমুখী যাত্রায় দক্ষিণ আটলান্টিক মহাসাগর তৈরি হয়।" },
+      { q: "৩. লিমোনাইট থেকে হেমাটাইটে পরিণত হওয়া নিরক্ষীয় জলবায়ুর সূচক, উচ্চ অক্ষাংশের মহাদেশগুলিতে এর উপস্থিতি কী প্রমাণ করে?", opts: ["মহাদেশগুলি একসময় নিরক্ষীয় অঞ্চলে ছিল", "মহাদেশগুলি চিরকাল মেরু অঞ্চলে ছিল", "মহাদেশগুলি সমুদ্রের নীচে ছিল", "এগুলির কোনোটিই নয়"], ans: 0, exp: "<b>ব্যাখ্যা:</b> শিলামধ্যস্থ খনিজের পরিবর্তন জলবায়ুনির্ভর। উচ্চ অক্ষাংশে নিরক্ষীয় জলবায়ুর সূচক হেমাটাইটের উপস্থিতি প্রমাণ করে যে ওই মহাদেশগুলি একসময় নিরক্ষীয় অঞ্চলে ছিল।" },
+      { q: "৪. মহাদেশীয় চলন তত্ত্বের সমালোচনায় কে 'সেতুবন্ধ যোজক' বা Strait bridge-এর ধারণা দিয়েছিলেন?", opts: ["শুকার্ট", "জেফ্রিস", "চেম্বারলিন", "হোমস"], ans: 0, exp: "<b>ব্যাখ্যা:</b> ভূবিজ্ঞানী শুকার্ট সমালোচনা করে বলেন যে দুটি মহাদেশ ঐক্যবদ্ধ না হলেও জীবাশ্ম পাওয়া সম্ভব যদি মহাদেশ দুটির মধ্যে কোনো সেতুবন্ধ যোজক বা 'strait bridge' থাকে।" },
+      { q: "৫. লোহাসমৃদ্ধ শিলাগুলি পৃথিবীর চৌম্বক ক্ষেত্রের প্রভাবে চুম্বকে পরিণত হলে তাদের কী বলা হয়?", opts: ["প্যারাচুম্বক", "ফেরোচুম্বক পদার্থ", "ডায়াচুম্বক", "কুরি খনিজ"], ans: 1, exp: "<b>ব্যাখ্যা:</b> শিলা চুম্বকে পরিণত হলে তাদের উত্তর-দক্ষিণ মেরু সৃষ্টি হয়, এদের ফেরোচুম্বক (Ferromagnetic) পদার্থ বলে।" },
+      { q: "৬. ওয়েগনারের মতে, আফ্রিকা মহাদেশ উত্তর দিকে সামান্য উঠে এসে ইউরোপের সাথে ধাক্কা খাওয়ায় কোন্ পর্বতের সৃষ্টি হয়?", opts: ["হিমালয়", "রকি", "আন্দিজ", "আল্পস"], ans: 3, exp: "<b>ব্যাখ্যা:</b> আফ্রিকা মহাদেশ উত্তর দিকে সামান্য উঠে এসে ইউরোপের সাথে ধাক্কা খাওয়ায় আল্পস পর্বতের সৃষ্টি হয় বলে ওয়েগনার মনে করতেন।" },
+      { q: "৭. ১৯২৯ সালে ওয়েগনার কোন্ শক্তিকে মহাদেশীয় চলনের মূল কারণ হিসেবে স্বীকার করে নেন?", opts: ["জোয়ারি শক্তি", "অভিকর্ষজ বল", "তাপীয় পরিচলন স্রোত", "মহাকর্ষ বল"], ans: 2, exp: "<b>ব্যাখ্যা:</b> জোয়ারি ও প্লবতা বল সমালোচিত হওয়ার পর, আর্থার হোমসের ভূগর্ভ তাপীয় পরিচলন স্রোতকে ১৯২৯ সালে ওয়েগনার মহাদেশীয় চলনের মূল কারণ হিসেবে মেনে নেন।" },
+      { q: "৮. ১৬৬৬ সালে কোন দার্শনিক বলেছিলেন যে আটলান্টিক মহাসাগরের সৃষ্টি দক্ষিণ আমেরিকা ও দক্ষিণ আফ্রিকার মাঝের ভূভাগ অবনমিত হওয়ার ফলে হয়েছে?", opts: ["ফ্রান্সিস বেকন", "আব্রাহাম অরটেলিয়াস", "ফ্রাঁসোয়া প্ল্যানেট (Francois Placet)", "স্নাইডার পেলিগ্রিনি"], ans: 2, exp: "<b>ব্যাখ্যা:</b> ১৬৬৬ সালে দার্শনিক ফ্রাঁসোয়া প্ল্যানেট লিখেছিলেন যে দক্ষিণ আমেরিকা ও দক্ষিণ আফ্রিকার মাঝে অবস্থিত সংযোগকারী ভূভাগ অবনমিত হয়ে আটলান্টিক মহাসাগরের সৃষ্টি হয়।" },
+      { q: "৯. পার্মো-কার্বোনিফেরাস যুগের হিমবাহের সঞ্চিত গ্রাবরেখার অস্তিত্ব ভারত ও দক্ষিণ আফ্রিকা ছাড়া আর কোথায় পাওয়া গেছে?", opts: ["গ্রিনল্যান্ড", "অস্ট্রেলিয়া", "ইউরোপ", "কানাডা"], ans: 1, exp: "<b>ব্যাখ্যা:</b> দক্ষিণ আমেরিকা, দক্ষিণ আফ্রিকা, ভারত এবং অস্ট্রেলিয়ার কিছু অংশে হিমবাহ সঞ্চিত গ্রাবরেখার অস্তিত্বের সন্ধান পাওয়া গেছে যা অতীতে এদের একত্রে থাকার প্রমাণ দেয়।" },
+      { q: "১০. নিকেলের কুরি বিন্দু (Curie Point) কত?", opts: ["৭৭০°C", "৪৫০°C", "১৫৪°C", "১০০°C"], ans: 2, exp: "<b>ব্যাখ্যা:</b> চুম্বকের উপাদান আলাদা হলে কুরি বিন্দুও আলাদা হয়। লোহার কুরি বিন্দু ৭৭০°C, আর নিকেলের কুরি বিন্দু ১৫৪°C।" },
+      { q: "১১. কার্বোনিফেরাস যুগ আজ থেকে প্রায় কত কোটি বছর আগের সময়কালকে নির্দেশ করে?", opts: ["১৩.৫ কোটি বছর", "৩৪ কোটি বছর", "২০ কোটি বছর", "৬.৫ কোটি বছর"], ans: 1, exp: "<b>ব্যাখ্যা:</b> কার্বোনিফেরাস যুগের সময়কাল আজ থেকে প্রায় ৩৪ কোটি বছর পূর্বে নির্দেশ করে, যখন প্যানজিয়া একত্রে অবস্থান করত।" },
+      { q: "১২. 'আওয়ার ওয়ান্ডারিং কন্টিনেন্টস' (Our Wandering Continents) গবেষণাপত্রটি কে প্রকাশ করেন?", opts: ["আর্থার হোমস", "ডি এইচ টার্লিং", "আলেকজান্ডার ড্যু টয়েট", "আলফ্রেড ওয়েগনার"], ans: 2, exp: "<b>ব্যাখ্যা:</b> ১৯২৭ সালে আফ্রিকান ভূতত্ত্ববিদ আলেকজান্ডার ড্যু টয়েট ওয়েগনারের সমর্থনে 'আমাদের সঞ্চরণশীল মহাদেশ' বা 'Our Wandering Continents' নামে এক গবেষণাপত্র লেখেন।" },
+      { q: "১৩. ওয়েগনার দীর্ঘ ৫ বছর ধরে কোন্ স্থানের হিমবাহ পর্যবেক্ষণ করে তাঁর তত্ত্ব দেন?", opts: ["সাইবেরিয়া", "অ্যান্টার্কটিকা", "গ্রিনল্যান্ড", "আলাস্কা"], ans: 2, exp: "<b>ব্যাখ্যা:</b> ওয়েগনার গ্রিনল্যান্ডের হিমবাহ পর্যবেক্ষণ এবং আফ্রিকার আবহাওয়া সংক্রান্ত তথ্য সংগ্রহ করে দীর্ঘ পাঁচ বছর গবেষণা চালান।" },
+      { q: "১৪. প্যানজিয়া ভেঙে যাওয়ার আগে কোন্ বল কার্বোনিফেরাস যুগ পর্যন্ত মহাদেশগুলোকে একত্রে রেখেছিল, সেই সম্পর্কে কে কোনো ব্যাখ্যা দিতে পারেননি?", opts: ["আর্থার হোমস", "এফ বি টেলর", "আলফ্রেড ওয়েগনার", "শুকার্ট"], ans: 2, exp: "<b>ব্যাখ্যা:</b> ওয়েগনারের তত্ত্বের এটি একটি বড় সমালোচনা ছিল যে, কার্বোনিফেরাসের আগে কেন মহাদেশে ভাঙন হয়নি বা কোন বল খণ্ডগুলোকে একত্রে রেখেছিল তার কোনো ব্যাখ্যা তিনি দেননি।" },
+      { q: "১৫. পৃথিবীর মেরুভ্রমণ বা পোলার ওয়ান্ডারিং নিয়ে কে গবেষণা করেন?", opts: ["আর্থার হোমস", "জে এ স্টিয়ার্স", "ডি এইচ টার্লিং", "এফ বি টেলর"], ans: 2, exp: "<b>ব্যাখ্যা:</b> ইংরেজ ভূপদার্থবিদ ডোনাল্ড হার্ভে টার্লিং (D H Tarling) আফ্রিকা ও দক্ষিণ আমেরিকার মেরুভ্রমণ নিয়ে গবেষণা করেছেন।" }
+    ]
+  },
+  4: {
+    name: "সেট ৪", icon: "🗺️", topic: "ভূগাঠনিক তত্ত্ব ও মহীসঞ্চরণ",
+    questions: [
+      { q: "১. ১৮৫৮ সালে কে প্রথম মহাদেশগুলির সংযুক্তি মানচিত্রের মাধ্যমে উপস্থাপন করেছিলেন?", opts: ["অ্যানটোনিও স্নাইডার পেলিগ্রিনি", "ফ্রান্সিস বেকন", "এফ বি টেলর", "টমাস চেম্বারলিন"], ans: 0, exp: "<b>ব্যাখ্যা:</b> ১৮৫৮ সালে অ্যানটোনিও স্নাইডার পেলিগ্রিনি প্রথম মহাদেশগুলির সংযুক্তি মানচিত্রের মাধ্যমে উপস্থাপন করেন এবং মহাদেশগুলি বিচ্ছিন্ন হওয়ার কথা বলেন।" },
+      { q: "২. ম্যান্টল বা গুরুমণ্ডলে সান্দ্র অবস্থায় থাকা উত্তপ্ত ম্যাগমা ঊর্ধ্বমুখী হয়ে যে স্রোতের সৃষ্টি করে, তাকে কী বলে?", opts: ["জোয়ারি স্রোত", "তাপীয় পরিচলন স্রোত", "সমুদ্র স্রোত", "অভিকর্ষ স্রোত"], ans: 1, exp: "<b>ব্যাখ্যা:</b> বিজ্ঞানী আর্থার হোমস ১৯৩০ সালে এই তাপীয় পরিচলন স্রোতের ধারণা দেন, যেখানে ম্যান্টলের সান্দ্র পদার্থ উত্তপ্ত হয়ে পরিচলন স্রোতের সৃষ্টি করে যা পাতের চলনের মূল কারণ।" },
+      { q: "৩. রকি ও আন্দিজ পর্বতের উৎপত্তির কারণ হিসেবে ওয়েগনার কোন্ ভুল ব্যাখ্যা দিয়েছিলেন?", opts: ["পাতের বিশেষ গতি", "সিমার ঘর্ষণ", "পরিচলন স্রোত", "জোয়ারি বল"], ans: 1, exp: "<b>ব্যাখ্যা:</b> ওয়েগনার বিশ্বাস করতেন সিমা স্তরের ঘর্ষণের কারণে রকি ও আন্দিজ পর্বত তৈরি হয়েছে, কিন্তু বর্তমানে জানা যায় এগুলি পাতের গতির ফলে তৈরি।" },
+      { q: "৪. টেথিস সাগর কোথায় অবস্থিত ছিল?", opts: ["লরেশিয়া ও গন্ডোয়ানাল্যান্ডের মাঝখানে", "প্যানজিয়ার চারিদিকে", "প্যানথালাসার বাইরে", "উত্তর আমেরিকার মাঝখানে"], ans: 0, exp: "<b>ব্যাখ্যা:</b> উত্তরে লরেশিয়া এবং দক্ষিণে গন্ডোয়ানাল্যান্ডের মাঝখানে বিষুবরেখা বরাবর টেথিস নামক এক অগভীর সমুদ্র অবস্থান করত।" },
+      { q: "৫. ইংল্যান্ডের ভূগর্ভের অনেক গভীরে কীসের সন্ধান প্রমাণ করে যে সেটি একসময় মরু জলবায়ু বা ক্রান্তীয় অঞ্চলে ছিল?", opts: ["পটাশিয়াম", "মরু অঞ্চলের মতো বালির সঞ্চয়", "প্রবাল প্রাচীর", "কয়লা"], ans: 1, exp: "<b>ব্যাখ্যা:</b> ইংল্যান্ডের বর্তমান শীতল জলবায়ু এই বালির সঞ্চয়ের কারণ ব্যাখ্যা করতে পারে না, তাই অতীতের ক্রান্তীয় অবস্থানই এই মরু জলবায়ুর কারণ হতে পারে।" },
+      { q: "৬. পার্মিয়ান ও ট্রায়াসিক যুগে গন্ডোয়ানাল্যান্ডে প্রাপ্ত ফার্ন-জাতীয় উদ্ভিদের জীবাশ্মটি কী?", opts: ["গ্লোসোপটেরিস", "মেসোসরাস", "মাসুপিয়াল", "লিস্ট্রোসরাস"], ans: 0, exp: "<b>ব্যাখ্যা:</b> গ্লোসোপটেরিস (Glossopteris) হলো এই ফার্ন-জাতীয় উদ্ভিদের পাতার জীবাশ্ম যা পার্মিয়ান ও ট্রায়াসিক যুগে গন্ডোয়ানাল্যান্ড মহাদেশে পাওয়া যেত।" },
+      { q: "৭. বিভিন্ন যুগে মেরুর সাপেক্ষে মহাদেশগুলির আপেক্ষিক অবস্থান নির্ণয় করে যে বক্র রেখা পাওয়া যায়, তাকে কী বলে?", opts: ["জিগ-স-ফিট রেখা", "আপাত মেরু পরিভ্রমণ রেখা (Apparent Polar Wandering Curve)", "চৌম্বক রেখা", "কুরি রেখা"], ans: 1, exp: "<b>ব্যাখ্যা:</b> বিভিন্ন যুগে মেরুর আপেক্ষিক অবস্থান নির্ণয় করে যে বক্র রেখা পাওয়া যায়, তাকে আপাত মেরু পরিভ্রমণ রেখা বলে, যা মহাদেশগুলির স্থান পরিবর্তনের চিত্র তুলে ধরে।" },
+      { q: "৮. ড্যু টয়েট-এর মতে মহাদেশগুলি উপকূলরেখার বদলে কোন্ অংশের সাদৃশ্য দেখলে আরও ভালোভাবে জোড়া লাগে?", opts: ["পাহাড়ের চূড়া", "মহীসোপান অঞ্চল (Continental shelf)", "গভীর সমুদ্রখাত", "নদীর মোহনা"], ans: 1, exp: "<b>ব্যাখ্যা:</b> ড্যু টয়েট বিশ্বাস করতেন যে উপকূলরেখার বদলে মহীসোপান অঞ্চলের মধ্যে সাদৃশ্য দেখলে মহাদেশগুলি আরও নিখুঁতভাবে মিলে যায়।" },
+      { q: "৯. গ্লোসোপটেরিস কাঠের জীবাশ্মে কী পাওয়া গেছে, যা প্রমাণ করে যে সেসময় আর্দ্র ও শুষ্ক ঋতু পরিবর্তন ছিল?", opts: ["খনিজ তেল", "বরফের দাগ", "ট্রি-রিং (Tree ring)", "চৌম্বক রেখা"], ans: 2, exp: "<b>ব্যাখ্যা:</b> গ্লোসোপটেরিস কাঠের জীবাশ্মে ট্রি-রিং (tree ring) বা বর্ষবলয় পাওয়া গেছে, যার থেকে মনে করা হয় সে সময় আর্দ্র ও শুষ্ক ঋতু পরিবর্তন ছিল।" },
+      { q: "১০. মহাদেশীয় চলনের ফলে এশিয়া, ইউরোপ ও উত্তর আমেরিকা কোন্ প্রাচীন ভূখণ্ড ভেঙে সৃষ্টি হয়েছে?", opts: ["গন্ডোয়ানাল্যান্ড", "প্যানথালাসা", "লরেশিয়া", "টেথিস"], ans: 2, exp: "<b>ব্যাখ্যা:</b> প্যানজিয়ার উত্তরাংশ লরেশিয়া বিভক্ত হয়ে উত্তর আমেরিকা, ইউরোপ ও এশিয়া মহাদেশে পরিণত হয়।" },
+      { q: "১১. ভারত ও অস্ট্রেলিয়া আফ্রিকা থেকে বিচ্ছিন্ন হয়ে উত্তরে অগ্রসর হওয়ায় কোন্ মহাসাগরের সৃষ্টি হয়?", opts: ["নরওয়েজীয় সাগর", "আটলান্টিক মহাসাগর", "প্রশান্ত মহাসাগর", "ভারত মহাসাগর"], ans: 3, exp: "<b>ব্যাখ্যা:</b> ভারত ও অস্ট্রেলিয়া গন্ডোয়ানাল্যান্ড তথা আফ্রিকা থেকে বিচ্ছিন্ন হয়ে উত্তর-পূর্ব দিকে সঞ্চলিত হওয়ায় ভারত মহাসাগরের সৃষ্টি হয়েছে।" },
+      { q: "১২. গন্ডোয়ানা যুগের হিমবাহবাহিত পলি বা টিলাইট বর্তমানে কোন্ গোলার্ধের মহাদেশগুলিতে পাওয়া গেছে?", opts: ["উত্তর গোলার্ধ", "দক্ষিণ গোলার্ধ", "পূর্ব গোলার্ধ", "উভয় গোলার্ধ"], ans: 1, exp: "<b>ব্যাখ্যা:</b> গন্ডোয়ানা যুগের হিমবাহবাহিত পলি বর্তমানে মূলত দক্ষিণ গোলার্ধের সব মহাদেশে (যেমন- দক্ষিণ আমেরিকা, আফ্রিকা, ভারত, অস্ট্রেলিয়া) পাওয়া গেছে।" },
+      { q: "১৩. 'প্যানজিয়া' (Pangea) কোন্ ভাষার শব্দ?", opts: ["ল্যাটিন", "গ্রিক", "জার্মান", "ফারসি"], ans: 1, exp: "<b>ব্যাখ্যা:</b> 'প্যানজিয়া' একটি গ্রিক শব্দ, যার অর্থ সমগ্র পৃথিবী (all earth)।" },
+      { q: "১৪. ভূতত্ত্ববিদ টমাস সি চেম্বারলিন মহাদেশীয় চলন তত্ত্বের সমালোচনা করে কোন্ ত্রুটি দেখিয়েছিলেন?", opts: ["জোয়ারি শক্তির অভাব", "শিলার একতার ত্রুটি বা পেট্রোগ্রাফিক অসাদৃশ্য", "সেতুবন্ধ যোজক", "প্যানজিয়ার ভাঙন"], ans: 1, exp: "<b>ব্যাখ্যা:</b> ভূতত্ত্ববিদ টমাস সি চেম্বারলিনের মতে, শিলার পেট্রোগ্রাফিক বিশ্লেষণ দেখায় যে দুই মহাদেশের উপকূলের শিলাস্তরের মধ্যে সাদৃশ্যের চেয়ে অসাদৃশ্য বেশি, যা শিলার একতার ত্রুটি তুলে ধরে।" },
+      { q: "১৫. মহাদেশীয় চলন তত্ত্বে 'মেরুভ্রমণ' (Polar Wandering) বলতে কী বোঝায়?", opts: ["পৃথিবীর অক্ষের পরিবর্তন", "মহাদেশগুলির সাপেক্ষে চৌম্বক মেরুর আপেক্ষিক পরিবর্তন", "উত্তর মেরুর গলে যাওয়া", "নিরক্ষরেখার মেরুর দিকে সরে যাওয়া"], ans: 1, exp: "<b>ব্যাখ্যা:</b> বাস্তবে চুম্বক মেরুর স্থান পরিবর্তন অসম্ভব। তাই বিভিন্ন যুগে চুম্বক মেরুর অবস্থান পরিবর্তন থেকে এটিই প্রমাণিত হয় যে, মেরুর সাপেক্ষে মহাদেশগুলিই স্থান পরিবর্তন করছে, যা মেরুভ্রমণ বা পোলার ওয়ান্ডারিং নামে পরিচিত।" }
+    ]
+  }
+};
+
+let loggedInUser = null;
+let currentSetId = null;
+let questions = [];
+let score = 0;
+let wrongAnswers = 0;
+let userAnswers = {};
+let isReviewMode = false;
+let timerInterval;
+let timeLeft = TIME_LIMIT;
+
+window.onload = () => { buildHub(); };
+
+function buildHub() {
+  const grid = document.getElementById('setGrid');
+  grid.innerHTML = '';
+  let userAttempts = JSON.parse(localStorage.getItem(STORAGE_KEY_ATTEMPTS)) || {};
+  for(let id in QUIZ_SETS) {
+    const set = QUIZ_SETS[id];
+    let attemptCount = 0;
+    let isLocked = false;
+    if(loggedInUser) {
+      attemptCount = userAttempts[loggedInUser + "_" + id] || 0;
+      isLocked = attemptCount >= MAX_ATTEMPTS;
+    }
+    const card = document.createElement('div');
+    card.className = 'set-card';
+    let badge = '';
+    if(loggedInUser) {
+      badge = `<div class="attempt-badge ${isLocked? 'locked': ''} en-font">${isLocked? 'সম্পূর্ণ' : attemptCount + '/' + MAX_ATTEMPTS}</div>`;
+    }
+    card.innerHTML = `
+      ${badge}
+      <div class="set-icon">${set.icon}</div>
+      <div class="set-name">${set.name}</div>
+      <div class="set-topic">${set.topic}</div>
+      <div class="set-meta-info en-font">
+      <span>${set.questions.length} Qs</span>
+      <span>10 Mins</span>
+      </div>
+    `;
+    card.onclick = () => { selectSet(id); };
+    grid.appendChild(card);
+  }
+}
+
+function selectSet(setId) {
+  if(loggedInUser) {
+    let userAttempts = JSON.parse(localStorage.getItem(STORAGE_KEY_ATTEMPTS)) || {};
+    let attemptCount = userAttempts[loggedInUser + "_" + setId] || 0;
+    if(attemptCount >= MAX_ATTEMPTS) {
+      alert(`আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
+      return;
+    }
+    startQuiz(setId);
+  } else {
+    currentSetId = setId;
+    document.getElementById('loginUsername').value = '';
+    document.getElementById('loginPassword').value = '';
+    document.getElementById('loginError').classList.add('hidden');
+    document.getElementById('loginSetName').innerText = QUIZ_SETS[setId].name + ": " + QUIZ_SETS[setId].topic;
+    document.getElementById('loginModal').classList.remove('hidden');
+  }
+}
+
+function closeLogin() { document.getElementById('loginModal').classList.add('hidden'); }
+
+function doLogin() {
+  const u = document.getElementById('loginUsername').value.trim();
+  const p = document.getElementById('loginPassword').value.trim();
+  const err = document.getElementById('loginError');
+  const GLOBAL_USERS = JSON.parse(localStorage.getItem("testBazarGlobalUsers")) || {};
+  if(!u || !p) { err.innerText = "ইউজারনেম এবং পাসওয়ার্ড দিন!"; err.classList.remove('hidden'); return; }
+  if(GLOBAL_USERS[u] && GLOBAL_USERS[u] === p) {
+    loggedInUser = u;
+    document.getElementById('userDisplay').innerText = u;
+    closeLogin();
+    buildHub();
+    if(currentSetId) { startQuiz(currentSetId); }
+  } else {
+    err.innerText = "ইউজারনেম বা পাসওয়ার্ড ভুল!";
+    err.classList.remove('hidden');
+  }
+}
+
+function incrementAttempt(user, setId) {
+  let userAttempts = JSON.parse(localStorage.getItem(STORAGE_KEY_ATTEMPTS)) || {};
+  let key = user + "_" + setId;
+  userAttempts[key] = (userAttempts[key] || 0) + 1;
+  localStorage.setItem(STORAGE_KEY_ATTEMPTS, JSON.stringify(userAttempts));
+}
+
+function startQuiz(setId) {
+  currentSetId = setId;
+  incrementAttempt(loggedInUser, setId);
+  questions = QUIZ_SETS[setId].questions;
+  userAnswers = {};
+  isReviewMode = false;
+  score = 0;
+  wrongAnswers = 0;
+  timeLeft = TIME_LIMIT;
+
+  document.getElementById('hubView').classList.add('hidden');
+  document.getElementById('resultModal').classList.add('hidden');
+  document.getElementById('quizView').classList.remove('hidden');
+  document.getElementById('timerBox').classList.remove('hidden');
+  document.getElementById('timerBox').classList.remove('danger');
+  document.getElementById('submitTestBtn').classList.remove('hidden');
+  document.getElementById('quizTitle').innerText = QUIZ_SETS[setId].name + " | " + QUIZ_SETS[setId].topic;
+
+  clearInterval(timerInterval);
+  timerInterval = setInterval(tick, 1000);
+  renderQuestions();
+}
+
+function tick() {
+  timeLeft--;
+  const m = Math.floor(timeLeft / 60);
+  const s = timeLeft % 60;
+  document.getElementById('timerDisplay').textContent = m + ':' + (s < 10 ? '0' : '') + s;
+  if (timeLeft <= 60) document.getElementById('timerBox').classList.add('danger');
+  if (timeLeft <= 0) { submitQuiz(); }
+}
+
+const LABELS = ['A', 'B', 'C', 'D'];
+
+function renderQuestions() {
+  const quizList = document.getElementById('quizList');
+  let html = '';
+  questions.forEach((q, i) => {
+    html += `<div class="q-block" id="qBlock_${i}">
+    <div class="q-text">${q.q}</div>
+    <div class="options-grid">`;
+    q.opts.forEach((opt, j) => {
+      html += `<div class="opt" id="opt_${i}_${j}" onclick="selectOpt(${i}, ${j})">
+      <div class="opt-circle">${LABELS[j]}</div>
+      <div class="opt-text">${opt}</div>
+      </div>`;
+    });
+    html += `</div><div class="explanation hidden" id="exp_${i}">${q.exp}</div></div>`;
+  });
+  quizList.innerHTML = html;
+  window.scrollTo(0, 0);
+}
+
+function selectOpt(qIdx, optIdx) {
+  if (isReviewMode) return;
+  userAnswers[qIdx] = optIdx;
+  const block = document.getElementById(`qBlock_${qIdx}`);
+  const opts = block.querySelectorAll('.opt');
+  opts.forEach(o => o.classList.remove('selected'));
+  document.getElementById(`opt_${qIdx}_${optIdx}`).classList.add('selected');
+}
+
+function submitQuiz() {
+  if (isReviewMode) return;
+  const answeredCount = Object.keys(userAnswers).length;
+  if (timeLeft > 0 && answeredCount < questions.length) {
+    const confirmSubmit = confirm(`আপনি মাত্র ${answeredCount} টি প্রশ্নের উত্তর দিয়েছেন। আপনি কি সত্যিই Test জমা দিতে চান?`);
+    if(!confirmSubmit) return;
+  }
+  isReviewMode = true;
+  clearInterval(timerInterval);
+  document.getElementById('timerBox').classList.add('hidden');
+  document.getElementById('submitTestBtn').classList.add('hidden');
+
+  score = 0;
+  wrongAnswers = 0;
+
+  questions.forEach((q, i) => {
+    const selected = userAnswers[i];
+    const block = document.getElementById(`qBlock_${i}`);
+    const opts = block.querySelectorAll('.opt');
+    opts.forEach(o => o.classList.remove('selected'));
+
+    if (selected !== undefined) {
+      if (selected === q.ans) {
+        score++;
+        document.getElementById(`opt_${i}_${selected}`).classList.add('correct');
+      } else {
+        wrongAnswers++;
+        document.getElementById(`opt_${i}_${selected}`).classList.add('wrong');
+        document.getElementById(`opt_${i}_${q.ans}`).classList.add('correct');
+      }
+    } else {
+      document.getElementById(`opt_${i}_${q.ans}`).classList.add('correct');
+    }
+    document.getElementById(`exp_${i}`).classList.remove('hidden');
+  });
+
+  const skipped = questions.length - (score + wrongAnswers);
+  const pct = Math.round((score / questions.length) * 100);
+
+  document.getElementById('finalScore').textContent = `${pct}%`;
+  document.getElementById('rbCorrect').textContent = score;
+  document.getElementById('rbWrong').textContent = wrongAnswers + skipped;
+
+  let icon = '😔', grade = 'চেষ্টা চালিয়ে যাও!';
+  if(pct >= 90) { icon = '🏆'; grade = 'অসাধারণ!'; }
+  else if(pct >= 70) { icon = '⭐'; grade = 'খুব ভালো!'; }
+  else if(pct >= 50) { icon = '👍'; grade = 'ভালো চেষ্টা!'; }
+
+  document.getElementById('resultIcon').textContent = icon;
+  document.getElementById('resultGrade').textContent = grade;
+
+  let userAttempts = JSON.parse(localStorage.getItem(STORAGE_KEY_ATTEMPTS)) || {};
+  let attemptCount = userAttempts[loggedInUser + "_" + currentSetId] || 0;
+  let remaining = MAX_ATTEMPTS - attemptCount;
+  document.getElementById('attemptInfo').innerText = `বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ (সর্বোচ্চ ${MAX_ATTEMPTS} বার)`;
+
+  document.getElementById('resultModal').classList.remove('hidden');
+}
+
+function closeResultModal() {
+  document.getElementById('resultModal').classList.add('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restartQuiz() {
+  closeResultModal();
+  let userAttempts = JSON.parse(localStorage.getItem(STORAGE_KEY_ATTEMPTS)) || {};
+  let attemptCount = userAttempts[loggedInUser + "_" + currentSetId] || 0;
+  if(attemptCount >= MAX_ATTEMPTS) {
+    alert(`আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
+    document.getElementById('quizView').classList.add('hidden');
+    document.getElementById('hubView').classList.remove('hidden');
+    buildHub();
+    return;
+  }
+  startQuiz(currentSetId);
+}
+</script>
+</body>
+</html>
+
