@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Bazar — Education 3rd Sem | Ch 10</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ================= COLOR SCHEME & VARIABLES ================= */
+:root {
+  --primary: #1a7a4a;
+  --primary-hover: #2aad68;
+  --accent: #f9a825;
+  --bg-main: #f0faf4;
+  --bg-card: #ffffff;
+  --bg-correct: #e8f7ef;
+  --bg-wrong: #fdf0f0;
+  --text-main: #1c2e24;
+  --text-meta: #5a7a66;
+  --text-exp: #2c4035;
+  --alert-danger: #dc3545;
+  --alert-warning: #e8730a;
+  --border-color: #c5dccb;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: var(--bg-main); min-height: 100vh; color: var(--text-main); }
+.en-font { font-family: 'Syne', sans-serif; }
+
+/* Top Bar */
+.top-bar { background: var(--primary); padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.top-logo { font-size: 1.2rem; font-weight: 800; color: white; cursor: pointer; }
+.top-logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.2); padding: 0.4rem 1rem; border-radius: 8px; color: white; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.timer-box.danger { background: var(--alert-danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+.user-info { font-size: 0.85rem; font-weight: 700; color: white; background: rgba(0,0,0,0.15); padding: 4px 10px; border-radius: 20px;}
+
+.main { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
+
+/* Hub View */
+.hub-header { text-align: center; margin-bottom: 2rem; }
+.hub-header h1 { font-family: 'Tiro Bangla', serif; color: var(--primary); font-size: 1.6rem; margin-bottom: 0.5rem; line-height: 1.4; }
+.hub-header p { color: var(--text-meta); font-size: 0.95rem; font-family: 'Tiro Bangla', serif;}
+
+.set-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+.set-card { background: var(--bg-card); border: 2px solid var(--border-color); border-radius: 12px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s; position: relative; }
+.set-card:hover:not(.locked) { transform: translateY(-3px); border-color: var(--primary); box-shadow: 0 8px 15px rgba(26,122,74,0.1); }
+.set-card.locked { opacity: 0.6; cursor: not-allowed; border-color: var(--alert-danger); }
+.set-card .icon { font-size: 2.2rem; margin-bottom: 0.5rem; }
+.set-card .set-num { font-weight: 700; font-size: 1.1rem; color: var(--primary); }
+.set-card .set-title { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-main); margin: 0.3rem 0 0.8rem; line-height: 1.3; height: 35px; display: flex; align-items: center; justify-content: center;}
+.set-card .set-meta { display: flex; justify-content: center; gap: 1rem; font-size: 0.75rem; color: var(--text-meta); font-weight: bold; }
+.set-card .set-meta span { background: var(--bg-main); padding: 0.2rem 0.6rem; border-radius: 6px; }
+.attempt-badge { position: absolute; top: 10px; right: 10px; background: #ffeeba; color: #856404; font-size: 0.75rem; font-weight: bold; padding: 3px 8px; border-radius: 10px; }
+.attempt-badge.locked-badge { background: var(--alert-danger); color: white; }
+
+/* Quiz View */
+.quiz-info { background: white; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; border: 1px solid var(--border-color); display: flex; gap: 1rem; flex-wrap: wrap; }
+.info-item { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-meta); font-weight: 600;}
+.info-item strong { color: var(--primary); }
+.progress-wrap { background: var(--border-color); border-radius: 4px; height: 6px; margin-bottom: 1.2rem; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--primary); transition: width 0.3s ease; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.q-num { font-size: 0.85rem; font-weight: 700; color: var(--primary); margin-bottom: 0.8rem; }
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; color: var(--text-main); font-weight: 700; line-height: 1.6; margin-bottom: 1.2rem; }
+.opts { display: flex; flex-direction: column; gap: 0.6rem; }
+.opt { display: flex; align-items: center; gap: 12px; padding: 0.8rem 1rem; border: 1.5px solid var(--border-color); border-radius: 10px; background: transparent; cursor: pointer; text-align: left; transition: all 0.2s; width: 100%; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: 600; color: var(--text-main);}
+.opt:not(.disabled):hover { border-color: var(--primary); background: var(--bg-selected); }
+.opt-circle { width: 26px; height: 26px; min-width: 26px; border-radius: 50%; border: 1.5px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; font-family: 'Syne', sans-serif; background: white; }
+.opt.correct { border-color: var(--primary); background: var(--bg-correct); }
+.opt.correct .opt-circle { background: var(--primary); border-color: var(--primary); color: white; }
+.opt.wrong { border-color: var(--alert-danger); background: var(--bg-wrong); }
+.opt.wrong .opt-circle { background: var(--alert-danger); border-color: var(--alert-danger); color: white; }
+.opt.disabled { cursor: default; }
+
+.explanation { background: var(--bg-main); border-left: 4px solid var(--primary); border-radius: 0 8px 8px 0; padding: 1rem; margin-top: 1rem; display: none; }
+.explanation.show { display: block; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-exp); line-height: 1.6; }
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; }
+.score-show { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: var(--text-meta); font-weight: bold;}
+.next-btn { background: var(--primary); color: white; border: none; padding: 0.7rem 1.5rem; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: 0.2s; }
+.next-btn:disabled { background: var(--border-color); cursor: not-allowed; }
+
+/* Result View */
+.result-wrap { background: white; border-radius: 14px; padding: 2rem 1.5rem; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.1); max-width: 500px; margin: 0 auto; display: none; }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; line-height: 1;}
+.result-score { font-size: 3rem; font-weight: 800; color: var(--primary); line-height: 1;}
+.result-total { font-size: 1rem; color: var(--text-meta); font-weight: bold; margin-bottom: 1rem; }
+.result-grade { font-family: 'Tiro Bangla', serif; font-size: 1.2rem; font-weight: 700; color: var(--accent); margin-bottom: 1.5rem; }
+.result-bars { display: flex; justify-content: center; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 10px; padding: 0.8rem; min-width: 80px; }
+.rb-num { font-size: 1.5rem; font-weight: 800; line-height: 1; margin-bottom: 5px;}
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.8rem; color: var(--text-meta); font-weight: bold;}
+.attempt-info-box { background: #fff3cd; color: #856404; padding: 10px; border-radius: 8px; font-size: 0.9rem; font-weight: 700; margin-bottom: 1.5rem; font-family: 'Tiro Bangla', serif; border: 1px solid #ffeeba;}
+.action-btns { display: flex; flex-direction: column; gap: 10px; }
+.action-btns button { width: 100%; padding: 12px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; cursor: pointer; border: none; transition: 0.2s; }
+.btn-retry { background: #17a2b8; color: white; }
+.btn-review { background: #28a745; color: white; }
+.btn-home { background: var(--bg-main); color: var(--text-main); border: 1.5px solid var(--border-color) !important; }
+
+/* Login Modal */
+.login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(3px); }
+.login-overlay.active { display: flex; }
+.login-modal { background: white; padding: 2.5rem 2rem; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); text-align: center; }
+.login-modal h2 { font-family: 'Tiro Bangla', serif; color: var(--primary); font-size: 1.4rem; margin-bottom: 0.5rem; }
+.login-modal p { font-family: 'Tiro Bangla', serif; color: var(--text-meta); font-size: 0.9rem; margin-bottom: 1.5rem; }
+.login-set-name { background: var(--bg-main); color: var(--primary); padding: 10px; border-radius: 8px; font-weight: 700; font-family: 'Tiro Bangla', serif; margin-bottom: 1.5rem; font-size: 0.95rem; }
+.input-group { text-align: left; margin-bottom: 1.2rem; }
+.input-group label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 5px; font-family: 'Tiro Bangla', serif;}
+.input-group input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border-color); border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 0.95rem; outline: none; transition: 0.2s; }
+.input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,122,74,0.1); }
+.login-btn { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
+.login-btn:hover { background: var(--primary-hover); }
+.cancel-btn { width: 100%; background: transparent; color: var(--text-meta); border: none; padding: 10px; margin-top: 5px; font-family: 'Tiro Bangla', serif; font-weight: 700; cursor: pointer;}
+.error-msg { color: var(--alert-danger); font-size: 0.85rem; font-weight: 700; margin-top: 10px; font-family: 'Tiro Bangla', serif; display: none; }
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="top-logo" onclick="location.reload()">Test<span>Bazar</span></div>
+  <div class="timer-box en-font hidden" id="timerBox">⏱ <span id="timerDisplay">10:00</span></div>
+  <div class="user-info en-font hidden" id="userDisplay"></div>
+</header>
+
+<div class="main">
+
+  <!-- ================= LOGIN MODAL ================= -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-modal">
+      <h2>লগইন করুন</h2>
+      <p>Test শুরু করতে আপনার ইউজারনেম ও পাসওয়ার্ড দিন</p>
+      <div class="login-set-name" id="loginSetName">📚 Set 1</div>
+      <div class="input-group">
+        <label>ইউজারনেম</label>
+        <input type="text" id="loginUsername" placeholder="Username">
+      </div>
+      <div class="input-group">
+        <label>পাসওয়ার্ড</label>
+        <input type="password" id="loginPassword" placeholder="Password" onkeydown="if(event.key==='Enter') doLogin()">
+      </div>
+      <button class="login-btn" onclick="doLogin()">✅ লগইন করে Test শুরু করো</button>
+      <button class="cancel-btn" onclick="closeLogin()">বাতিল</button>
+      <div class="error-msg" id="loginError">❌ ভুল ইউজারনেম বা পাসওয়ার্ড! (Index থেকে চেক করুন)</div>
+    </div>
+  </div>
+
+  <!-- ================= HUB PAGE ================= -->
+  <div id="hubPage">
+    <div class="hub-header">
+      <h1>শিক্ষাবিজ্ঞান 3rd Sem Chapter 10:<br>আধুনিক শিক্ষায় ইতিবাচক মনোবিজ্ঞানের ভূমিকা</h1>
+      <p>মোট ৪টি সেট সম্বলিত কুইজ। Test শুরু করতে সেটে ক্লিক করুন।</p>
+    </div>
+    <div class="set-grid" id="setGrid"></div>
+    <div style="text-align: center; margin-top: 30px;">
+      <button onclick="window.history.back()" style="background: white; border: 1.5px solid var(--border-color); padding: 10px 20px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-weight: bold; cursor: pointer; color: var(--text-meta);">← Main Dashboard-এ ফিরুন</button>
+    </div>
+  </div>
+
+  <!-- ================= QUIZ AREA ================= -->
+  <div id="testArea" class="hidden">
+    <div class="quiz-info">
+      <div class="info-item">🎓 <strong>শিক্ষাবিজ্ঞান</strong> — 3rd Sem | <span id="testSetLabel">Set 1</span></div>
+      <div class="info-item">📝 <span id="testTopic">Topic Name</span></div>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+    <div class="q-card">
+      <div class="q-num en-font" id="qNum">প্রশ্ন ১ / ১৫</div>
+      <div class="q-text" id="qText">Question Text</div>
+      <div class="opts" id="qOpts"></div>
+      <div class="explanation" id="explanation"><p id="explanationText"></p></div>
+
+      <div class="nav-row">
+        <div class="score-show" id="scoreShow">সঠিক: ০ | ভুল: ০</div>
+        <button class="next-btn" id="nextBtn" onclick="nextQ()" disabled>পরবর্তী →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= RESULT AREA ================= -->
+  <div class="result-wrap" id="resultWrap">
+    <div class="result-icon" id="resultIcon">🏆</div>
+    <div class="result-score en-font" id="finalScore">100%</div>
+    <div class="result-total">স্কোর</div>
+    <div class="result-grade" id="resultGrade">অসাধারণ!</div>
+
+    <div class="result-bars">
+      <div class="result-bar">
+        <div class="rb-num en-font" id="rbCorrect" style="color:var(--primary)">15</div>
+        <div class="rb-label">সঠিক</div>
+      </div>
+      <div class="result-bar">
+        <div class="rb-num en-font" id="rbWrong" style="color:var(--alert-danger)">0</div>
+        <div class="rb-label">ভুল/স্কিপ</div>
+      </div>
+    </div>
+
+    <div class="attempt-info-box" id="attemptInfo"></div>
+
+    <div class="action-btns">
+      <button class="btn-retry" onclick="restartQuiz()">আবার চেষ্টা করো</button>
+      <button class="btn-review" onclick="showReview()">উত্তর দেখো</button>
+      <button class="btn-home" onclick="goToHub()">← Hub এ ফিরে যাও</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+//  Global Config & Database
+// ============================================================
+const MAX_ATTEMPTS = 10;
+const TIME_LIMIT = 10 * 60; // 10 Minutes
+const LABELS = ['ক', 'খ', 'গ', 'ঘ'];
+
+// Chapter 10: 4 Sets x 15 Questions = 60 Questions
+const ALL_SETS = {
+  1: {
+    name: 'Set 1', icon: '📜', topic: 'ইতিবাচক মনোবিজ্ঞানের ইতিহাস ও উদ্ভব',
+    questions: [
+      {q: '১. ইতিবাচক মনোবিজ্ঞানের উদ্ভব বিংশ শতাব্দীর কোন্ সময়ে ঘটে?', opts: ['প্রথম দিকে', 'মাঝামাঝি সময়ে', 'শেষের দিকে', 'একদম শুরুতে'], ans: 2, exp: 'ব্যাখ্যা: বিংশ শতাব্দীর শেষের দিকে মনোবিজ্ঞানের একটি নতুন শাখা হিসেবে ইতিবাচক মনোবিজ্ঞানের উদ্ভব ঘটে।'},
+      {q: '২. \'ইতিবাচক মনোবিজ্ঞান\' শব্দটি প্রথম কে ব্যবহার করেন?', opts: ['মার্টিন সেলিগম্যান', 'আব্রাহাম মাসলো', 'অ্যারিস্টটল', 'জন ডিউই'], ans: 1, exp: 'ব্যাখ্যা: আমেরিকান মনোবিদ আব্রাহাম মাসলো সর্বপ্রথম ইতিবাচক মনোবিজ্ঞান (Positive Psychology) শব্দটি ব্যবহার করেন।'},
+      {q: '৩. আব্রাহাম মাসলো কত খ্রিস্টাব্দে \'ইতিবাচক মনোবিজ্ঞান\' শব্দটি প্রথম ব্যবহার করেন?', opts: ['১৯০৮', '১৯৫৪', '১৯৬২', '১৯৯৮'], ans: 1, exp: 'ব্যাখ্যা: ১৯৫৪ খ্রিস্টাব্দে আব্রাহাম মাসলো তাঁর একটি পুস্তকে সর্বপ্রথম ইতিবাচক মনোবিজ্ঞান শব্দটি ব্যবহার করেছিলেন।'},
+      {q: '৪. আব্রাহাম মাসলো তাঁর কোন্ পুস্তকে শব্দটি প্রথম ব্যবহার করেছিলেন?', opts: ['সাইকোলজি অফ বিয়িং', 'ফ্লোরিশ', 'লার্নড অপটিমিজম', 'প্রেরণা ও ব্যক্তিত্ব (Motivation and Personality)'], ans: 3, exp: 'ব্যাখ্যা: আব্রাহাম মাসলো তাঁর রচিত ‘প্রেরণা ও ব্যক্তিত্ব’ পুস্তকে প্রথম এই শব্দটি ব্যবহার করেন।'},
+      {q: '৫. আব্রাহাম মাসলো কত খ্রিস্টাব্দে জন্মগ্রহণ করেন?', opts: ['১৯০৮', '১৯৪২', '১৯৫৪', '১৯৬২'], ans: 0, exp: 'ব্যাখ্যা: আব্রাহাম মাসলো ১৯০৮ খ্রিস্টাব্দের ১ এপ্রিল জন্মগ্রহণ করেছিলেন।'},
+      {q: '৬. \'সাইকোলজি অফ বিয়িং\' (Psychology of Being) পুস্তকটি কত খ্রিস্টাব্দে রচিত হয়?', opts: ['১৯৫৪', '১৯৬২', '১৯৯৮', '২০০২'], ans: 1, exp: 'ব্যাখ্যা: আব্রাহাম মাসলো ১৯৬২ খ্রিস্টাব্দে \'সাইকোলজি অফ বিয়িং\' নামক পুস্তকটি রচনা করেছিলেন।'},
+      {q: '৭. ১৯৯৮ খ্রিস্টাব্দে কোন্ মনোবিজ্ঞানী ইতিবাচক মনোবিজ্ঞানের আলোচনা একটি নতুন ক্ষেত্র হিসেবে শুরু করেন?', opts: ['আব্রাহাম মাসলো', 'বেঞ্জামিন ফ্র্যাঙ্কলিন', 'মার্টিন ইলিয়াস পিটার সেলিগম্যান', 'অ্যারিস্টটল'], ans: 2, exp: 'ব্যাখ্যা: ১৯৯৮ খ্রিস্টাব্দে মার্টিন ইলিয়াস পিটার সেলিগম্যান ইতিবাচক মনোবিজ্ঞান নামে একটি নতুন ক্ষেত্রের আলোচনা শুরু করেন।'},
+      {q: '৮. মার্টিন সেলিগম্যান ১৯৯৮ খ্রিস্টাব্দে কোন্ সংস্থার সভাপতি ছিলেন?', opts: ['আমেরিকান সাইকোলজিক্যাল অ্যাসোসিয়েশন', 'ব্রিটিশ সাইকোলজিক্যাল সোসাইটি', 'ওয়ার্ল্ড সাইকোলজিক্যাল কংগ্রেস', 'পেনসিলভানিয়া বিশ্ববিদ্যালয়'], ans: 0, exp: 'ব্যাখ্যা: মার্টিন সেলিগম্যান সেই সময় আমেরিকান সাইকোলজিক্যাল অ্যাসোসিয়েশন (APA)-এর সভাপতি হিসেবে দায়িত্ব পালন করছিলেন।'},
+      {q: '৯. আধুনিক \'ইতিবাচক মনোবিজ্ঞানের জনক\' কাকে বলা হয়?', opts: ['আব্রাহাম মাসলোকে', 'মার্টিন সেলিগম্যানকে', 'অ্যারিস্টটলকে', 'প্লেটোকে'], ans: 1, exp: 'ব্যাখ্যা: ইতিবাচক মনোবিজ্ঞানের ব্যাপক প্রচার ও প্রসারের জন্য মার্টিন সেলিগম্যানকে এর জনক বলা হয়।'},
+      {q: '১০. ইতিবাচক মনোবিজ্ঞানের ঐতিহাসিক শিকড় কোন্ প্রাচীন দার্শনিকের শিক্ষার মধ্যে পাওয়া যায়?', opts: ['সক্রেটিস', 'প্লেটো', 'অ্যারিস্টটল', 'রুশো'], ans: 2, exp: 'ব্যাখ্যা: সেলিগম্যান একে আধুনিক রূপ দিলেও এর ঐতিহাসিক শিকড় অ্যারিস্টটলের শিক্ষার মধ্যে পাওয়া যায়।'},
+      {q: '১১. প্রথম ইতিবাচক মনোবিজ্ঞানের সামিট (Summit) কত খ্রিস্টাব্দে অনুষ্ঠিত হয়?', opts: ['১৯৫৪', '১৯৯৮', '১৯৯৯', '২০০২'], ans: 2, exp: 'ব্যাখ্যা: ১৯৯৯ খ্রিস্টাব্দের সেপ্টেম্বর মাসে প্রথম ইতিবাচক মনোবিজ্ঞানের সামিট অনুষ্ঠিত হয়েছিল।'},
+      {q: '১২. প্রথম ইতিবাচক মনোবিজ্ঞানের সামিট কোথায় অনুষ্ঠিত হয়েছিল?', opts: ['ফিলাডেলফিয়াতে', 'নেব্রাস্কার রাজধানী লিংকনে (Lincoln)', 'লন্ডনে', 'প্যারিসে'], ans: 1, exp: 'ব্যাখ্যা: প্রথম সামিট Nebraska-এর রাজধানী Lincoln-এ ৯ থেকে ১২ সেপ্টেম্বর পর্যন্ত অনুষ্ঠিত হয়েছিল।'},
+      {q: '১৩. ইতিবাচক মনোবিজ্ঞানের ওপর প্রথম আন্তর্জাতিক সম্মেলন কত খ্রিস্টাব্দে অনুষ্ঠিত হয়?', opts: ['১৯৯৯', '২০০২', '২০০৫', '২০০৯'], ans: 1, exp: 'ব্যাখ্যা: ২০০২ খ্রিস্টাব্দে ইতিবাচক মনোবিজ্ঞানের ওপর প্রথম আন্তর্জাতিক সম্মেলন অনুষ্ঠিত হয়।'},
+      {q: '১৪. ২০০৫ খ্রিস্টাব্দে কোন্ বিশ্ববিদ্যালয়ে ইতিবাচক মনোবিজ্ঞানের প্রথম মাস্টার্স প্রোগ্রাম চালু হয়?', opts: ['হার্ভার্ড বিশ্ববিদ্যালয়ে', 'অক্সফোর্ড বিশ্ববিদ্যালয়ে', 'পেনসিলভানিয়া বিশ্ববিদ্যালয়ে', 'কেমব্রিজ বিশ্ববিদ্যালয়ে'], ans: 2, exp: 'ব্যাখ্যা: ২০০৫ খ্রিস্টাব্দে পেনসিলভানিয়া বিশ্ববিদ্যালয়ে ইতিবাচক মনোবিজ্ঞান বিষয়ে মাস্টার্স ডিগ্রি প্রচলিত হয়।'},
+      {q: '১৫. ১৭৪৯ খ্রিস্টাব্দে পেনসিলভানিয়া বিশ্ববিদ্যালয় কে প্রতিষ্ঠা করেছিলেন?', opts: ['আব্রাহাম মাসলো', 'মার্টিন সেলিগম্যান', 'জর্জ ওয়াশিংটন', 'বেঞ্জামিন ফ্র্যাঙ্কলিন'], ans: 3, exp: 'ব্যাখ্যা: মার্কিন যুক্তরাষ্ট্রের এই বিখ্যাত বিশ্ববিদ্যালয়টি ১৭৪৯ খ্রিস্টাব্দে বেঞ্জামিন ফ্র্যাঙ্কলিন প্রতিষ্ঠা করেছিলেন।'}
+    ]
+  },
+  2: {
+    name: 'Set 2', icon: '🧠', topic: 'ধারণা, উদ্দেশ্য ও পরিভাষিক শব্দ',
+    questions: [
+      {q: '১. ২০০৯ খ্রিস্টাব্দে ইতিবাচক মনোবিজ্ঞানের ওপর প্রথম বিশ্ব কংগ্রেস (World Congress) কোথায় অনুষ্ঠিত হয়েছিল?', opts: ['লিংকনে', 'ফিলাডেলফিয়াতে', 'হংকং-এ', 'গ্রেট ব্রিটেনে'], ans: 1, exp: 'ব্যাখ্যা: ২০০৯ খ্রিস্টাব্দের ১৮-২১ জুন পর্যন্ত ফিলাডেলফিয়াতে (Philadelphia) ইতিবাচক মনোবিজ্ঞানের প্রথম বিশ্ব কংগ্রেস অনুষ্ঠিত হয়।'},
+      {q: '২. বর্তমানে ইতিবাচক মনোবিজ্ঞানের ক্ষেত্রটি পৃথিবীর কোন্ অঞ্চলে সবচেয়ে বেশি উন্নত?', opts: ['কেবল এশিয়ায়', 'কেবল আফ্রিকায়', 'মার্কিন যুক্তরাষ্ট্র, কানাডা, পশ্চিম ইউরোপ এবং অস্ট্রেলিয়ায়', 'দক্ষিণ আমেরিকায়'], ans: 2, exp: 'ব্যাখ্যা: বর্তমানে মার্কিন যুক্তরাষ্ট্র, কানাডা, পশ্চিম ইউরোপ এবং অস্ট্রেলিয়ায় এই ক্ষেত্রটি সবচেয়ে বেশি উন্নত।'},
+      {q: '৩. মার্টিন সেলিগম্যান কত খ্রিস্টাব্দে জন্মগ্রহণ করেন?', opts: ['১৯০৮', '১৯৪২', '১৯৫৪', '১৯৬২'], ans: 1, exp: 'ব্যাখ্যা: আমেরিকান মনোবিদ মার্টিন সেলিগম্যান ১৯৪২ খ্রিস্টাব্দের ১২ আগস্ট জন্মগ্রহণ করেন।'},
+      {q: '৪. নীচের কোন্ পুস্তকটি মার্টিন সেলিগম্যানের লেখা?', opts: ['অথেনটিক হ্যাপিনেস', 'লার্নড অপটিমিজম', 'ফ্লোরিশ (Flourish)', 'ওপরের সবকটি'], ans: 3, exp: 'ব্যাখ্যা: মার্টিন সেলিগম্যান ইতিবাচক মনোবিজ্ঞানের ওপর \'অথেনটিক হ্যাপিনেস\', \'লার্নড অপটিমিজম\' এবং \'ফ্লোরিশ\'—এই সবকটি পুস্তকই রচনা করেছেন।'},
+      {q: '৫. "Positive Psychology is the Scientific Study of human strengths and virtues." —সংজ্ঞাটি কার?', opts: ['আব্রাহাম মাসলো', 'মার্টিন সেলিগম্যান', 'জন ডিউই', 'অ্যারিস্টটল'], ans: 1, exp: 'ব্যাখ্যা: মানুষের শক্তি ও গুণাবলির বৈজ্ঞানিক আলোচনা হিসেবে মার্টিন সেলিগম্যান এই সংজ্ঞাটি প্রদান করেছেন।'},
+      {q: '৬. মার্টিন সেলিগম্যান ইতিবাচক মনোবিজ্ঞানকে কী ধরনের বিজ্ঞান হিসেবে উল্লেখ করেছেন?', opts: ['ধ্বংসাত্মক বিজ্ঞান', 'পুনর্নির্মাণ বিজ্ঞান', 'পদার্থবিজ্ঞান', 'রাসায়নিক বিজ্ঞান'], ans: 1, exp: 'ব্যাখ্যা: সেলিগম্যান বলেছেন, এটি হলো একটি পুনর্নির্মাণ বিজ্ঞান, যা ব্যক্তির ইতিবাচক গুণাবলি নির্মাণের ওপর জোর দেয়।'},
+      {q: '৭. ইতিবাচক মনোবিজ্ঞানের মূল উদ্দেশ্য কী?', opts: ['মানুষের শারীরিক অসুস্থতা বৃদ্ধি করা', 'মানুষের সুখ, সন্তুষ্টি ও জীবনের গুণমান বিকাশ ঘটানো', 'মানুষের মধ্যে দ্বন্দ্ব সৃষ্টি করা', 'কেবল পুঁথিগত জ্ঞান বৃদ্ধি করা'], ans: 1, exp: 'ব্যাখ্যা: মানুষের সুখ, সন্তুষ্টি, স্থিতিস্থাপকতা এবং জীবনের গুণমান বিকাশ ঘটানোই এই বিজ্ঞানের প্রধান উদ্দেশ্য।'},
+      {q: '৮. মানসিক চাপের সঙ্গে সফলভাবে মানিয়ে নেওয়ার ক্ষমতাকে পরিভাষায় কী বলা হয়?', opts: ['বিষণ্ণতা', 'স্থিতিস্থাপকতা (Resilience)', 'উদ্বেগ', 'উন্মুক্ত মানসিকতা'], ans: 1, exp: 'ব্যাখ্যা: মানসিক চাপের সঙ্গে সফলভাবে মানিয়ে নিয়ে সুস্থতা বজায় রাখাকেই স্থিতিস্থাপকতা বলা হয়।'},
+      {q: '৯. যে-কোনো পরিস্থিতিতে সর্বোত্তম সম্ভাব্য ফলাফল আশা করাকে কী বলা হয়?', opts: ['আশাবাদী (Optimism)', 'বিষণ্ণতা', 'নৈরাশ্যবাদী', 'উদ্বেগ'], ans: 0, exp: 'ব্যাখ্যা: সবরকম পরিস্থিতিতে সবচেয়ে ভালো ফলাফলের আশা রাখাকেই আশাবাদী বলা হয়।'},
+      {q: '১০. নতুন দৃষ্টিভঙ্গির ক্ষমতা এবং নির্ভীকতার সঙ্গে নতুন জিনিসের সঙ্গে যুক্ত হওয়ার প্রবণতাকে কী বলে?', opts: ['স্থিতিস্থাপকতা', 'উন্মুক্ত মানসিকতা (Open-mindedness)', 'কৃতিত্ব', 'আশাবাদী'], ans: 1, exp: 'ব্যাখ্যা: নির্ভীকতার সঙ্গে নতুন বিষয় শেখার এই প্রবণতাকেই উন্মুক্ত মানসিকতা বা Open-mindedness বলা হয়।'},
+      {q: '১১. মানুষের দুঃখ, কষ্ট, অসহায়তা এবং আগ্রহহীনতাকে চিহ্নিত করে কোন্ মানসিক অবস্থা?', opts: ['আনন্দ', 'স্থিতিস্থাপকতা', 'বিষণ্ণতা (Depression)', 'কৃতিত্ব'], ans: 2, exp: 'ব্যাখ্যা: বিষণ্ণতা হলো এমন একটি নেতিবাচক মানসিক অবস্থা যা মানুষের দুঃখ, কষ্ট ও অসহায়তাকে প্রকাশ করে।'},
+      {q: '১২. ব্যক্তির অভ্যন্তরে অশান্তির একটি অপ্রীতিকর অবস্থা সৃষ্টি করে কোন্ আবেগ?', opts: ['উদ্বেগ (Anxiety)', 'আনন্দ', 'সন্তুষ্টি', 'উন্মুক্ত মানসিকতা'], ans: 0, exp: 'ব্যাখ্যা: উদ্বেগ হলো এমন এক ধরনের আবেগ যা ব্যক্তির মনের অভ্যন্তরে অশান্তির সৃষ্টি করে।'},
+      {q: '১৩. কঠোর পরিশ্রম, দক্ষতা ও সাহসের সঙ্গে কোনো কাজ সফলভাবে সম্পন্ন করাকে কী বলা হয়?', opts: ['বিষণ্ণতা', 'কৃতিত্ব (Accomplishment)', 'উদ্বেগ', 'স্থিতিস্থাপকতা'], ans: 1, exp: 'ব্যাখ্যা: দক্ষতা ও সাহসের সঙ্গে কোনো কাজকে সফলভাবে সমাপ্ত করাকেই কৃতিত্ব বলা হয়।'},
+      {q: '১৪. ভারসাম্যহীনতাকে সংশোধন করে দুঃখকষ্টের জ্ঞানকে কোন্ আবেগের সঙ্গে যুক্ত করা ইতিবাচক মনোবিজ্ঞানের কাজ?', opts: ['নেতিবাচক আবেগের সঙ্গে', 'ইতিবাচক আবেগের সঙ্গে', 'ভয়ের সঙ্গে', 'ক্রোধের সঙ্গে'], ans: 1, exp: 'ব্যাখ্যা: ইতিবাচক মনোবিজ্ঞান কষ্টার্জিত জ্ঞানকে ইতিবাচক আবেগের সঙ্গে যুক্ত করে মানুষকে সমৃদ্ধ করে তোলে।'},
+      {q: '১৫. ব্যক্তি, গোষ্ঠী এবং প্রতিষ্ঠানের সর্বোত্তম মানবিক কার্যকারিতা নিয়ে আলোচনা করে কোন্ বিজ্ঞান?', opts: ['রসায়নবিদ্যা', 'ইতিবাচক মনোবিজ্ঞান', 'পদার্থবিদ্যা', 'ইতিহাস'], ans: 1, exp: 'ব্যাখ্যা: মনস্তাত্ত্বিক তত্ত্বের একটি ক্ষেত্র হিসেবে ইতিবাচক মনোবিজ্ঞান এই সর্বোত্তম মানবিক কার্যকারিতা নিয়ে অধ্যয়ন করে।'}
+    ]
+  },
+  3: {
+    name: 'Set 3', icon: '🏫', topic: 'আধুনিক শিক্ষায় ইতিবাচক মনোবিজ্ঞানের ভূমিকা',
+    questions: [
+      {q: '১. আধুনিক শিক্ষায় ইতিবাচক মনোবিজ্ঞান শিক্ষার্থীদের কঠিন পরিস্থিতি থেকে ফিরে আসতে কীভাবে সাহায্য করে?', opts: ['শারীরিক শক্তির মাধ্যমে', 'স্থিতিস্থাপকতা বাড়ানোর মাধ্যমে', 'বিষণ্ণতা সৃষ্টির মাধ্যমে', 'ভয় দেখানোর মাধ্যমে'], ans: 1, exp: 'ব্যাখ্যা: স্থিতিস্থাপকতা বাড়ানোর মাধ্যমে শিক্ষার্থীরা কঠিন পরিস্থিতি থেকে আত্মবিশ্বাসের সঙ্গে ফিরে আসতে শেখে।'},
+      {q: '২. শিক্ষার্থীর ভবিষ্যৎ জীবনকে সুন্দর করে গড়ে তুলতে ইতিবাচক মনোবিজ্ঞান কোন্ মনোভাব গঠনে সাহায্য করে?', opts: ['নৈরাশ্যবাদী মনোভাব', 'আশাবাদী মনোভাব', 'হিংসাত্মক মনোভাব', 'সন্দেহজনক মনোভাব'], ans: 1, exp: 'ব্যাখ্যা: ইতিবাচক মনোবিজ্ঞান শিক্ষার্থীর সুন্দর ভবিষ্যৎ গড়তে আশাবাদী মনোভাব গঠনে গুরুত্বপূর্ণ ভূমিকা পালন করে।'},
+      {q: '৩. শিক্ষার্থীদের শিখনে এবং কর্মে মনোযোগ ও প্রেরণা বৃদ্ধিতে কোন্ মনোবিজ্ঞান সাহায্য করে?', opts: ['ধ্বংসাত্মক মনোবিজ্ঞান', 'ইতিবাচক মনোবিজ্ঞান', 'শারীরিক বিজ্ঞান', 'পরিবেশ বিজ্ঞান'], ans: 1, exp: 'ব্যাখ্যা: শিক্ষার্থীদের শিখন এবং যেকোনো কাজে মনোযোগ ও প্রেরণা বৃদ্ধিতে ইতিবাচক মনোবিজ্ঞান সহায়তা করে।'},
+      {q: '৪. কোনো কারণে শিক্ষার্থীদের মধ্যে বিষণ্ণতা ও উদ্বেগ সম্পর্কিত উপসর্গ দেখা দিলে ইতিবাচক মনোবিজ্ঞান কী করে?', opts: ['উপসর্গগুলি বৃদ্ধি করে', 'উপসর্গগুলি হ্রাস করতে সাহায্য করে', 'এড়িয়ে যায়', 'উপসর্গগুলি স্থায়ী করে'], ans: 1, exp: 'ব্যাখ্যা: শিক্ষার্থীদের মধ্যে বিষণ্ণতা ও উদ্বেগ দেখা দিলে তা হ্রাস করতে ইতিবাচক মনোবিজ্ঞান সাহায্য করে।'},
+      {q: '৫. সামাজিক গুণাবলির বিকাশের জন্য বিদ্যালয়ে কী ধরনের পরিবেশ তৈরি করতে ইতিবাচক মনোবিজ্ঞান সাহায্য করে?', opts: ['দ্বন্দ্বমূলক পরিবেশ', 'শিক্ষার আদর্শ পরিবেশ', 'কোলাহলপূর্ণ পরিবেশ', 'ভীতিপ্রদ পরিবেশ'], ans: 1, exp: 'ব্যাখ্যা: শিক্ষার্থীদের সামাজিক গুণাবলি বিকাশের লক্ষ্যে ইতিবাচক মনোবিজ্ঞান বিদ্যালয়ে শিক্ষার আদর্শ পরিবেশ তৈরি করে।'},
+      {q: '৬. শিক্ষার্থীর নিজস্ব যে শক্তি বা ক্ষমতা রয়েছে, তার বিকাশের ওপর গুরুত্ব প্রদান করে ইতিবাচক মনোবিজ্ঞান কীসে সাহায্য করে?', opts: ['স্বতন্ত্র শক্তির বিকাশে', 'শক্তি দমনে', 'শক্তি লুকিয়ে রাখতে', 'শারীরিক দুর্বলতায়'], ans: 0, exp: 'ব্যাখ্যা: শিক্ষার্থীর নিজস্ব ক্ষমতার ওপর ফোকাস করে এটি তাদের স্বতন্ত্র শক্তির উন্নয়নে সাহায্য করে।'},
+      {q: '৭. শিক্ষার্থীদের চারিত্রিক বিকাশের মাধ্যমে ইতিবাচক মনোবিজ্ঞান মূলত কোন্ স্বাস্থ্যের উন্নতি ঘটায়?', opts: ['কেবল শারীরিক স্বাস্থ্যের', 'মানসিক স্বাস্থ্যের', 'পেশাগত স্বাস্থ্যের', 'পরিবেশগত স্বাস্থ্যের'], ans: 1, exp: 'ব্যাখ্যা: চারিত্রিক বিকাশের মধ্য দিয়ে শিক্ষার্থীদের মানসিক স্বাস্থ্যের (Mental Health) উন্নতি ঘটাতে ইতিবাচক মনোবিজ্ঞান ভূমিকা নেয়।'},
+      {q: '৮. ইতিবাচক মনোবিজ্ঞান শিক্ষার্থীদের অগ্রগতির জন্য জীবনের কোন্ দিকের ওপর ফোকাস করে?', opts: ['ব্যর্থতার ওপর', 'নেতিবাচক দিকগুলির ওপর', 'ইতিবাচক কৃতিত্বের ওপর', 'ভুলত্রুটির ওপর'], ans: 2, exp: 'ব্যাখ্যা: শিক্ষার্থীর জীবনের ইতিবাচক কৃতিত্বের ওপর ফোকাস করে এটি তাদের অগ্রগতিতে আরও উৎসাহ প্রদান করে।'},
+      {q: '৯. ইতিবাচক মনোবিজ্ঞানের নীতি প্রয়োগের মাধ্যমে শিক্ষার্থীদের কী বাড়িয়ে সামঞ্জস্যপূর্ণ জীবন গঠনে সাহায্য করা হয়?', opts: ['সুখ ও সন্তুষ্টি', 'ভয় ও উদ্বেগ', 'দুঃখ ও কষ্ট', 'নৈরাশ্য'], ans: 0, exp: 'ব্যাখ্যা: এই নীতি প্রয়োগ করে শিক্ষার্থীদের সুস্থতা, সুখ ও সন্তুষ্টি বাড়িয়ে সামঞ্জস্যপূর্ণ জীবন গঠন করা হয়।'},
+      {q: '১০. আধুনিক শিক্ষায় ইতিবাচক মনোবিজ্ঞান সকল বিদ্যালয়গুলিতে কোন্ ধারণাকে বাড়ানোর লক্ষ্যে কাজ করে?', opts: ['অসুস্থতার ধারণাকে', 'সুস্থতার ধারণাকে', 'কেবল প্রতিযোগিতার ধারণাকে', 'মুখস্থ করার ধারণাকে'], ans: 1, exp: 'ব্যাখ্যা: আধুনিক শিক্ষায় ইতিবাচক মনোবিজ্ঞান সব বিদ্যালয়ে সুস্থতার ধারণাকে বাড়ানোর লক্ষ্যে কাজ করে।'},
+      {q: '১১. ইতিবাচক মনোবিজ্ঞান শিক্ষার্থীদের জীবনযাপনের সমস্যা সমাধান করে কী সর্বাধিক করতে সক্ষম করে?', opts: ['মানসিক চাপ', 'শারীরিক ক্লান্তি', 'সন্তুষ্টি', 'বিষণ্ণতা'], ans: 2, exp: 'ব্যাখ্যা: এটি শিক্ষার্থীদের জীবনযাপনের সমস্যা সমাধান করে জীবনে সন্তুষ্টি সর্বাধিক করতে সক্ষম করে তোলে।'},
+      {q: '১২. ইতিবাচক বৈশিষ্ট্য, প্রতিভা এবং শক্তির যথাযথ বিকাশে ইতিবাচক মনোবিজ্ঞান কীসের ওপর বিশেষ গুরুত্ব দেয়?', opts: ['মুখস্থ করার ওপর', 'অবহেলার ওপর', 'ভয়ের ওপর', 'অনুশীলনে'], ans: 3, exp: 'ব্যাখ্যা: ইতিবাচক বৈশিষ্ট্য ও প্রতিভা বিকাশের জন্য এটি অনুশীলনের (Practice) ওপর সবচেয়ে বেশি গুরুত্ব প্রদান করে।'},
+      {q: '১৩. আধুনিক শিক্ষায় শিক্ষার মূল বিষয় কী তৈরি করা?', opts: ['বিষণ্ণতা', 'উন্মুক্ত মানসিকতা', 'নৈরাশ্য', 'ভীতি'], ans: 1, exp: 'ব্যাখ্যা: আধুনিক শিক্ষার মূল বিষয় হলো শিক্ষার্থীদের মধ্যে উন্মুক্ত মানসিকতা তৈরি করা, যা কঠোর পরিশ্রম করতে শেখায়।'},
+      {q: '১৪. উন্মুক্ত মানসিকতা তৈরি হওয়ার ফলে শিক্ষার্থীদের মধ্যে কোন্ ভয়ের পরিমাণ কমে যায়?', opts: ['প্রতিযোগিতার ভয়', 'শিক্ষকের ভয়', 'ব্যর্থতার ভয়', 'কথা বলার ভয়'], ans: 2, exp: 'ব্যাখ্যা: ইতিবাচক ও উন্মুক্ত মানসিকতার বিকাশের ফলে শিক্ষার্থীদের মন থেকে ব্যর্থতার ভয় অনেকটাই কমে যায়।'},
+      {q: '১৫. সুস্থ জীবনযাপনের ক্ষেত্রে শিক্ষার্থীদের সমস্যা সমাধানের জন্য উপযোগী করে তোলে কোনটি?', opts: ['নেতিবাচক আবেগ', 'ইতিবাচক মনোবিজ্ঞান', 'শারীরিক শাস্তি', 'মুখস্থবিদ্যা'], ans: 1, exp: 'ব্যাখ্যা: ইতিবাচক মনোবিজ্ঞানের একটি অন্যতম উদ্দেশ্য হলো মানুষকে সুস্থ জীবনযাপনের সমস্যার সমাধানের জন্য উপযোগী করে তোলা।'}
+    ]
+  },
+  4: {
+    name: 'Set 4', icon: '⭐', topic: 'PERMA মডেল',
+    questions: [
+      {q: '১. ২০১১ খ্রিস্টাব্দে মার্টিন সেলিগম্যানের \'PERMA\' মডেলটি তাঁর কোন্ পুস্তকে প্রকাশিত হয়?', opts: ['লার্নড অপটিমিজম', 'অথেনটিক হ্যাপিনেস', 'ফ্লোরিশ (Flourish)', 'সাইকোলজি অফ বিয়িং'], ans: 2, exp: 'ব্যাখ্যা: ২০১১ খ্রিস্টাব্দে মার্টিন সেলিগম্যানের বিখ্যাত PERMA মডেলটি তাঁর রচিত পুস্তক ‘Flourish’-এ প্রথম প্রকাশিত হয়।'},
+      {q: '২. \'PERMA\' মডেলটি মূলত সুস্থতার কয়টি উপাদানের সংক্ষিপ্ত রূপ?', opts: ['৩টি', '৪টি', '৫টি', '৬টি'], ans: 2, exp: 'ব্যাখ্যা: PERMA মডেল হলো সুস্থতার ৫টি ভিন্ন ভিন্ন উপাদানের প্রথম অক্ষরের সমন্বয়।'},
+      {q: '৩. \'PERMA\' মডেলের \'P\' অক্ষরটি কী নির্দেশ করে?', opts: ['Positive Emotion', 'Positive Energy', 'Public Emotion', 'Private Emotion'], ans: 0, exp: 'ব্যাখ্যা: PERMA-এর প্রথম অক্ষর P-এর অর্থ হলো Positive Emotion বা ইতিবাচক আবেগ।'},
+      {q: '৪. \'PERMA\' মডেলের \'E\' অক্ষরটি কী নির্দেশ করে?', opts: ['Education', 'Engagement', 'Environment', 'Energy'], ans: 1, exp: 'ব্যাখ্যা: PERMA-এর দ্বিতীয় অক্ষর E-এর অর্থ হলো Engagement বা কাজের প্রতি একাত্মতা।'},
+      {q: '৫. \'PERMA\' মডেলের \'R\' অক্ষরটির অর্থ কী?', opts: ['Reality', 'Relationship', 'Role', 'Rule'], ans: 1, exp: 'ব্যাখ্যা: PERMA-এর তৃতীয় অক্ষর R-এর অর্থ হলো Relationship বা ইতিবাচক সম্পর্ক।'},
+      {q: '৬. \'PERMA\' মডেলের \'M\' অক্ষরটি কী নির্দেশ করে?', opts: ['Motivation', 'Memory', 'Meaning', 'Mind'], ans: 2, exp: 'ব্যাখ্যা: PERMA-এর চতুর্থ অক্ষর M-এর অর্থ হলো Meaning বা কাজের উদ্দেশ্য ও অর্থ বোঝা।'},
+      {q: '৭. \'PERMA\' মডেলের \'A\' অক্ষরটি কী নির্দেশ করে?', opts: ['Accomplishment', 'Action', 'Attention', 'Art'], ans: 0, exp: 'ব্যাখ্যা: PERMA-এর শেষ অক্ষর A-এর অর্থ হলো Accomplishment বা কৃতিত্ব অর্জন।'},
+      {q: '৮. কোন্ শহরের সিনিয়র এবং প্রাথমিক বিদ্যালয়গুলিতে শিক্ষাগত পরিবেশে PERMA মডেলটি ইতিবাচক শিক্ষা মডেল হিসেবে ব্যবহৃত হয়েছে?', opts: ['ফিলাডেলফিয়া', 'লন্ডন', 'হংকং', 'টোকিও'], ans: 2, exp: 'ব্যাখ্যা: হংকং-এ সিনিয়র এবং প্রাথমিক বিদ্যালয়গুলিতে এই PERMA মডেলটি সফলভাবে প্রয়োগ করা হয়েছে।'},
+      {q: '৯. PERMA মডেলের বাস্তবায়ন প্রক্রিয়াটি কয়টি স্তর দ্বারা পরিচালিত হয়?', opts: ['৩টি', '৪টি', '৫টি', '৬টি'], ans: 3, exp: 'ব্যাখ্যা: PERMA মডেলের প্রোগ্রামটি একটি ৬-স্তরের বাস্তবায়ন প্রক্রিয়া দ্বারা পরিচালিত হয়।'},
+      {q: '১০. PERMA মডেলের বাস্তবায়ন প্রক্রিয়ার প্রথম স্তর কোনটি?', opts: ['প্রয়োগ', 'ইতিবাচক সংস্কৃতি গড়ে তোলা', 'শিখন', 'অংশগ্রহণকারীদের গুরুত্বপ্রদান'], ans: 2, exp: 'ব্যাখ্যা: ৬টি স্তরের মধ্যে একদম প্রথম স্তরটি হলো শিখন, যা সুস্থতার বিজ্ঞান বুঝতে সাহায্য করে।'},
+      {q: '১১. PERMA মডেলের বাস্তবায়ন প্রক্রিয়ার শেষ (ষষ্ঠ) স্তর কোনটি?', opts: ['শিখন', 'ইতিবাচক শিক্ষা ধারণা গঠন', 'ইতিবাচক সংস্কৃতি গড়ে তোলা', 'প্রয়োগ'], ans: 2, exp: 'ব্যাখ্যা: এর ষষ্ঠ বা শেষ স্তরটি হলো বিদ্যালয় সম্প্রদায়ের মধ্যে একটি ইতিবাচক সংস্কৃতি গড়ে তোলা।'},
+      {q: '১২. বিদ্যালয়গুলিতে ইতিবাচক শিক্ষা কার্যক্রমের নকশা ও পরিচালনার ক্ষেত্রে PERMA মডেলের কোন্ স্তরটি যুক্ত?', opts: ['শিখন', 'প্রয়োগ', 'অভিজ্ঞতার প্রতিফলন', 'ইতিবাচক ধারণা গঠন'], ans: 1, exp: 'ব্যাখ্যা: মডেলটির পঞ্চম স্তর অর্থাৎ \'প্রয়োগ\'-এর মাধ্যমে ইতিবাচক শিক্ষা কার্যক্রমের নকশা তৈরি করা হয়।'},
+      {q: '১৩. PERMA মডেলের বাস্তবায়ন প্রক্রিয়া চালু হওয়ার পর শিক্ষার্থীদের কোন্ সমস্যা অনেকটাই হ্রাস পেয়েছে?', opts: ['শারীরিক সমস্যা', 'আর্থিক সমস্যা', 'মানসিক স্বাস্থ্যের সমস্যা', 'যোগাযোগের সমস্যা'], ans: 2, exp: 'ব্যাখ্যা: এই মডেলটি চালু হওয়ার ফলে শিক্ষার্থীদের মানসিক স্বাস্থ্যের সমস্যা উল্লেখযোগ্যভাবে হ্রাস পেয়েছে।'},
+      {q: '১৪. কোন্ দেশে PERMA মডেলটি মাধ্যমিক পরবর্তী শিক্ষার্থীদের সাহায্য করার জন্য প্রয়োগ করা হয়েছে?', opts: ['আমেরিকায়', 'হংকং-এ', 'গ্রেট ব্রিটেনে', 'অস্ট্রেলিয়ায়'], ans: 2, exp: 'ব্যাখ্যা: গ্রেট ব্রিটেনে মাধ্যমিক পরবর্তী শিক্ষার্থীদের সুস্থতা প্রোগ্রামে এটি প্রয়োগ করা হয়েছে।'},
+      {q: '১৫. গ্রেট ব্রিটেনে PERMA মডেলের প্রোগ্রামে একজন পরামর্শদাতার সঙ্গে কয়টি অনলাইন সেশন ছিল?', opts: ['৪টি', '৬টি', '৮টি', '১০টি'], ans: 2, exp: 'ব্যাখ্যা: গ্রেট ব্রিটেনের ওই প্রোগ্রামে একজন পরামর্শদাতার সঙ্গে মোট ৮টি অনলাইন সেশন ছিল।'}
+    ]
+  }
+};
+
+// ================== STATE VARIABLES ==================
+let currentUser = "";
+let activeSetId = null;
+let questions = [];
+let currentQIndex = 0;
+let score = 0;
+let wrongAnswers = 0;
+let isReviewMode = false;
+let timerInterval;
+let timeLeft = TIME_LIMIT;
+let userAnswers = {};
+
+// ================== LOCAL STORAGE LOGIC ==================
+function getGlobalUsers() {
+  const data = localStorage.getItem("testBazarGlobalUsers");
+  return data ? JSON.parse(data) : {};
+}
+
+function getAttemptsData() {
+  const data = localStorage.getItem("testBazarAttemptsEdCh10");
+  return data ? JSON.parse(data) : {};
+}
+
+function getAttemptCount(username, setId) {
+  const attempts = getAttemptsData();
+  const key = username + '|' + setId;
+  return attempts[key] || 0;
+}
+
+function incrementAttempt(username, setId) {
+  const attempts = getAttemptsData();
+  const key = username + '|' + setId;
+  attempts[key] = (attempts[key] || 0) + 1;
+  localStorage.setItem("testBazarAttemptsEdCh10", JSON.stringify(attempts));
+  return attempts[key];
+}
+
+// ================== INITIALIZATION ==================
+window.onload = () => {
+  renderHub();
+};
+
+function renderHub() {
+  const grid = document.getElementById("setGrid");
+  grid.innerHTML = "";
+
+  for(let id in ALL_SETS) {
+    const set = ALL_SETS[id];
+    const div = document.createElement("div");
+    div.className = "set-card";
+
+    let attemptCount = 0;
+    let isLocked = false;
+
+    if (currentUser) {
+      attemptCount = getAttemptCount(currentUser, id);
+      isLocked = attemptCount >= MAX_ATTEMPTS;
+      if (isLocked) div.classList.add("locked");
+    }
+
+    div.innerHTML = `
+      <div class="icon">${set.icon}</div>
+      <div class="set-num">${set.name.split(' - ')}</div>
+      <div class="set-title">${set.topic}</div>
+      <div class="set-meta"><span>${set.questions.length} Qs</span><span>10 Mins</span></div>
+      ${currentUser ? `<div class="attempt-badge ${isLocked?'locked-badge':''}">${isLocked ? '🔒 Locked' : attemptCount + '/' + MAX_ATTEMPTS}</div>` : ''}
+    `;
+
+    div.onclick = () => {
+      if (isLocked) {
+        alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
+        return;
+      }
+      handleSetClick(id);
+    };
+    grid.appendChild(div);
+  }
+}
+
+function handleSetClick(setId) {
+  activeSetId = setId;
+  if (!currentUser) {
+    document.getElementById("loginSetName").innerText = `📚 ${ALL_SETS[setId].name}`;
+    document.getElementById("loginOverlay").classList.add("active");
+    document.getElementById("loginUsername").value = "";
+    document.getElementById("loginPassword").value = "";
+    document.getElementById("loginError").style.display = "none";
+  } else {
+    startQuiz(setId);
+  }
+}
+
+function doLogin() {
+  const u = document.getElementById("loginUsername").value.trim();
+  const p = document.getElementById("loginPassword").value.trim();
+  const err = document.getElementById("loginError");
+
+  const GLOBAL_USERS = getGlobalUsers();
+
+  if(!u || !p) {
+    err.innerText = "ইউজারনেম এবং পাসওয়ার্ড দিন!";
+    err.style.display = "block";
+    return;
+  }
+
+  if(GLOBAL_USERS[u] && GLOBAL_USERS[u] === p) {
+    let attempts = getAttemptCount(u, activeSetId);
+    if (attempts >= MAX_ATTEMPTS) {
+      err.innerText = `আপনি এই সেটে সর্বোচ্চ ${MAX_ATTEMPTS} বার পরীক্ষা দিয়েছেন!`;
+      err.style.display = "block";
+      return;
+    }
+
+    currentUser = u;
+    document.getElementById("loginOverlay").classList.remove("active");
+    document.getElementById("userDisplay").innerHTML = `👤 ${u}`;
+    document.getElementById("userDisplay").classList.remove("hidden");
+
+    renderHub();
+    startQuiz(activeSetId);
+  } else {
+    err.innerText = "ইউজারনেম বা পাসওয়ার্ড ভুল! (Index থেকে চেক করুন)";
+    err.style.display = "block";
+  }
+}
+
+function closeLogin() {
+  document.getElementById("loginOverlay").classList.remove("active");
+}
+
+function goToHub() {
+  document.getElementById("resultWrap").classList.remove("show");
+  document.getElementById("testArea").classList.add("hidden");
+  document.getElementById("hubPage").style.display = "block";
+  document.getElementById("timerBox").classList.add("hidden");
+  clearInterval(timerInterval);
+  renderHub();
+}
+
+// ================== QUIZ LOGIC ==================
+function startQuiz(setId) {
+  incrementAttempt(currentUser, setId);
+
+  questions = ALL_SETS[setId].questions;
+  currentQIndex = 0;
+  score = 0;
+  wrongAnswers = 0;
+  userAnswers = {};
+  isReviewMode = false;
+  timeLeft = TIME_LIMIT;
+
+  document.getElementById("hubPage").style.display = "none";
+  document.getElementById("resultWrap").classList.remove("show");
+  document.getElementById("testArea").classList.remove("hidden");
+  document.getElementById("timerBox").classList.remove("hidden");
+  document.getElementById("testSetLabel").innerText = ALL_SETS[setId].name;
+  document.getElementById("testTopic").innerText = ALL_SETS[setId].topic;
+
+  startTimer();
+  loadQuestion();
+}
+
+function loadQuestion() {
+  const qData = questions[currentQIndex];
+  document.getElementById("qNum").innerText = `প্রশ্ন ${currentQIndex + 1} / ${questions.length}`;
+  document.getElementById("qText").innerText = qData.q;
+
+  const progress = ((currentQIndex) / questions.length) * 100;
+  document.getElementById("progressFill").style.width = `${progress}%`;
+  document.getElementById("scoreShow").innerText = `সঠিক: ${score} | ভুল: ${wrongAnswers}`;
+
+  const optsBox = document.getElementById("qOpts");
+  optsBox.innerHTML = "";
+  document.getElementById("explanation").classList.remove("show");
+  document.getElementById("nextBtn").disabled = true;
+  document.getElementById("nextBtn").innerText = (currentQIndex === questions.length - 1) && !isReviewMode ? "টেস্ট জমা দিন" : "পরবর্তী →";
+
+  qData.opts.forEach((optText, idx) => {
+    const btn = document.createElement("button");
+    btn.className = "opt";
+    btn.innerHTML = `<div class="opt-circle">${LABELS[idx]}</div> <div class="opt-text">${optText}</div>`;
+
+    if (isReviewMode) {
+      btn.classList.add("disabled");
+      if (idx === qData.ans) btn.classList.add("correct");
+      else if (userAnswers[currentQIndex] === idx) btn.classList.add("wrong");
+    } else {
+      btn.onclick = () => selectOption(btn, idx, qData.ans, qData.exp);
+    }
+    optsBox.appendChild(btn);
+  });
+
+  if (isReviewMode) {
+    document.getElementById("explanationText").innerHTML = `<strong>ব্যাখ্যা:</strong> ${qData.exp.replace('ব্যাখ্যা: ', '')}`;
+    document.getElementById("explanation").classList.add("show");
+    document.getElementById("nextBtn").disabled = false;
+    if (currentQIndex === questions.length - 1) {
+      document.getElementById("nextBtn").innerText = "ফলাফলে ফিরুন";
+    }
+  }
+}
+
+function selectOption(btn, selectedIdx, correctIdx, exp) {
+  const allBtns = document.getElementById("qOpts").querySelectorAll(".opt");
+  allBtns.forEach(b => b.classList.add("disabled"));
+
+  userAnswers[currentQIndex] = selectedIdx;
+
+  if (selectedIdx === correctIdx) {
+    btn.classList.add("correct");
+    score++;
+  } else {
+    btn.classList.add("wrong");
+    allBtns[correctIdx].classList.add("correct");
+    wrongAnswers++;
+  }
+
+  document.getElementById("scoreShow").innerText = `সঠিক: ${score} | ভুল: ${wrongAnswers}`;
+  document.getElementById("explanationText").innerHTML = `<strong>ব্যাখ্যা:</strong> ${exp.replace('ব্যাখ্যা: ', '')}`;
+  document.getElementById("explanation").classList.add("show");
+  document.getElementById("nextBtn").disabled = false;
+}
+
+function nextQ() {
+  if (isReviewMode && currentQIndex === questions.length - 1) {
+    document.getElementById("testArea").classList.add("hidden");
+    document.getElementById("resultWrap").classList.add("show");
+    return;
+  }
+
+  if (!isReviewMode && currentQIndex === questions.length - 1) {
+    finishQuiz();
+    return;
+  }
+
+  currentQIndex++;
+  loadQuestion();
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  const tBox = document.getElementById("timerBox");
+  tBox.classList.remove("danger");
+
+  timerInterval = setInterval(() => {
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      finishQuiz();
+      return;
+    }
+    timeLeft--;
+    const m = Math.floor(timeLeft / 60);
+    const s = timeLeft % 60;
+    document.getElementById("timerDisplay").innerText = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+    if (timeLeft < 60) tBox.classList.add("danger");
+  }, 1000);
+}
+
+function finishQuiz() {
+  clearInterval(timerInterval);
+  document.getElementById("testArea").classList.add("hidden");
+  document.getElementById("timerBox").classList.add("hidden");
+  document.getElementById("resultWrap").classList.add("show");
+
+  const total = questions.length;
+  const skipped = total - (score + wrongAnswers);
+  const percent = Math.round((score / total) * 100);
+
+  document.getElementById("finalScore").innerText = `${percent}%`;
+  document.getElementById("rbCorrect").innerText = score;
+  document.getElementById("rbWrong").innerText = wrongAnswers + skipped;
+
+  const gradeEl = document.getElementById("resultGrade");
+  if (percent >= 80) { gradeEl.innerText = "🌟 অসাধারণ পারফরম্যান্স!"; gradeEl.style.color = "#1a7a4a"; document.getElementById("resultIcon").innerText = "🏆"; }
+  else if (percent >= 60) { gradeEl.innerText = "👍 খুব ভালো!"; gradeEl.style.color = "#2aad68"; document.getElementById("resultIcon").innerText = "⭐"; }
+  else { gradeEl.innerText = "💪 চেষ্টা চালিয়ে যাও!"; gradeEl.style.color = "#e8730a"; document.getElementById("resultIcon").innerText = "📚"; }
+
+  const remaining = MAX_ATTEMPTS - getAttemptCount(currentUser, activeSetId);
+  document.getElementById("attemptInfo").innerHTML = `👤 ${currentUser} — বাকি আছে <strong>${remaining}</strong> বার Test দেওয়ার সুযোগ।`;
+}
+
+function restartQuiz() {
+  if (getAttemptCount(currentUser, activeSetId) >= MAX_ATTEMPTS) {
+    alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
+    return;
+  }
+  startQuiz(activeSetId);
+}
+
+function showReview() {
+  isReviewMode = true;
+  currentQIndex = 0;
+  document.getElementById("resultWrap").classList.remove("show");
+  document.getElementById("testArea").classList.remove("hidden");
+  loadQuestion();
+}
+</script>
+</body>
+</html>
+
