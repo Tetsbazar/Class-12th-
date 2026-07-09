@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Bazar — Education 3rd Sem | Ch 6</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ================= COLOR SCHEME & VARIABLES ================= */
+:root {
+  --primary: #1a7a4a;
+  --primary-hover: #2aad68;
+  --accent: #f9a825;
+  --bg-main: #f0faf4;
+  --bg-card: #ffffff;
+  --bg-correct: #e8f7ef;
+  --bg-wrong: #fdf0f0;
+  --text-main: #1c2e24;
+  --text-meta: #5a7a66;
+  --text-exp: #2c4035;
+  --alert-danger: #dc3545;
+  --alert-warning: #e8730a;
+  --border-color: #c5dccb;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: var(--bg-main); min-height: 100vh; color: var(--text-main); }
+.en-font { font-family: 'Syne', sans-serif; }
+
+/* Top Bar */
+.top-bar { background: var(--primary); padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.top-logo { font-size: 1.2rem; font-weight: 800; color: white; cursor: pointer; }
+.top-logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.2); padding: 0.4rem 1rem; border-radius: 8px; color: white; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.timer-box.danger { background: var(--alert-danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+.user-info { font-size: 0.85rem; font-weight: 700; color: white; background: rgba(0,0,0,0.15); padding: 4px 10px; border-radius: 20px;}
+
+.main { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
+
+/* Hub View */
+.hub-header { text-align: center; margin-bottom: 2rem; }
+.hub-header h1 { font-family: 'Tiro Bangla', serif; color: var(--primary); font-size: 1.6rem; margin-bottom: 0.5rem; line-height: 1.4; }
+.hub-header p { color: var(--text-meta); font-size: 0.95rem; font-family: 'Tiro Bangla', serif;}
+
+.set-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+.set-card { background: var(--bg-card); border: 2px solid var(--border-color); border-radius: 12px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s; position: relative; }
+.set-card:hover:not(.locked) { transform: translateY(-3px); border-color: var(--primary); box-shadow: 0 8px 15px rgba(26,122,74,0.1); }
+.set-card.locked { opacity: 0.6; cursor: not-allowed; border-color: var(--alert-danger); }
+.set-card .icon { font-size: 2.2rem; margin-bottom: 0.5rem; }
+.set-card .set-num { font-weight: 700; font-size: 1.1rem; color: var(--primary); }
+.set-card .set-title { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-main); margin: 0.3rem 0 0.8rem; line-height: 1.3; height: 35px; display: flex; align-items: center; justify-content: center;}
+.set-card .set-meta { display: flex; justify-content: center; gap: 1rem; font-size: 0.75rem; color: var(--text-meta); font-weight: bold; }
+.set-card .set-meta span { background: var(--bg-main); padding: 0.2rem 0.6rem; border-radius: 6px; }
+.attempt-badge { position: absolute; top: 10px; right: 10px; background: #ffeeba; color: #856404; font-size: 0.75rem; font-weight: bold; padding: 3px 8px; border-radius: 10px; }
+.attempt-badge.locked-badge { background: var(--alert-danger); color: white; }
+
+/* Quiz View */
+.quiz-info { background: white; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; border: 1px solid var(--border-color); display: flex; gap: 1rem; flex-wrap: wrap; }
+.info-item { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-meta); font-weight: 600;}
+.info-item strong { color: var(--primary); }
+.progress-wrap { background: var(--border-color); border-radius: 4px; height: 6px; margin-bottom: 1.2rem; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--primary); transition: width 0.3s ease; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.q-num { font-size: 0.85rem; font-weight: 700; color: var(--primary); margin-bottom: 0.8rem; }
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; color: var(--text-main); font-weight: 700; line-height: 1.6; margin-bottom: 1.2rem; }
+.opts { display: flex; flex-direction: column; gap: 0.6rem; }
+.opt { display: flex; align-items: center; gap: 12px; padding: 0.8rem 1rem; border: 1.5px solid var(--border-color); border-radius: 10px; background: transparent; cursor: pointer; text-align: left; transition: all 0.2s; width: 100%; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: 600; color: var(--text-main);}
+.opt:not(.disabled):hover { border-color: var(--primary); background: var(--bg-selected); }
+.opt-circle { width: 26px; height: 26px; min-width: 26px; border-radius: 50%; border: 1.5px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; font-family: 'Syne', sans-serif; background: white; }
+.opt.correct { border-color: var(--primary); background: var(--bg-correct); }
+.opt.correct .opt-circle { background: var(--primary); border-color: var(--primary); color: white; }
+.opt.wrong { border-color: var(--alert-danger); background: var(--bg-wrong); }
+.opt.wrong .opt-circle { background: var(--alert-danger); border-color: var(--alert-danger); color: white; }
+.opt.disabled { cursor: default; }
+
+.explanation { background: var(--bg-main); border-left: 4px solid var(--primary); border-radius: 0 8px 8px 0; padding: 1rem; margin-top: 1rem; display: none; }
+.explanation.show { display: block; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-exp); line-height: 1.6; }
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; }
+.score-show { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: var(--text-meta); font-weight: bold;}
+.next-btn { background: var(--primary); color: white; border: none; padding: 0.7rem 1.5rem; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: 0.2s; }
+.next-btn:disabled { background: var(--border-color); cursor: not-allowed; }
+
+/* Result View */
+.result-wrap { background: white; border-radius: 14px; padding: 2rem 1.5rem; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.1); max-width: 500px; margin: 0 auto; display: none; }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; line-height: 1;}
+.result-score { font-size: 3rem; font-weight: 800; color: var(--primary); line-height: 1;}
+.result-total { font-size: 1rem; color: var(--text-meta); font-weight: bold; margin-bottom: 1rem; }
+.result-grade { font-family: 'Tiro Bangla', serif; font-size: 1.2rem; font-weight: 700; color: var(--accent); margin-bottom: 1.5rem; }
+.result-bars { display: flex; justify-content: center; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 10px; padding: 0.8rem; min-width: 80px; }
+.rb-num { font-size: 1.5rem; font-weight: 800; line-height: 1; margin-bottom: 5px;}
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.8rem; color: var(--text-meta); font-weight: bold;}
+.attempt-info-box { background: #fff3cd; color: #856404; padding: 10px; border-radius: 8px; font-size: 0.9rem; font-weight: 700; margin-bottom: 1.5rem; font-family: 'Tiro Bangla', serif; border: 1px solid #ffeeba;}
+.action-btns { display: flex; flex-direction: column; gap: 10px; }
+.action-btns button { width: 100%; padding: 12px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; cursor: pointer; border: none; transition: 0.2s; }
+.btn-retry { background: #17a2b8; color: white; }
+.btn-review { background: #28a745; color: white; }
+.btn-home { background: var(--bg-main); color: var(--text-main); border: 1.5px solid var(--border-color) !important; }
+
+/* Login Modal */
+.login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(3px); }
+.login-overlay.active { display: flex; }
+.login-modal { background: white; padding: 2.5rem 2rem; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); text-align: center; }
+.login-modal h2 { font-family: 'Tiro Bangla', serif; color: var(--primary); font-size: 1.4rem; margin-bottom: 0.5rem; }
+.login-modal p { font-family: 'Tiro Bangla', serif; color: var(--text-meta); font-size: 0.9rem; margin-bottom: 1.5rem; }
+.login-set-name { background: var(--bg-main); color: var(--primary); padding: 10px; border-radius: 8px; font-weight: 700; font-family: 'Tiro Bangla', serif; margin-bottom: 1.5rem; font-size: 0.95rem; }
+.input-group { text-align: left; margin-bottom: 1.2rem; }
+.input-group label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 5px; font-family: 'Tiro Bangla', serif;}
+.input-group input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border-color); border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 0.95rem; outline: none; transition: 0.2s; }
+.input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,122,74,0.1); }
+.login-btn { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
+.login-btn:hover { background: var(--primary-hover); }
+.cancel-btn { width: 100%; background: transparent; color: var(--text-meta); border: none; padding: 10px; margin-top: 5px; font-family: 'Tiro Bangla', serif; font-weight: 700; cursor: pointer;}
+.error-msg { color: var(--alert-danger); font-size: 0.85rem; font-weight: 700; margin-top: 10px; font-family: 'Tiro Bangla', serif; display: none; }
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="top-logo" onclick="location.reload()">Test<span>Bazar</span></div>
+  <div class="timer-box en-font hidden" id="timerBox">⏱ <span id="timerDisplay">10:00</span></div>
+  <div class="user-info en-font hidden" id="userDisplay"></div>
+</header>
+
+<div class="main">
+
+  <!-- ================= LOGIN MODAL ================= -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-modal">
+      <h2>লগইন করুন</h2>
+      <p>Test শুরু করতে আপনার ইউজারনেম ও পাসওয়ার্ড দিন</p>
+      <div class="login-set-name" id="loginSetName">📚 Set 1</div>
+      <div class="input-group">
+        <label>ইউজারনেম</label>
+        <input type="text" id="loginUsername" placeholder="Username">
+      </div>
+      <div class="input-group">
+        <label>পাসওয়ার্ড</label>
+        <input type="password" id="loginPassword" placeholder="Password" onkeydown="if(event.key==='Enter') doLogin()">
+      </div>
+      <button class="login-btn" onclick="doLogin()">✅ লগইন করে Test শুরু করো</button>
+      <button class="cancel-btn" onclick="closeLogin()">বাতিল</button>
+      <div class="error-msg" id="loginError">❌ ভুল ইউজারনেম বা পাসওয়ার্ড! (Index থেকে চেক করুন)</div>
+    </div>
+  </div>
+
+  <!-- ================= HUB PAGE ================= -->
+  <div id="hubPage">
+    <div class="hub-header">
+      <h1>শিক্ষাবিজ্ঞান 3rd Sem Chapter 6:<br>প্রতিবন্ধী শিশুদের শিক্ষামূলক কর্মসূচি</h1>
+      <p>মোট ১০টি সেট সম্বলিত কুইজ। Test শুরু করতে সেটে ক্লিক করুন।</p>
+    </div>
+    <div class="set-grid" id="setGrid"></div>
+    <div style="text-align: center; margin-top: 30px;">
+      <button onclick="window.history.back()" style="background: white; border: 1.5px solid var(--border-color); padding: 10px 20px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-weight: bold; cursor: pointer; color: var(--text-meta);">← Main Dashboard-এ ফিরুন</button>
+    </div>
+  </div>
+
+  <!-- ================= QUIZ AREA ================= -->
+  <div id="testArea" class="hidden">
+    <div class="quiz-info">
+      <div class="info-item">🎓 <strong>শিক্ষাবিজ্ঞান</strong> — 3rd Sem | <span id="testSetLabel">Set 1</span></div>
+      <div class="info-item">📝 <span id="testTopic">Topic Name</span></div>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+    <div class="q-card">
+      <div class="q-num en-font" id="qNum">প্রশ্ন ১ / ১৫</div>
+      <div class="q-text" id="qText">Question Text</div>
+      <div class="opts" id="qOpts"></div>
+      <div class="explanation" id="explanation"><p id="explanationText"></p></div>
+
+      <div class="nav-row">
+        <div class="score-show" id="scoreShow">সঠিক: ০ | ভুল: ০</div>
+        <button class="next-btn" id="nextBtn" onclick="nextQ()" disabled>পরবর্তী →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= RESULT AREA ================= -->
+  <div class="result-wrap" id="resultWrap">
+    <div class="result-icon" id="resultIcon">🏆</div>
+    <div class="result-score en-font" id="finalScore">100%</div>
+    <div class="result-total">স্কোর</div>
+    <div class="result-grade" id="resultGrade">অসাধারণ!</div>
+
+    <div class="result-bars">
+      <div class="result-bar">
+        <div class="rb-num en-font" id="rbCorrect" style="color:var(--primary)">15</div>
+        <div class="rb-label">সঠিক</div>
+      </div>
+      <div class="result-bar">
+        <div class="rb-num en-font" id="rbWrong" style="color:var(--alert-danger)">0</div>
+        <div class="rb-label">ভুল/স্কিপ</div>
+      </div>
+    </div>
+
+    <div class="attempt-info-box" id="attemptInfo"></div>
+
+    <div class="action-btns">
+      <button class="btn-retry" onclick="restartQuiz()">আবার চেষ্টা করো</button>
+      <button class="btn-review" onclick="showReview()">উত্তর দেখো</button>
+      <button class="btn-home" onclick="goToHub()">← Hub এ ফিরে যাও</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+//  Global Config & Database
+// ============================================================
+const MAX_ATTEMPTS = 10;
+const TIME_LIMIT = 10 * 60; // 10 Minutes
+const LABELS = ['ক', 'খ', 'গ', 'ঘ'];
+
+// Chapter 6: 10 Sets
+const ALL_SETS = {
+  1: {
+    name: 'Set 1', icon: '👁️', topic: 'দৃষ্টি প্রতিবন্ধীতার ধারণা, বৈশিষ্ট্য এবং কারণ',
+    questions: [
+      {q: '১. 1934 খ্রিস্টাব্দে কোন্ সংস্থা দৃষ্টি প্রতিবন্ধকতা সম্পর্কে একটি গ্রহণযোগ্য আইনগত সংজ্ঞা প্রদান করেন?', opts: ['ওয়ার্ল্ড হেলথ অর্গানাইজেশন', 'আমেরিকান মেডিক্যাল অ্যাসোসিয়েশন', 'ইউনেস্কো', 'রিহ্যাবিলিটেশন কাউন্সিল'], ans: 1, exp: 'ব্যাখ্যা: 1934 খ্রিস্টাব্দে আমেরিকান মেডিক্যাল অ্যাসোসিয়েশন সর্বপ্রথম দৃষ্টি প্রতিবন্ধকতার একটি গ্রহণযোগ্য সংজ্ঞা দিয়েছিল, যা 1935 সালে \'Social Security Act\' সমর্থন করে।'},
+      {q: '২. আইনগত দৃষ্টিহীন বলতে কোনো ব্যক্তির দুটি চোখেই লেন্স ব্যবহারের পরও ভিস্যুয়াল অ্যাকুইটি (Visual Acuity) কত-এর বেশি নয়?', opts: ['20/200', '10/200', '20/20', '20/100'], ans: 0, exp: 'ব্যাখ্যা: আমেরিকান মেডিক্যাল অ্যাসোসিয়েশনের সংজ্ঞা অনুযায়ী, ভালো চোখে বা লেন্স ব্যবহারের পরেও যাদের ভিস্যুয়াল অ্যাকুইটি 20/200 বা তার কম, তারা দৃষ্টি প্রতিবন্ধী।'},
+      {q: '৩. দৃষ্টি প্রতিবন্ধী বা অন্ধ ব্যক্তিদের ভালো চোখে দৃষ্টির ক্ষেত্র কত ডিগ্রির মধ্যে থাকে?', opts: ['40°', '30°', '20°', '10°'], ans: 2, exp: 'ব্যাখ্যা: আইনগত সংজ্ঞা অনুযায়ী, ভিস্যুয়াল অ্যাকুইটি 20/200-এর বেশি হলেও যাদের দৃষ্টিক্ষেত্র 20° বা তার কম, তারাও দৃষ্টি প্রতিবন্ধী।'},
+      {q: '৪. ভারতে কোন্ আইন অনুসারে কোনো ব্যক্তিকে দৃষ্টি প্রতিবন্ধী হিসেবে সংজ্ঞায়িত করা হয়েছে?', opts: ['Social Security Act (1935)', 'Rehabilitation Council of India Act (1992)', 'Education Act (1990)', 'CABE Act'], ans: 1, exp: 'ব্যাখ্যা: ভারতে 1992 সালের \'রিহ্যাবিলিটেশন কাউন্সিল অফ ইন্ডিয়া অ্যাক্ট\' অনুসারে দৃষ্টি প্রতিবন্ধীদের শনাক্তকরণের নির্দিষ্ট শর্তাবলি দেওয়া হয়েছে।'},
+      {q: '৫. শিক্ষাবিজ্ঞান অনুযায়ী দৃষ্টি প্রতিবন্ধী শিশুদের কয়টি শ্রেণিতে ভাগ করা হয়েছে?', opts: ['চারটি', 'তিনটি', 'পাঁচটি', 'দুইটি'], ans: 1, exp: 'ব্যাখ্যা: শিক্ষাবিজ্ঞানে দৃষ্টি প্রতিবন্ধীদের তিনটি শ্রেণিতে ভাগ করা হয়— স্বল্প দৃষ্টিমান, আংশিক দৃষ্টিমান এবং সম্পূর্ণ দৃষ্টিহীন।'},
+      {q: '৬. সামাজিক বিকাশের ক্ষেত্রে দৃষ্টিহীন শিক্ষার্থীরা স্বাভাবিক শিশুদের তুলনায় কতটা পিছিয়ে থাকে?', opts: ['25%', '30%', '38%', '45%'], ans: 2, exp: 'ব্যাখ্যা: মনোবিদগণ পরীক্ষা করে দেখেছেন যে দৃষ্টি প্রতিবন্ধী শিশুরা সামাজিক বিকাশের দিক থেকে স্বাভাবিক শিশুদের তুলনায় 38% পিছিয়ে থাকে।'},
+      {q: '৭. মনোবিদ এস. পি. হেইস-এর মতে দৃষ্টি প্রতিবন্ধী শিশুরা স্বাভাবিক শিশুদের তুলনায় কোন্ দিক থেকে পিছিয়ে থাকে?', opts: ['বাচনিক দিক থেকে', 'শারীরিক দিক থেকে', 'বুদ্ধির দিক থেকে', 'প্রাক্ষোভিক দিক থেকে'], ans: 2, exp: 'ব্যাখ্যা: মনোবিদ হেইস উল্লেখ করেছেন যে, দৃষ্টি প্রতিবন্ধী শিশুরা স্বাভাবিক শিশুদের তুলনায় বুদ্ধির বা বৌদ্ধিক বিকাশের দিক থেকে সামান্য পিছিয়ে থাকে।'},
+      {q: '৮. দৃষ্টি প্রতিবন্ধী শিশুদের শিক্ষামূলক বিকাশ পিছিয়ে পড়ার মূল কারণ কী?', opts: ['প্রক্ষোভের অভাব', 'প্রত্যক্ষণের অভাব', 'মনোযোগের অভাব', 'স্মৃতির অভাব'], ans: 1, exp: 'ব্যাখ্যা: শিশুরা কোনো কিছু স্বচক্ষে দেখে (প্রত্যক্ষণ) যে অভিজ্ঞতা অর্জন করে, দৃষ্টিহীন শিশুদের সেই প্রত্যক্ষণের অভাব থাকায় তাদের শিক্ষামূলক বিকাশ কিছুটা পিছিয়ে থাকে।'},
+      {q: '৯. চোখের তারারন্ধ্রের মাঝখানে সাদা দাগ দেখা গেলে তা কীসের লক্ষণ হিসেবে ধরা হয়?', opts: ['শ্রবণ প্রতিবন্ধীতার', 'মানসিক অক্ষমতার', 'দৃষ্টি প্রতিবন্ধীতার', 'অটিজমের'], ans: 2, exp: 'ব্যাখ্যা: এটি দৃষ্টি প্রতিবন্ধী শিশুদের শনাক্তকরণের একটি অন্যতম প্রধান বৈশিষ্ট্য।'},
+      {q: '১০. অন্ধ শিশুদের শনাক্তকরণের একটি বৈশিষ্ট্য হল—', opts: ['চোখে রামধনুর রং দেখা', 'নির্দিষ্ট কয়েকটি শব্দ ব্যবহার করা', 'আলোকের দিকে তাকাতে অসুবিধা হওয়া', 'A এবং C উভয়েই'], ans: 3, exp: 'ব্যাখ্যা: চোখে রামধনুর রং দেখা এবং আলোর দিকে তাকাতে অসুবিধা হওয়া—উভয়ই দৃষ্টি প্রতিবন্ধী শিশুদের শনাক্তকরণের লক্ষণ।'},
+      {q: '১১. দৃষ্টি প্রতিবন্ধীতার একটি বংশগত কারণ নীচের কোন্টি?', opts: ['রেটিনোব্লাস্টোমা', 'শৈশবকালে ছানি', 'ডায়াবেটিস', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: রেটিনোব্লাস্টোমা, শৈশবকালীন ছানি এবং ডায়াবেটিস প্রভৃতি বংশগত কারণে শিশুরা দৃষ্টি প্রতিবন্ধী হতে পারে।'},
+      {q: '১২. গর্ভাবস্থায় রুবেলা বা হারপিস সংক্রমণ দৃষ্টি প্রতিবন্ধীতার কোন্ স্তরের কারণ?', opts: ['জন্ম-পূর্ববর্তী কারণ', 'জন্মকালীন কারণ', 'জন্ম-পরবর্তী কারণ', 'বংশগত কারণ'], ans: 0, exp: 'ব্যাখ্যা: রুবেলা, গনোরিয়া বা হারপিসের মতো রোগগুলি মায়ের গর্ভাবস্থায় অর্থাৎ জন্ম-পূর্ববর্তী সময়ে শিশুকে সংক্রামিত করে অন্ধত্বের কারণ হতে পারে।'},
+      {q: '১৩. অন্ধ শিশুদের অভিজ্ঞতা অর্জনে কোন্ পদ্ধতির সাহায্য নেওয়া হয়?', opts: ['দর্শন পদ্ধতি', 'শ্রবণ ও স্পর্শ পদ্ধতি', 'ওষ্ঠ পঠন পদ্ধতি', 'সঞ্চালনমূলক পদ্ধতি'], ans: 1, exp: 'ব্যাখ্যা: অন্ধ শিশুরা দেখতে পায় না, তাই তাদের অন্যান্য ইন্দ্রিয়, প্রধানত শ্রবণ ও স্পর্শের মাধ্যমে বিভিন্ন বিষয়ে অভিজ্ঞতা অর্জনে সাহায্য করা হয়।'},
+      {q: '১৪. দৃষ্টি প্রতিবন্ধী শিশুদের শিক্ষার একটি গুরুত্বপূর্ণ উদ্দেশ্য কী?', opts: ['বৃত্তিমুখী শিক্ষাদান করে স্বনির্ভর করা', 'আত্মবিশ্বাস বাড়িয়ে তোলা', 'সামাজিক চেতনার বিকাশ', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: আত্মবিশ্বাস গঠন, সামাজিক বিকাশ এবং বৃত্তিমুখী শিক্ষার মাধ্যমে স্বনির্ভরতা অর্জন—সবগুলিই দৃষ্টিহীনদের শিক্ষার উদ্দেশ্য।'},
+      {q: '১৫. অন্ধ শিশুদের পাঠ্যক্রমকে মূলত কয়টি ভাগে ভাগ করা যায়?', opts: ['তিনটি', 'চারটি', 'পাঁচটি', 'দুইটি'], ans: 1, exp: 'ব্যাখ্যা: অন্ধদের পাঠ্যক্রমকে মূলত চারটি ভাগে ভাগ করা হয়— মূল বিষয় (ব্রেইল), জ্ঞানমূলক বিষয়, শরীর শিক্ষা এবং সহ-পাঠ্যক্রমিক বিষয়।'}
+    ]
+  },
+  2: {
+    name: 'Set 2', icon: '🔤', topic: 'ব্রেইল পদ্ধতি এবং দৃষ্টিহীনদের শিক্ষা ব্যবস্থাপনা',
+    questions: [
+      {q: '১. অন্ধ শিশুদের পাঠ্যক্রমের মূল বিষয় বা পড়ার মাধ্যম কোন্টি?', opts: ['অ্যাবাকাস', 'স্টাইলাস', 'ব্রেইল পদ্ধতি', 'ওষ্ঠ পঠন'], ans: 2, exp: 'ব্যাখ্যা: দৃষ্টিহীন শিশুরা যেহেতু স্বাভাবিকভাবে দেখতে পায় না, তাই তাদের পড়ার জন্য মূল বিষয় হিসেবে ব্রেইল পড়া ও লেখাকে পাঠ্যক্রমের অন্তর্ভুক্ত করা হয়েছে।'},
+      {q: '২. ব্রেইল পদ্ধতির আবিষ্কারক কে?', opts: ['জুয়ান পাবলো বর্নে', 'লুইস ব্রেইল', 'সেগুইন', 'মস্তেসরি'], ans: 1, exp: 'ব্যাখ্যা: ফরাসি শিক্ষাবিদ লুইস ব্রেইল নিজে অন্ধ হয়ে যাওয়ার পর দৃষ্টি প্রতিবন্ধী ব্যক্তিদের জন্য এই পদ্ধতি আবিষ্কার করেন।'},
+      {q: '৩. লুইস ব্রেইল কত খ্রিস্টাব্দে ব্রেইল পদ্ধতির প্রবর্তন করেন?', opts: ['1809', '1829', '1835', '1950'], ans: 1, exp: 'ব্যাখ্যা: লুইস ব্রেইল 1829 খ্রিস্টাব্দে দৃষ্টি প্রতিবন্ধী ব্যক্তিদের জন্য এই ব্রেইল পদ্ধতির প্রবর্তন করেছিলেন।'},
+      {q: '৪. স্পর্শভিত্তিক পাঠের একটি পদ্ধতি হল—', opts: ['স্টাইলাস', 'অ্যাবাকাস', 'ব্রেইল', 'ওষ্ঠ পঠন'], ans: 2, exp: 'ব্যাখ্যা: ব্রেইল একটি স্পর্শভিত্তিক পদ্ধতি, যেখানে উঁচু উঁচু বিন্দুগুলি স্পর্শ করে অন্ধ শিশুরা বিষয় সম্পর্কে জ্ঞান লাভ করে।'},
+      {q: '৫. ব্রেইল পদ্ধতিতে কয়টি বিন্দুর সমন্বয়ে এক-একটি ইংরেজি বর্ণ তৈরি হয়?', opts: ['চারটি', 'পাঁচটি', 'ছয়টি', 'আটটি'], ans: 2, exp: 'ব্যাখ্যা: পুরু কাগজের ওপর ৬টি বিন্দুর বিভিন্ন সমন্বয়ে বা বিন্যাসে এক-একটি ইংরেজি বর্ণ তৈরি করা হয়।'},
+      {q: '৬. ব্রেইল সাধারণত কোন্ দিক থেকে কোন্ দিকে পড়া হয়?', opts: ['ডানদিক থেকে বামদিকে', 'বামদিক থেকে ডানদিকে', 'ওপর থেকে নীচে', 'নীচ থেকে ওপরে'], ans: 1, exp: 'ব্যাখ্যা: ব্রেইলের বিন্দুগুলি স্পর্শ করে সাধারণত বামদিক থেকে ডানদিকে পড়তে হয়।'},
+      {q: '৭. একজন দক্ষ ব্রেইল পাঠক প্রতি মিনিটে সর্বাধিক কয়টি শব্দ পড়তে পারে?', opts: ['40টি', '50টি', '60টি', '80টি'], ans: 2, exp: 'ব্যাখ্যা: দক্ষ ব্রেইল পাঠক স্পর্শের মাধ্যমে এক মিনিটে সর্বাধিক 60টি শব্দ পড়তে সক্ষম হয়।'},
+      {q: '৮. ব্রেইল লেখার জন্য কোন্ যন্ত্র ব্যবহার করা হয়?', opts: ['স্টাইলাস (Stylus)', 'অ্যাবাকাস', 'টকিং বুক', 'টেলিস্কোপ'], ans: 0, exp: 'ব্যাখ্যা: শিক্ষার্থীরা পুরু কাগজের ওপর উঁচু বিন্দু তৈরি করার জন্য \'স্টাইলাস\' নামক একটি শক্ত যন্ত্রের সাহায্যে ব্রেইল লিখে থাকে।'},
+      {q: '৯. দৃষ্টি প্রতিবন্ধী শিশুদের জন্য ব্যবহৃত শব্দ নির্ভর শিক্ষোপকরণ নীচের কোন্টি?', opts: ['ব্রেইল', 'টেপরেকর্ডার', 'Talking Book', 'B এবং C উভয়েই'], ans: 3, exp: 'ব্যাখ্যা: টেপরেকর্ডার, অডিও ক্যাসেট এবং টকিং বুক (Talking Book) হলো অন্ধ শিশুদের শিক্ষার জন্য শব্দ নির্ভর বা ইলেকট্রনিক যন্ত্রপাতি।'},
+      {q: '১০. ভারতবর্ষে কত খ্রিস্টাব্দে অন্ধ শিশুদের জন্য নিয়ন্ত্রিত শিক্ষা শুরু হয়?', opts: ['1950 খ্রিস্টাব্দে', '1943 খ্রিস্টাব্দে', '1935 খ্রিস্টাব্দে', '1992 খ্রিস্টাব্দে'], ans: 1, exp: 'ব্যাখ্যা: 1943 খ্রিস্টাব্দে কেন্দ্রীয় শিক্ষা উপদেষ্টা বোর্ড (CABE) অন্ধ শিশুদের জন্য একটি কমিটি গঠন করে এই নিয়ন্ত্রিত শিক্ষা শুরু করেন।'},
+      {q: '১১. ইংল্যান্ডের সেন্ট ডানস্টানের শাখা হিসেবে ভারতের কোথায় অন্ধ সৈনিকদের জন্য হোস্টেল স্থাপন করা হয়?', opts: ['কলকাতায়', 'মুম্বাইতে', 'দেরাদুনে', 'দিল্লিতে'], ans: 2, exp: 'ব্যাখ্যা: দেরাদুনে এই হোস্টেলটি স্থাপন করা হয়েছিল যা পরবর্তীকালে 1950 খ্রিস্টাব্দে কেন্দ্রীয় সরকার অধিগ্রহণ করে।'},
+      {q: '১২. দৃষ্টি প্রতিবন্ধী শিক্ষার্থীদের অতিরিক্ত সহায়তা প্রদানের জন্য কোন্ কক্ষ ব্যবহার করা হয়?', opts: ['সাধারণ শ্রেণিকক্ষ', 'রিসোর্স কক্ষ', 'হোস্টেল', 'কমনরুম'], ans: 1, exp: 'ব্যাখ্যা: দৃষ্টি প্রতিবন্ধী শিক্ষার্থীরা দিনের নির্দিষ্ট সময়ে বিশেষজ্ঞ শিক্ষকের অধীনে \'রিসোর্স কক্ষ\' বা Resource Room-এ বিশেষ শিক্ষালাভ করে থাকে।'},
+      {q: '১৩. অন্ধ শিশুদের শিক্ষাদানের জন্য বেসরকারি শিক্ষাসংস্থাগুলিকে ভারত সরকার মোট খরচের কত শতাংশ অনুদান দেয়?', opts: ['50 শতাংশ', '60 শতাংশ', '75 শতাংশ', '100 শতাংশ'], ans: 2, exp: 'ব্যাখ্যা: অন্ধ শিশুদের শিক্ষাদানের প্রসারের লক্ষ্যে সরকার বেসরকারি সংস্থাগুলিকে খরচের 75 শতাংশ অনুদান দেওয়ার নীতি গ্রহণ করেছে।'},
+      {q: '১৪. পশ্চিমবঙ্গে দৃষ্টি প্রতিবন্ধীদের শিক্ষকদের জন্য প্রশিক্ষণ কেন্দ্র কোথায় অবস্থিত?', opts: ['সল্টলেক', 'নরেন্দ্রপুর', 'কল্যাণী', 'যাদবপুর'], ans: 1, exp: 'ব্যাখ্যা: ভারতের তিনটি প্রধান প্রশিক্ষণ কেন্দ্রের একটি হলো পশ্চিমবঙ্গের নরেন্দ্রপুর (বাকি দুটি দিল্লি ও মুম্বাইতে অবস্থিত)।'},
+      {q: '১৫. আমাদের দেশে প্রতি বছর কত তারিখে প্রতিবন্ধী দিবস পালন করা হয়?', opts: ['১৫ মার্চ', '৭ এপ্রিল', '৩ ডিসেম্বর', '৫ সেপ্টেম্বর'], ans: 0, exp: 'ব্যাখ্যা: ভারতে প্রতি বছর ১৫ মার্চ দিনটিকে প্রতিবন্ধী দিবস হিসেবে পালন করা হয়।'}
+    ]
+  },
+  3: {
+    name: 'Set 3', icon: '👂', topic: 'শ্রবণ প্রতিবন্ধীতার ইতিহাস, ধারণা এবং বৈশিষ্ট্য',
+    questions: [
+      {q: '১. ষোড়শ শতাব্দীতে সর্বপ্রথম শ্রবণ প্রতিবন্ধীদের শিক্ষার প্রয়োজনীয়তার কথা কে বলেন?', opts: ['পেড্রো পোন্স ডি লিওন', 'জুয়ান পাবলো বর্নে', 'জিরোলামো কার্ডানো', 'লুইস ব্রেইল'], ans: 2, exp: 'ব্যাখ্যা: ইতালীয় গণিতবিদ ও চিকিৎসক জিরোলামো কার্ডানো (1501-1576) সর্বপ্রথম শ্রবণ প্রতিবন্ধীদের শিক্ষার সপক্ষে সওয়াল করে বহু যুগের অন্ধকারের অবসান ঘটান।'},
+      {q: '২. শ্রবণ প্রতিবন্ধীদের শিক্ষার ইতিহাসে প্রথম শিক্ষকের মর্যাদা কে লাভ করেন?', opts: ['পেড্রো পোন্স ডি লিওন', 'জিরোলামো কার্ডানো', 'জুয়ান পাবলো বর্নে', 'স্যামুয়েল কর্ক'], ans: 0, exp: 'ব্যাখ্যা: স্পেনের একজন সাধু পেড্রো পোন্স ডি লিওন শ্রবণ প্রতিবন্ধীদের জন্য সর্বপ্রথম একটি বিদ্যালয় স্থাপন করে প্রথম শিক্ষকের মর্যাদা পান।'},
+      {q: '৩. আঙুলের সাহায্যে বানান করে পড়া ও লেখার পদ্ধতি কে আবিষ্কার করেন?', opts: ['পেড্রো পোন্স ডি লিওন', 'জিরোলামো কার্ডানো', 'জুয়ান পাবলো বর্নে', 'স্যামুয়েল কর্ক'], ans: 2, exp: 'ব্যাখ্যা: স্পেনের জুয়ান পাবলো বর্নে প্রথম আঙুলের সাহায্যে বানান করে এবং শব্দ উচ্চারণের মাধ্যমে পড়া ও লেখার পদ্ধতি আবিষ্কার করেন।'},
+      {q: '৪. 2001 খ্রিস্টাব্দের জনগণনা অনুযায়ী মোট প্রতিবন্ধী ব্যক্তিদের মধ্যে শ্রবণ প্রতিবন্ধীদের হার কত?', opts: ['5.5%', '7.5%', '10%', '15%'], ans: 1, exp: 'ব্যাখ্যা: 2001 সালের জনগণনায় দেখা যায় যে, ভারতের মোট প্রতিবন্ধীদের মধ্যে 7.5% হলো শ্রবণ প্রতিবন্ধী।'},
+      {q: '৫. যেসকল শিশু জন্ম থেকেই শ্রবণে অক্ষম তাদের কী বলা হয়?', opts: ['কানে খাটো', 'দৃষ্টি প্রতিবন্ধী', 'বধির', 'মানসিক প্রতিবন্ধী'], ans: 2, exp: 'ব্যাখ্যা: শ্রবণ ক্ষমতার ওপর নির্ভর করে যারা জন্ম থেকে শুনতে পায় না, তাদের সম্পূর্ণ \'বধির\' বলা হয়।'},
+      {q: '৬. যে সকল শিশু শ্রবণ যন্ত্রের সাহায্যে বা নির্দিষ্ট উচ্চমাত্রার শব্দ শুনতে পায় তাদের কী বলে?', opts: ['বধির', 'কানে খাটো', 'মূক', 'শিখন অক্ষম'], ans: 1, exp: 'ব্যাখ্যা: যারা শ্রবণ যন্ত্রের মাধ্যমে বা জোরে কথা বললে শুনতে পায়, তাদের কানে খাটো (Hard of hearing) বলা হয়।'},
+      {q: '৭. শ্রবণ প্রতিবন্ধী শিশুদের কোন্ বিকাশ যথাযথভাবে ঘটে না?', opts: ['দৈহিক বিকাশ', 'সামাজিক বিকাশ', 'ভাষার বিকাশ', 'B এবং C উভয়েই'], ans: 3, exp: 'ব্যাখ্যা: কানে না শোনা এবং কথা বলতে না পারার কারণে এদের সামাজিক বিকাশ এবং ভাষার বিকাশ অত্যন্ত ব্যাহত হয়।'},
+      {q: '৮. কোন্ মনোবিজ্ঞানী শ্রবণ প্রতিবন্ধী শিশুদের সঙ্গে স্বাভাবিক শিশুদের চিন্তাশক্তির সমমাত্রা লক্ষ করেছেন?', opts: ['ফার্থ (Furth)', 'হেইস', 'লিও ক্যানার', 'ক্লেমেন্ট'], ans: 0, exp: 'ব্যাখ্যা: বৌদ্ধিক বিকাশে এরা সামান্য পিছিয়ে থাকলেও মনোবিজ্ঞানী ফার্থ এদের এবং স্বাভাবিক শিশুদের চিন্তাশক্তির মধ্যে সমমাত্রা লক্ষ করেছেন।'},
+      {q: '৯. শ্রবণ প্রতিবন্ধীদের শনাক্তকরণের একটি উল্লেখযোগ্য বৈশিষ্ট্য নীচের কোন্টি?', opts: ['শব্দের উৎসের দিকে মাথা ঘোরানো', 'বক্তার ঠোঁটের দিকে নজর দেওয়া', 'জোরে জোরে কথা বলা', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: যেহেতু এরা কানে শুনতে পায় না, তাই এরা ঠোঁট নাড়া লক্ষ করে, জোরে কথা বলে এবং শব্দের উৎসের দিকে মাথা ঝুঁকিয়ে রাখে।'},
+      {q: '১০. \'টিভি বা রেডিও সবসময় উচ্চ শব্দে বাজানো\' —এটি কোন্ প্রতিবন্ধীতার লক্ষণ?', opts: ['দৃষ্টি প্রতিবন্ধী', 'শিখন অক্ষমতা', 'শ্রবণ প্রতিবন্ধী', 'অটিজম'], ans: 2, exp: 'ব্যাখ্যা: শ্রবণ প্রতিবন্ধী বা কানে খাটো শিশুরা সাধারণ শব্দ শুনতে পায় না বলে তারা টিভি বা রেডিও খুব জোরে বাজায়।'},
+      {q: '১১. রুবেলা সংক্রমণ শ্রবণ প্রতিবন্ধীতার কোন্ স্তরের কারণ?', opts: ['জন্ম-পূর্ববর্তী কারণ', 'জন্মকালীন কারণ', 'জন্ম-পরবর্তী কারণ', 'বংশগত কারণ'], ans: 0, exp: 'ব্যাখ্যা: মায়ের গর্ভাবস্থায় রুবেলা ভাইরাসের সংক্রমণ ঘটলে শিশু জন্মগতভাবে বধির হতে পারে।'},
+      {q: '১২. পিতা-মাতার রক্তে কী উপাদানের অসামঞ্জস্যতার কারণে শিশু বধির হয়ে জন্মাতে পারে?', opts: ['Bh উপাদান', 'Ph উপাদান', 'Rh উপাদান', 'STH উপাদান'], ans: 2, exp: 'ব্যাখ্যা: গর্ভাবস্থায় রক্তে Rh উপাদানের অসামঞ্জস্যতা এবং অপুষ্টির কারণে শিশুর শ্রবণ ক্ষমতা নষ্ট হতে পারে।'},
+      {q: '১৩. জন্মকালীন শ্বাসকষ্ট বা অক্সিজেনের অভাব শ্রবণ প্রতিবন্ধীতার কোন্ স্তরের কারণ?', opts: ['জন্ম-পূর্ববর্তী কারণ', 'জন্মকালীন কারণ', 'জন্ম-পরবর্তী কারণ', 'জিনগত কারণ'], ans: 1, exp: 'ব্যাখ্যা: ভূমিষ্ঠ হওয়ার সময় শিশুর শ্বাসকষ্ট হলে বা অপরিণত অবস্থায় জন্মালে শ্রবণ প্রতিবন্ধীতা দেখা দিতে পারে।'},
+      {q: '১৪. শ্রবণ প্রতিবন্ধী বা মূক ও বধির শিশুদের শিক্ষার অন্যতম মূল উদ্দেশ্য কী?', opts: ['বাচনিক ক্ষমতার বিকাশ', 'সামাজিক বিকাশ', 'বৃত্তিমূলক প্রশিক্ষণ', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: এদের বাচনিক ক্ষমতা, আত্মবিশ্বাস, সামাজিকীকরণ এবং বৃত্তিমূলক প্রশিক্ষণের মাধ্যমে স্বনির্ভর করা শিক্ষার প্রধান উদ্দেশ্য।'},
+      {q: '১৫. মূক ও বধির শিশুদের জন্য উপযুক্ত পাঠ্যক্রমের কথা কে উল্লেখ করেছেন?', opts: ['স্যামুয়েল কর্ক', 'ফার্থ', 'লুইস ব্রেইল', 'সেগুইন'], ans: 0, exp: 'ব্যাখ্যা: মনোবিদ স্যামুয়েল কর্ক মূক ও বধির শিশুদের জন্য বাচনিক বিকাশ, পঠন-লিখন এবং ভাষাজ্ঞানমূলক নির্দিষ্ট পাঠ্যক্রমের কথা বলেছেন।'}
+    ]
+  },
+  4: {
+    name: 'Set 4', icon: '🤟', topic: 'শ্রবণ প্রতিবন্ধীদের শিক্ষণ পদ্ধতি এবং অটিজমের ধারণা',
+    questions: [
+      {q: '১. জুয়ান পাবলো বর্নে শ্রবণ প্রতিবন্ধীদের জন্য কোন্ শিক্ষণ পদ্ধতির প্রবর্তন করেন?', opts: ['সঞ্চালনমূলক পদ্ধতি', 'কম্পন ও স্পর্শ পদ্ধতি', 'মৌখিক পদ্ধতি', 'দর্শনভিত্তিক পদ্ধতি'], ans: 2, exp: 'ব্যাখ্যা: স্প্যানিশ ধর্মগুরু জুয়ান পাবলো বর্নে বধিরদের শিক্ষাদানের জন্য মৌখিক পদ্ধতি (ওষ্ঠ পঠন)-র প্রবর্তন করেন।'},
+      {q: '২. ঠোঁট নাড়াচাড়া দেখে বক্তার কথা বা মনের ভাব বুঝতে পারাকে কী বলে?', opts: ['ওষ্ঠ পঠন (Lip reading)', 'ব্রেইল', 'আঙুল সঞ্চালন', 'কম্পন পদ্ধতি'], ans: 0, exp: 'ব্যাখ্যা: বক্তার ঠোঁট নাড়াচাড়ার কৌশল পর্যবেক্ষণের মাধ্যমে মনের ভাব বোঝা ও কথা বলার চেষ্টাই হলো ওষ্ঠ পঠন।'},
+      {q: '৩. ওষ্ঠ পঠনের মাধ্যমে শিশুর কোন্ বিকাশ ঘটানো হয়?', opts: ['শারীরিক বিকাশ', 'বাচনিক বিকাশ', 'মানসিক বিকাশ', 'আধ্যাত্মিক বিকাশ'], ans: 1, exp: 'ব্যাখ্যা: ওষ্ঠ পঠনের মাধ্যমে শ্রবণ প্রতিবন্ধী শিশুরা শব্দ উচ্চারণ করতে ও কথা বলতে শেখে, ফলে তাদের বাচনিক বিকাশ ঘটে।'},
+      {q: '৪. শ্রবণ প্রতিবন্ধীদের সঞ্চালনমূলক পদ্ধতির প্রবর্তক কে?', opts: ['জুয়ান পাবলো বর্নে', 'কেটি অলকর্ণ', 'শিক্ষাবিদ পিরিয়ার (Pereire)', 'মস্তেসরি'], ans: 2, exp: 'ব্যাখ্যা: শিক্ষাবিদ পিরিয়ার সঞ্চালনমূলক পদ্ধতির প্রবর্তন করেন, যেখানে হাতের আঙুলের নাড়াচাড়ার মাধ্যমে মনের ভাব প্রকাশ করা হয়।'},
+      {q: '৫. সঞ্চালনমূলক পদ্ধতিতে কীসের ব্যবহার সবচেয়ে বেশি করা হয়?', opts: ['ওষ্ঠের', 'কম্পনের', 'দৃষ্টিশক্তির', 'আঙুলের'], ans: 3, exp: 'ব্যাখ্যা: এই পদ্ধতিতে হাতের আঙুল তালুতে ভিন্ন ভিন্ন ভাবে স্পর্শ করে এক-একটি বর্ণ প্রকাশ করা হয়, অর্থাৎ আঙুলের ব্যবহার সর্বাধিক।'},
+      {q: '৬. শ্রবণ প্রতিবন্ধীদের জন্য \'কম্পন ও স্পর্শ পদ্ধতি\' কে প্রবর্তন করেন?', opts: ['কেটি অলকর্ণ ও সোফিয়া অলকর্ণ', 'পিরিয়ার', 'জুয়ান পাবলো বর্নে', 'স্যামুয়েল কর্ক'], ans: 0, exp: 'ব্যাখ্যা: এই পদ্ধতিতে শিক্ষার্থীরা শিক্ষকের শব্দ উচ্চারণের সময় কণ্ঠনালির ওপর হাত দিয়ে শব্দের কম্পন অনুভূতি উপলব্ধি করতে শেখে।'},
+      {q: '৭. যেসকল শ্রবণ প্রতিবন্ধী শিশুকে কোনোভাবেই নিয়ন্ত্রিত শিক্ষাব্যবস্থায় শিক্ষাদান করা যায় না তাদের বিকল্প শিক্ষা হিসেবে কী দেওয়া হয়?', opts: ['প্রথাগত শিক্ষা', 'বৃত্তিমুখী প্রশিক্ষণ', 'সাধারণ পাঠ্যক্রম', 'দর্শন শিক্ষা'], ans: 1, exp: 'ব্যাখ্যা: এদের জন্য বিকল্প ব্যবস্থা হিসেবে বৃত্তিমুখী প্রশিক্ষণের ব্যবস্থা করা হয় যাতে তারা স্বনির্ভর হতে পারে।'},
+      {q: '৮. 1908 খ্রিস্টাব্দে কে প্রথম \'অটিজম\' শব্দটি ব্যবহার করেন?', opts: ['লিও ক্যানার', 'ইউজিন ব্লুলার (Eugen Bleuler)', 'স্ট্যানলি গ্রিনস্প্যান', 'ক্লেমেন্ট'], ans: 1, exp: 'ব্যাখ্যা: সুইস মনশ্চিকিৎসক ইউজিন ব্লুলার \'American Journal of Insanity\'-তে প্রকাশিত তাঁর একটি নিবন্ধে সর্বপ্রথম \'অটিজম\' শব্দটি ব্যবহার করেন।'},
+      {q: '৯. 1943 খ্রিস্টাব্দে 11টি মানসিক ব্যাধিগ্রস্ত শিশুর আচরণের ওপর ভিত্তি করে কে \'Early Infantile Autism\' নামকরণ করেন?', opts: ['ইউজিন ব্লুলার', 'ড. লিও ক্যানার (Leo Kanner)', 'স্যামুয়েল কর্ক', 'ক্লেমেন্ট'], ans: 1, exp: 'ব্যাখ্যা: মনশ্চিকিৎসক ড. লিও ক্যানার শিশুদের আক্রমণাত্মক আচরণের ওপর ভিত্তি করে এই ব্যাপ্তির নাম দেন \'Early Infantile Autism\'।'},
+      {q: '১০. ড. লিও ক্যানারের লেখা অটিজম সংক্রান্ত প্রবন্ধটি কোন্ পত্রিকায় প্রকাশিত হয়?', opts: ['American Journal of Insanity', 'The Nervous Child', 'Early Infantile', 'Autism Spectrum'], ans: 1, exp: 'ব্যাখ্যা: লিও ক্যানার তাঁর এই গবেষণাটি \'The Nervous Child\' নামক একটি ছোট সাময়িক পত্রিকায় প্রকাশ করেছিলেন।'},
+      {q: '১১. \'Autism\' শব্দটি গ্রিক কোন্ শব্দ থেকে এসেছে?', opts: ['Auto', 'Autistic', 'Autos', 'Arotic'], ans: 2, exp: 'ব্যাখ্যা: অটিজম শব্দটি গ্রিক শব্দ \'Autos\' থেকে এসেছে।'},
+      {q: '১২. \'Autos\' শব্দটির অর্থ কী?', opts: ['আত্মা বা নিজেকে', 'সমাজ', 'মন', 'মস্তিষ্ক'], ans: 0, exp: 'ব্যাখ্যা: \'Autos\' এর অর্থ হলো আত্মা বা নিজেকে (Self), যা অটিস্টিক শিশুদের আত্মকেন্দ্রিক স্বভাবকে তুলে ধরে।'},
+      {q: '১৩. শিশু বা বয়স্ক ব্যক্তিদের অন্যান্য ব্যক্তিদের সঙ্গে সম্পর্ক স্থাপনের ক্ষমতার অভাবকেই কী বলে?', opts: ['শিখন অক্ষমতা', 'দৃষ্টি প্রতিবন্ধকতা', 'অটিজম', 'বুদ্ধিভিত্তিক অক্ষমতা'], ans: 2, exp: 'ব্যাখ্যা: সামাজিক ক্রিয়া-প্রতিক্রিয়া এবং অন্য মানুষের সঙ্গে সহজে সম্পর্ক স্থাপন করতে না পারাই হলো অটিজম।'},
+      {q: '১৪. Autism শব্দটির চিকিৎসাগত নাম বা ASD-এর সম্পূর্ণ নাম কী?', opts: ['Autism Spectrum Design', 'Autism Speed Disorder', 'Autism Spectrum Disorder', 'Autism Spectrum Despatch'], ans: 2, exp: 'ব্যাখ্যা: চিকিৎসাবিজ্ঞানে অটিজমকে Autism Spectrum Disorder (ASD) বলা হয়, যা একটি জটিল স্নায়বিক বিকাশ সংক্রান্ত রোগ।'},
+      {q: '১৫. অটিজম একটি জৈবিক উপসর্গ যা সাধারণত কত মাস বয়সের পূর্বেই শুরু হয়?', opts: ['20 মাস', '24 মাস', '30 মাস', '36 মাস'], ans: 2, exp: 'ব্যাখ্যা: 1977 সালের সংজ্ঞা অনুযায়ী, অটিজম এমন একটি জৈবিক উপসর্গ যা সাধারণত 30 মাস (আড়াই বছর) বয়সের পূর্বেই আরম্ভ হয়।'}
+    ]
+  },
+  5: {
+    name: 'Set 5', icon: '🧩', topic: 'অটিজমের বৈশিষ্ট্য, শিক্ষা এবং শিখন অক্ষমতা',
+    questions: [
+      {q: '১. ছেলে ও মেয়েদের মধ্যে অটিজমের অনুপাত কত?', opts: ['3 : 1', '2 : 1', '1 : 2', '3 : 2'], ans: 1, exp: 'ব্যাখ্যা: মেয়েদের তুলনায় ছেলেদের মধ্যে অটিজম বেশি দেখা যায়, এই অনুপাত হলো 2:1।'},
+      {q: '২. অটিজমের একটি প্রধান বৈশিষ্ট্য নীচের কোন্টি?', opts: ['আত্মকেন্দ্রিকতা', 'ভাষাগত সমস্যা', 'হিংসাত্মক মনোভাব', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: অটিস্টিক শিশুরা আত্মকেন্দ্রিক হয়, ভাষার প্রকাশে অক্ষম হয় এবং এদের মধ্যে হিংসাত্মক বা আত্মপীড়নকারী আচরণ দেখা যায়।'},
+      {q: '৩. নিজেকে কামড়ানো, দেওয়ালে মাথা ঠোকা, লাথি মারা—এগুলি অটিজমের কোন্ ধরনের বৈশিষ্ট্য?', opts: ['ঔৎসুক্যহীনতা', 'আত্মপীড়নকারী আচরণ', 'বিপদ বুঝতে না পারা', 'প্রক্ষোভগ্রস্ততা'], ans: 1, exp: 'ব্যাখ্যা: এই ধরনের কাজ করে শিশুরা নিজেদের বা চারপাশের মানুষের ক্ষতি করে, যাকে আত্মপীড়নকারী আচরণ বলে।'},
+      {q: '৪. অটিস্টিক শিশুদের শিক্ষাগত পদ্ধতি বা চিকিৎসা হিসেবে কোন্টি ব্যবহার করা হয়?', opts: ['শ্রবণগত প্রশিক্ষণ', 'সংগীত পদ্ধতি', 'ভিটামিন পদ্ধতি', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: অটিস্টিক শিশুদের চিকিৎসায় শ্রবণগত, সংগীত, পেশাগত, ভিটামিন এবং বিভিন্ন থেরাপি পদ্ধতি ব্যবহৃত হয়।'},
+      {q: '৫. TEACCH সংস্থাটি কত খ্রিস্টাব্দে গঠিত হয়?', opts: ['1975 খ্রিস্টাব্দে', '1970 খ্রিস্টাব্দে', '1980 খ্রিস্টাব্দে', '1966 খ্রিস্টাব্দে'], ans: 1, exp: 'ব্যাখ্যা: নর্থ ক্যারোলিনা বিশ্ববিদ্যালয়ের চিকিৎসা বিভাগে Autism-এ আক্রান্ত শিশুদের চিকিৎসার জন্য 1970 সালে TEACCH গঠিত হয়।'},
+      {q: '৬. TEACCH সংস্থাটি কাদের চিকিৎসার জন্য গঠিত হয়?', opts: ['দর্শন প্রতিবন্ধী', 'শ্রবণ প্রতিবন্ধী', 'শিখন অক্ষম', 'অটিজম প্রতিবন্ধী'], ans: 3, exp: 'ব্যাখ্যা: \'Treatment and Education of Autistic and Related Communication Handicapped Children\' সংস্থাটি মূলত অটিস্টিক শিশুদের চিকিৎসার জন্য গঠিত।'},
+      {q: '৭. অটিস্টিক শিশুদের শিখন সমস্যা চিহ্নিত করতে TEACCH কোন্ প্রোফাইল ব্যবহার করে বা PEP-এর সম্পূর্ণ নাম কী?', opts: ['Psychological Educational Profile', 'Psycho Educational Profile', 'Psycho Education Product', 'Psycho Educational Product'], ans: 1, exp: 'ব্যাখ্যা: PEP বা Psycho Educational Profile-এর মাধ্যমে শিক্ষার্থীদের শিখন সমস্যাগুলি চিহ্নিত করে উপযোগী পদ্ধতির প্রয়োগ করা হয়।'},
+      {q: '৮. \'Floor time\' শিক্ষা পদ্ধতি কে উদ্ভাবন করেন?', opts: ['লিও ক্যানার', 'স্ট্যানলি গ্রিনস্প্যান (Stanley Greenspan)', 'ইউজিন ব্লুলার', 'ক্লেমেন্ট'], ans: 1, exp: 'ব্যাখ্যা: শিশু মনোবিদ স্ট্যানলি গ্রিনস্প্যান অটিস্টিক শিশুদের জন্য \'Floor time\' নামক খেলাভিত্তিক পদ্ধতির উদ্ভাবন করেন।'},
+      {q: '৯. গ্রিনস্প্যানের মতে, শিশুর শিখন ক্ষমতার সঠিক বিকাশের জন্য কয়টি স্তর অতিক্রম করতে হয়?', opts: ['4টি', '5টি', '6টি', '8টি'], ans: 2, exp: 'ব্যাখ্যা: তাঁর মতে শিশুর প্রাক্ষোভিক ও সামাজিক বিকাশের ধারণা গঠনে মোট ৬টি স্তর অতিক্রম করতে হয়।'},
+      {q: '১০. সাম্প্রতিক সমীক্ষা অনুযায়ী প্রতি 10,000 শিশুর মধ্যে কতজন শিশু অটিজমে আক্রান্ত?', opts: ['5-10 জন', '10-12 জন', '10-15 জন', '15-20 জন'], ans: 2, exp: 'ব্যাখ্যা: সমীক্ষা থেকে দেখা যায় যে প্রতি ১০ হাজার শিশুর মধ্যে ১০ থেকে ১৫ জন শিশু অটিজম আক্রান্ত।'},
+      {q: '১১. শিশুদের পড়া, লেখা ও গাণিতিক সমস্যা সমাধান করার অক্ষমতাকে কী বলা হয়?', opts: ['অটিজম', 'শিখন অক্ষমতা (Learning Disability)', 'বুদ্ধিভিত্তিক অক্ষমতা', 'শ্রবণ অক্ষমতা'], ans: 1, exp: 'ব্যাখ্যা: শিশুর পঠন, লিখন ও গাণিতিক সমস্যার সমাধানের ক্রিয়াকলাপকে প্রভাবিত করা স্নায়বিক ব্যাধিই হলো শিখন অক্ষমতা।'},
+      {q: '১২. 1966 খ্রিস্টাব্দে কে সর্বপ্রথম শিখন অক্ষম শিশুদের বৈশিষ্ট্য নিরূপণের চেষ্টা করেন?', opts: ['ক্লেমেন্ট (Clement)', 'ক্যানার', 'মেরিল্যান্ড', 'স্যামুয়েল কর্ক'], ans: 0, exp: 'ব্যাখ্যা: 1966 খ্রিস্টাব্দে ক্লেমেন্ট সর্বপ্রথম শিখন অক্ষমতার ১০টি বৈশিষ্ট্য (যেমন- বিক্ষিপ্ত মনোযোগ, অতি সক্রিয় আচরণ) উল্লেখ করেছিলেন।'},
+      {q: '১৩. শিশুর পঠন ও ভাষাগত শিখন অক্ষমতাকে কী বলা হয়?', opts: ['ডিসগ্রাফিয়া (Dysgraphia)', 'ডিসক্যালকুলিয়া (Dyscalculia)', 'ডিসলেক্সিয়া (Dyslexia)', 'কোনোটাই নয়'], ans: 2, exp: 'ব্যাখ্যা: পড়ার ক্ষেত্রে সমস্যা, সমধর্মী বর্ণ চিনতে ভুল করা এবং ভাষাগত শিখন প্রতিবন্ধিতাকে পঠনগত অক্ষমতা বা Dyslexia বলে।'},
+      {q: '১৪. মস্তিষ্ক নিয়ন্ত্রিত স্নায়ু, অস্থি এবং মাংসপেশির মধ্যে এক সার্থক সমন্বয়ের অভাব ঘটলে কোন অক্ষমতা দেখা যায়?', opts: ['পঠনগত অক্ষমতা', 'গাণিতিক অক্ষমতা', 'লিখন অক্ষমতা (Dysgraphia)', 'অটিজম'], ans: 2, exp: 'ব্যাখ্যা: পেশি ও স্নায়ুর সমন্বয়ের অভাবে হাতের সূক্ষ্ম কাজ বা লেখার ক্ষেত্রে যে অক্ষমতা দেখা যায় তাকে Dysgraphia বলে।'},
+      {q: '১৫. গাণিতিক দক্ষতা অর্থাৎ সংখ্যা, চিহ্ন ও হিসাবের সমস্যাকে কী বলা হয়?', opts: ['পঠনগত অক্ষমতা', 'লিখন অক্ষমতা', 'গাণিতিক অক্ষমতা (Dyscalculia)', 'দর্শন অক্ষমতা'], ans: 2, exp: 'ব্যাখ্যা: গাণিতিক ধারণা অনুধাবন করতে না পারা, চিহ্ন না চেনা এবং মনে মনে হিসাব করতে না পারাকে Dyscalculia বলা হয়।'}
+    ]
+  },
+  6: {
+    name: 'Set 6', icon: '📝', topic: 'শিখন অক্ষমতার ধারণা ও শ্রেণিবিভাগ',
+    questions: [
+      {q: '১. National Centre for Learning Disabilities অনুযায়ী, শিখন অক্ষমতা কোন্ ধরনের অসুখ?', opts: ['মানসিক অসুখ', 'স্নায়বিক অসুখ', 'দৈহিক অসুখ', 'প্রক্ষোভিক অসুখ'], ans: 1, exp: 'ব্যাখ্যা: শিখন অক্ষমতা হলো একটি স্নায়বিক অসুখ যা মস্তিষ্কের তথ্য সংগ্রহ, প্রক্রিয়াকরণ ও সংরক্ষণ ক্ষমতাকে প্রভাবিত করে।'},
+      {q: '২. 1997 খ্রিস্টাব্দে শিখন অক্ষমতার সংজ্ঞা প্রদান করে কোন্ সংস্থা?', opts: ['American Office of Education', 'WHO', 'UNESCO', 'AAMD'], ans: 0, exp: 'ব্যাখ্যা: American Office of Education (1997) শিখন অক্ষমতাকে মৌখিক ও লিখিত ভাষার মনোবৈজ্ঞানিক প্রক্রিয়ার সমস্যা হিসেবে সংজ্ঞায়িত করেছেন।'},
+      {q: '৩. 1966 খ্রিস্টাব্দে সর্বপ্রথম কে শিখন অক্ষম শিশুদের বৈশিষ্ট্য নিরূপণের চেষ্টা করেন?', opts: ['ক্যানার', 'ইউজিন ব্লুলার', 'ক্লেমেন্ট (Clement)', 'সেগুইন'], ans: 2, exp: 'ব্যাখ্যা: 1966 খ্রিস্টাব্দে ক্লেমেন্ট সর্বপ্রথম শিখন অক্ষম শিশুদের বৈশিষ্ট্য নিরূপণের চেষ্টা করেন এবং ১০টি বৈশিষ্ট্যের উল্লেখ করেন।'},
+      {q: '৪. ক্লেমেন্ট শিখন অক্ষমতার কয়টি বৈশিষ্ট্যের কথা বলেছেন?', opts: ['5টি', '10টি', '8টি', '12টি'], ans: 1, exp: 'ব্যাখ্যা: ক্লেমেন্ট শিখন অক্ষমতার মোট 10টি বৈশিষ্ট্যের উল্লেখ করেছেন, যার মধ্যে অতি সক্রিয় আচরণ এবং বিক্ষিপ্ত মনোযোগ অন্যতম।'},
+      {q: '৫. শিখন অক্ষম শিশুদের খুব কম মনোযোগের পরিসর থাকাকে কী বলা হয়?', opts: ['অতিচঞ্চলতা', 'মনোযোগহীনতা', 'সক্ষমতার অভাব', 'প্রক্ষোভগত সমস্যা'], ans: 1, exp: 'ব্যাখ্যা: খুব কম মনোযোগের পরিসর থাকায় এরা একসঙ্গে অনেক উদ্দীপকের প্রতি মনোযোগ দিতে পারে না, একে মনোযোগহীনতা বলে।'},
+      {q: '৬. ডান-বাম দিক, পূর্ববর্তী ও পরবর্তী অবস্থা সম্পর্কে ধারণা এবং দূরত্বের ক্ষেত্রে দ্বিধাগ্রস্ত হওয়াকে কী বলে?', opts: ['শ্রবণজনিত সমস্যা', 'দর্শনগত সমস্যা', 'পারিপার্শ্বিক অবস্থা অনুধাবনে সমস্যা', 'কার্যাভ্যাস'], ans: 2, exp: 'ব্যাখ্যা: শিখন অক্ষম শিশুরা পারিপার্শ্বিক দিক, বস্তুর আকৃতি ও দূরত্বের ধারণা অনুধাবনের ক্ষেত্রে সমস্যা বা দ্বিধায় ভোগে।'},
+      {q: '৭. শিখন অক্ষম শিশু প্রধানত কয় প্রকার?', opts: ['দু-প্রকার', 'তিন প্রকার', 'চার প্রকার', 'পাঁচ প্রকার'], ans: 1, exp: 'ব্যাখ্যা: শিখন অক্ষমতা মূলত তিন ধরনের— পঠনগত অক্ষমতা (Dyslexia), লিখন অক্ষমতা (Dysgraphia) এবং গাণিতিক অক্ষমতা (Dyscalculia)।'},
+      {q: '৮. শিশুর পঠন ও ভাষাগত শিখন প্রতিবন্ধিতাকে কী বলা হয়?', opts: ['ডিসগ্রাফিয়া (Dysgraphia)', 'ডিসক্যালকুলিয়া (Dyscalculia)', 'ডিসলেক্সিয়া (Dyslexia)', 'কোনোটিই নয়'], ans: 2, exp: 'ব্যাখ্যা: শিশুর পড়ার ও ভাষার সমস্যাকেই ডিসলেক্সিয়া বা পঠনগত অক্ষমতা বলা হয়।'},
+      {q: '৯. সমধর্মী বর্ণগুলিকে সঠিকভাবে চিনতে ভুল করা কোন্ অক্ষমতার বৈশিষ্ট্য?', opts: ['পঠনগত অক্ষমতা', 'লিখন অক্ষমতা', 'গাণিতিক অক্ষমতা', 'বাচনিক অক্ষমতা'], ans: 0, exp: 'ব্যাখ্যা: পঠনগত অক্ষমতা বা Dyslexia-তে আক্রান্ত শিশুরা সমধর্মী বর্ণগুলিকে সহজে চিনতে পারে না এবং ভুল করে।'},
+      {q: '১০. মস্তিষ্ক নিয়ন্ত্রিত স্নায়ু, অস্থি এবং মাংসপেশির মধ্যে এক সার্থক সমন্বয়ের অভাব ঘটলে কোন্ অক্ষমতা দেখা যায়?', opts: ['ডিসলেক্সিয়া', 'ডিসগ্রাফিয়া (Dysgraphia)', 'ডিসক্যালকুলিয়া', 'অটিজম'], ans: 1, exp: 'ব্যাখ্যা: পেশি ও স্নায়ুর এই সমন্বয়ের অভাব ঘটলে হাতের সূক্ষ্ম কাজ ও লেখার ক্ষেত্রে যে অক্ষমতা দেখা যায়, তাকে ডিসগ্রাফিয়া বা লিখন অক্ষমতা বলে।'},
+      {q: '১১. একই সঙ্গে ভাবতে ও লিখতে অসুবিধা বোধ করা কীসের বৈশিষ্ট্য?', opts: ['গাণিতিক অক্ষমতার', 'পঠন অক্ষমতার', 'লিখন অক্ষমতার', 'দর্শন অক্ষমতার'], ans: 2, exp: 'ব্যাখ্যা: লিখন অক্ষম শিশুদের একই সঙ্গে চিন্তা করা এবং তা খাতায় লেখার ক্ষেত্রে চরম অসুবিধা বোধ করতে দেখা যায়।'},
+      {q: '১২. গাণিতিক দক্ষতা অর্থাৎ সংখ্যা, চিহ্ন সংখ্যার বিন্যাস ও হিসাবের ক্ষেত্রে সমস্যাকে কী বলে?', opts: ['লিখন অক্ষমতা', 'গাণিতিক অক্ষমতা (Dyscalculia)', 'পঠন অক্ষমতা', 'অটিজম'], ans: 1, exp: 'ব্যাখ্যা: গাণিতিক ধারণা অনুধাবন করতে না পারা এবং হিসাব করতে না পারাকে গাণিতিক অক্ষমতা বা Dyscalculia বলে।'},
+      {q: '১৩. স্থান, কাল ও দূরত্বের সংজ্ঞা বুঝতে না পারা কোন্ অক্ষমতার বৈশিষ্ট্য?', opts: ['পঠন অক্ষমতা', 'লিখন অক্ষমতা', 'গাণিতিক অক্ষমতা', 'মানসিক অক্ষমতা'], ans: 2, exp: 'ব্যাখ্যা: গাণিতিক অক্ষমতাযুক্ত শিশুরা স্থান, কাল ও দূরত্বের গাণিতিক সংজ্ঞা বা হিসাব বুঝতে পারে না।'},
+      {q: '১৪. শিখন অক্ষমতার একটি পরিবেশগত কারণ নীচের কোনটি?', opts: ['অপরিণত শিশুর জন্ম', 'রুবেলা সংক্রমণ', 'মস্তিষ্কের রক্তক্ষরণ', 'জিনগত স্নায়ুবিক ত্রুটি'], ans: 1, exp: 'ব্যাখ্যা: গর্ভাবস্থায় রুবেলা ভাইরাসের সংক্রমণ এবং প্রসবকালীন বিবিধ অসুবিধা শিখন অক্ষমতার পরিবেশগত কারণের অন্তর্গত।'},
+      {q: '১৫. টারনার সিন্ড্রোমে (Turner Syndrome) আক্রান্ত হওয়া শিখন অক্ষমতার কী ধরনের কারণ?', opts: ['বংশগত কারণ', 'অঙ্গসংস্থানগত কারণ', 'পরিবেশগত কারণ', 'মানসিক কারণ'], ans: 0, exp: 'ব্যাখ্যা: হাইপারঅ্যাক্টিভিটি বা টারনার সিন্ড্রোমের মতো সমস্যাগুলিকে শিখন অক্ষমতার বংশগত কারণ হিসেবে চিহ্নিত করা হয়।'}
+    ]
+  },
+  7: {
+    name: 'Set 7', icon: '📋', topic: 'শিখন অক্ষমতার কর্মসূচি (IEP) এবং শিক্ষাদান পদ্ধতি',
+    questions: [
+      {q: '১. শিখন প্রতিবন্ধিতা নির্ণয় ও বিশেষ শিক্ষাদানের জন্য কোন্ কর্মসূচি গ্রহণ করা হয়?', opts: ['TEACCH', 'PEP', 'IEP', 'WHO'], ans: 2, exp: 'ব্যাখ্যা: শিখন প্রতিবন্ধী প্রতিটি শিশুর ভিন্ন ভিন্ন প্রয়োজনের কথা চিন্তা করে ব্যক্তিগত শিক্ষা কর্মসূচি বা IEP গ্রহণ করা হয়।'},
+      {q: '২. IEP-এর সম্পূর্ণ নাম কী?', opts: ['Individual Educational Progress', 'Individual Educational Programme', 'Internal Educational Programme', 'Individual Education Plan'], ans: 1, exp: 'ব্যাখ্যা: IEP-এর সম্পূর্ণ রূপ হলো Individual Educational Programme বা ব্যক্তিগত শিক্ষা কর্মসূচি।'},
+      {q: '৩. শিখন অক্ষম শিশুদের IEP রূপায়ণের জন্য কয়টি ধাপ অনুসরণ করা হয়?', opts: ['৫টি', '৭টি', '৯টি', '৪টি'], ans: 2, exp: 'ব্যাখ্যা: পাঠ্যপুস্তকের বর্ণনা অনুযায়ী, IEP বা ব্যক্তিগত শিক্ষা কর্মসূচিকে বাস্তবায়িত করতে মোট ৯টি (নবম ধাপ পর্যন্ত) ধাপ অনুসরণ করা হয়।'},
+      {q: '৪. IEP-এর প্রথম ধাপটির নাম কী?', opts: ['শনাক্তকরণ', 'শিশুর মূল্যায়ন', 'বিশেষ সভার আয়োজন', 'শিক্ষার্থীর যোগ্যতা নির্ধারণ'], ans: 0, exp: 'ব্যাখ্যা: প্রথম ধাপে শিখন অক্ষম শিশুকে বিভিন্ন মনস্তাত্ত্বিক অভীক্ষা ও কাউন্সেলিং-এর মাধ্যমে শনাক্ত করা হয়।'},
+      {q: '৫. শিখন অক্ষম শিক্ষার্থীদের শিক্ষাদানের দ্বিতীয় ধাপ কোনটি?', opts: ['শনাক্তকরণ', 'শিশুর মূল্যায়ন', 'বিশেষ সভার আয়োজন', 'যোগ্যতা নির্ণয়'], ans: 1, exp: 'ব্যাখ্যা: দ্বিতীয় ধাপে শিশুটির সমস্যাগুলি নিয়ে বিশেষভাবে মূল্যায়ন করা হয় এবং কী ধরনের সহায়তা লাগবে তা যাচাই করা হয়।'},
+      {q: '৬. শিখন প্রতিবন্ধী শিশুর শিক্ষায় অভিভাবককে সভার চূড়ান্ত রিপোর্ট প্রদান করা হয় কোন্ ধাপে?', opts: ['দ্বিতীয় ধাপে', 'চতুর্থ ধাপে', 'পঞ্চম ধাপে', 'সপ্তম ধাপে'], ans: 2, exp: 'ব্যাখ্যা: পঞ্চম ধাপে সভার চূড়ান্ত রিপোর্ট তৈরি করে সিদ্ধান্তগুলি নির্দিষ্ট করা হয়।'},
+      {q: '৭. IEP-এর শেষ বা নবম ধাপটির নাম কী?', opts: ['শিক্ষা কর্মসূচির পুনর্মূল্যায়ন', 'সভার চূড়ান্ত রিপোর্ট তৈরি', 'শিক্ষার্থীর পুনর্মূল্যায়ন', 'অগ্রগতির পরিমাপ'], ans: 2, exp: 'ব্যাখ্যা: নবম বা শেষ ধাপে নতুন কার্যক্রমটি শিক্ষার্থীর কতটা সাফল্য এনেছে তার জন্য শিক্ষার্থীর পুনর্মূল্যায়ন করা হয়।'},
+      {q: '৮. শিখন প্রতিবন্ধী শিশুদের জন্য সাধারণ বিদ্যালয়ে বিশেষ শ্রেণিকক্ষের ব্যবস্থাকে কী বলে?', opts: ['দিবা বিদ্যালয়', 'বিশেষ শ্রেণিব্যবস্থা', 'সমন্বিত শিক্ষাব্যবস্থা', 'আবাসিক বিদ্যালয়'], ans: 1, exp: 'ব্যাখ্যা: সাধারণ বিদ্যালয়ে বিশেষ শ্রেণিকক্ষ তৈরি করে দিনের কিছুটা সময় সেখানে প্রশিক্ষণ দেওয়াকে বিশেষ শ্রেণিব্যবস্থা বলা হয়।'},
+      {q: '৯. শিখন প্রতিবন্ধী শিশুদের শিক্ষাদানের জন্য মনো-শিক্ষণভিত্তিক পদ্ধতি কয়টি?', opts: ['৩টি', '৪টি', '৫টি', '৭টি'], ans: 2, exp: 'ব্যাখ্যা: শিখন প্রতিবন্ধী শিশুদের যত্ন ও প্রশিক্ষণের জন্য মনো-শিক্ষণভিত্তিক মূল ৫টি পদ্ধতি রয়েছে।'},
+      {q: '১০. শিখন প্রতিবন্ধীদের শিক্ষাদানে পরিবেশগত পদ্ধতির একটি উদাহরণ কোনটি?', opts: ['প্রক্রিয়া প্রশিক্ষণ', 'শ্রেণিকক্ষের ছাদ ও দেওয়াল শব্দ নিরোধক করা', 'বহু ইন্দ্রিয়ভিত্তিক পদ্ধতি', 'আত্মবিশ্বাস গড়ে তোলা'], ans: 1, exp: 'ব্যাখ্যা: পরিবেশগত পদ্ধতির অন্তর্গত হলো শ্রেণিকক্ষকে বিক্ষিপ্ত চিত্ততা কমানোর জন্য শব্দ নিরোধক করা এবং জানালায় ঘষা কাচ ব্যবহার করা।'},
+      {q: '১১. শিখন প্রতিবন্ধী শিশুদের পঠনপাঠন সংক্রান্ত প্রশিক্ষণের জন্য কোন্ পদ্ধতি অবলম্বন করা উচিত?', opts: ['জ্ঞানমূলক পদ্ধতি', 'প্রক্রিয়া প্রশিক্ষণ', 'পরিবেশগত পদ্ধতি', 'বহু ইন্দ্রিয়ভিত্তিক পদ্ধতি'], ans: 1, exp: 'ব্যাখ্যা: পঠনপাঠন সংক্রান্ত বিবিধ বিষয়ে প্রশিক্ষণের জন্য নির্দিষ্ট মনোবৈজ্ঞানিক \'প্রক্রিয়া প্রশিক্ষণ\' অবলম্বন করা উচিত।'},
+      {q: '১২. শিখন প্রতিবন্ধী শিশুদের শিক্ষাদানের সাধারণ কৌশল নীচের কোনটি?', opts: ['নির্দেশনা খুব বড়ো হবে', 'কেবলমাত্র মৌখিক শিক্ষাদান', 'নির্দেশনা খুব ছোটো এবং সংক্ষিপ্ত হবে', 'উচ্চস্বরে বকাঝকা করা'], ans: 2, exp: 'ব্যাখ্যা: সাধারণ কৌশল হিসেবে শিক্ষকের দেওয়া শিখন নির্দেশনাগুলি খুব ছোটো এবং সংক্ষিপ্ত হতে হবে যাতে শিক্ষার্থীরা সহজে বুঝতে পারে।'},
+      {q: '১৩. শিক্ষার্থীদের সমস্যা নিরূপণ করার পর শিক্ষক কী করবেন?', opts: ['শাস্তি দেবেন', 'প্রতিকারমূলক শিক্ষাদান করবেন', 'অভিভাবককে ডাকবেন', 'বিদ্যালয় থেকে বের করবেন'], ans: 1, exp: 'ব্যাখ্যা: শিখন প্রতিবন্ধী সম্পর্কে জ্ঞানলাভ করে শিক্ষক শিক্ষার্থীর সমস্যা অনুযায়ী প্রতিকারমূলক শিক্ষাদান করবেন।'},
+      {q: '১৪. শিখন অক্ষমতার একটি অঙ্গসংস্থানগত কারণ কী?', opts: ['অপরিণত শিশুর জন্ম', 'রুবেলা সংক্রমণ', 'টারনার সিন্ড্রোম', 'ওষুধের প্রভাব'], ans: 0, exp: 'ব্যাখ্যা: গর্ভাবস্থায় সমস্যা, মস্তিষ্কের রক্তক্ষরণ এবং অপরিণত শিশুর জন্ম হলো অঙ্গসংস্থানগত কারণ।'},
+      {q: '১৫. শিখন অক্ষমতার জন্য দায়ী \'Hyperactivity\' কী ধরনের কারণ?', opts: ['পরিবেশগত', 'বংশগত', 'মানসিক', 'অঙ্গসংস্থানগত'], ans: 1, exp: 'ব্যাখ্যা: অতিসক্রিয়তা বা Hyperactivity শিখন অক্ষমতার একটি অন্যতম বংশগত কারণ।'}
+    ]
+  },
+  8: {
+    name: 'Set 8', icon: '🧠', topic: 'বুদ্ধিবৃত্তিক অক্ষমতার ধারণা ও বৈশিষ্ট্য',
+    questions: [
+      {q: '১. প্রাচীন গ্রিকরা স্বাভাবিক অবস্থা থেকে বিচ্যুত বিশেষ চাহিদাসম্পন্ন শিশুদের বোঝাতে কোন্ শব্দ ব্যবহার করতেন?', opts: ['Handicap', 'Disabled', 'Idiot', 'Autistic'], ans: 2, exp: 'ব্যাখ্যা: প্রাচীন গ্রিকরা বিশেষ চাহিদাসম্পন্ন সকল ধরনের অক্ষমদের বোঝাতে ‘idiot’ শব্দ ব্যবহার করতেন।'},
+      {q: '২. Kolstoe and Fre-এর মতে, বুদ্ধির দিক থেকে দুর্বলদের চিকিৎসা শুরুর সময়কে কী বলা হয়?', opts: ['Era of Extermination', 'Era of Examination', 'Era of Evaluation', 'Era of Education'], ans: 0, exp: 'ব্যাখ্যা: রোমান ও গ্রিক সমাজের এই শিশুদের বাঁচিয়ে রাখার প্রচেষ্টাকে তাঁরা "Era of extermination" বলে উল্লেখ করেছেন।'},
+      {q: '৩. 1961 খ্রিস্টাব্দে কোন্ সংস্থা বুদ্ধিবৃত্তিক অক্ষমতার সংজ্ঞা দিয়েছে?', opts: ['American Association on Mental Deficiency (AAMD)', 'WHO', 'TEACCH', 'UNESCO'], ans: 0, exp: 'ব্যাখ্যা: AAMD 1961 খ্রিষ্টাব্দে বুদ্ধিবৃত্তিক অক্ষমতার সংজ্ঞা প্রদান করেছিল।'},
+      {q: '৪. AAMR কত সালে বুদ্ধিবৃত্তিক অক্ষমতার সংজ্ঞা দিয়েছে?', opts: ['1961', '1983', '1997', '2002'], ans: 3, exp: 'ব্যাখ্যা: AAMR 2002 খ্রিষ্টাব্দে বুদ্ধিবৃত্তি কার্যাবলি ও উপযোজনশীল আচরণের ভিত্তিতে এই অক্ষমতার সংজ্ঞা প্রদান করে।'},
+      {q: '৫. বুদ্ধিবৃত্তিক অক্ষমতা বলতে সাধারণত কী বোঝায়?', opts: ['গড় বুদ্ধির চেয়ে বেশি বুদ্ধি', 'গড় বুদ্ধির চেয়ে স্পষ্টভাবে কম বুদ্ধি', 'ভাষার সমস্যা', 'দৃষ্টির সমস্যা'], ans: 1, exp: 'ব্যাখ্যা: সাধারণ গড় বুদ্ধির থেকে কম বুদ্ধিসম্পন্ন মানসিক অবস্থাকেই বুদ্ধিবৃত্তিক অক্ষমতা বলা হয়।'},
+      {q: '৬. শিশুর মাথা শরীরের তুলনায় অস্বাভাবিক ছোটো বা বড়ো হওয়া—এটি কোন্ অক্ষমতার বৈশিষ্ট্য?', opts: ['শিখন অক্ষমতা', 'অটিজম', 'বুদ্ধিবৃত্তিক অক্ষমতা', 'শারীরিক প্রতিবন্ধী'], ans: 2, exp: 'ব্যাখ্যা: বুদ্ধিবৃত্তিক অক্ষম শিশুদের এটি একটি অন্যতম শনাক্তকরণমূলক শারীরিক বৈশিষ্ট্য।'},
+      {q: '৭. বুদ্ধিবৃত্তিক অক্ষমতাগুলি সাধারণত কত বছর বয়সের পূর্বেই প্রকাশ পায়?', opts: ['১০ বছর', '১২ বছর', '১৫ বছর', '১৮ বছর'], ans: 3, exp: 'ব্যাখ্যা: এই ধরনের মানসিক বা বুদ্ধিবৃত্তিক অক্ষমতার লক্ষণগুলি শিশুর ১৮ বছর বয়সের পূর্বেই প্রকাশ পায়।'},
+      {q: '৮. বুদ্ধিবৃত্তিক অক্ষম শিশুদের শিক্ষাদানে নির্দেশগুলি কেমন হবে?', opts: ['একটানা দীর্ঘ হবে', 'ছোটো ছোটো পর্যায়ে ভাগ করা হবে', 'কেবলমাত্র লিখিত হবে', 'অত্যন্ত জটিল হবে'], ans: 1, exp: 'ব্যাখ্যা: এদের কোনো বিষয়ে প্রশিক্ষণ দিতে হলে তা ছোটো ছোটো পর্যায়ে ভাগ করে শিক্ষা দিতে হবে।'},
+      {q: '৯. বুদ্ধিবৃত্তিক অক্ষম শিশুদের কোনো বিমূর্ত বিষয়ের ধারণা দিতে হলে কীসের সহায়তা নিতে হয়?', opts: ['কল্পনার', 'ছবির', 'মূর্ত বস্তুর', 'চার্টের'], ans: 2, exp: 'ব্যাখ্যা: এরা বিমূর্ত ধারণা সহজে গ্রহণ করতে পারে না, তাই এদের শিক্ষাদানে মূর্ত বস্তুর সহায়তা নিতে হয়।'},
+      {q: '১০. Kirk এবং Johnson (1959) বুদ্ধিবৃত্তিক অক্ষম শিশুদের শিক্ষাদানের জন্য কয়টি বিষয়ের ওপর গুরুত্ব দিয়েছেন?', opts: ['দুটি', 'তিনটি', 'চারটি', 'পাঁচটি'], ans: 1, exp: 'ব্যাখ্যা: Kirk এবং Johnson শিক্ষাদানের জন্য মোট তিনটি বিষয়ের ওপর গুরুত্ব প্রদানের কথা বলেছেন।'},
+      {q: '১১. Kirk এবং Johnson-এর মতে শিক্ষার বিষয়গুলি কী কী?', opts: ['ব্যক্তিগত সামর্থ্য, সামাজিক যোগ্যতা, পেশাগত যোগ্যতা', 'পঠন, লিখন, গণিত', 'ভাষা, বিজ্ঞান, শিল্প', 'কোনোটিই নয়'], ans: 0, exp: 'ব্যাখ্যা: তাঁরা শিশুদের ব্যক্তিগত সামর্থ্য, সামাজিক যোগ্যতা এবং পেশাগত যোগ্যতার বিকাশের কথা বলেছেন।'},
+      {q: '১২. Goldstein and Siegel (1958) বুদ্ধিবৃত্তিক অক্ষম শিশুদের জীবনযাপনের উপযোগী কয়টি কাজ শেখানোর কথা বলেছেন?', opts: ['৫টি', '৮টি', '১০টি', '১২টি'], ans: 2, exp: 'ব্যাখ্যা: তাঁরা পারিবারিক কার্যাবলি, স্বাস্থ্যরক্ষা, আত্ম নিরাপত্তা ইত্যাদি মিলিয়ে মোট ১০টি কাজ শেখানোর কথা বলেছেন।'},
+      {q: '১৩. Goldstein and Siegel-এর মতে জীবনযাপনের দক্ষতা বিকাশে সহায়ক বিষয় নীচের কোনটি?', opts: ['গণিত ও ভাষা', 'শরীরশিক্ষা', 'ললিতকলা ও বিজ্ঞান', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: বুদ্ধিবৃত্তিক অক্ষম শিশুদের উপরোক্ত দক্ষতাগুলি বিকাশে গণিত, ভাষা, শরীরশিক্ষা, ললিতকলা, বিজ্ঞান ইত্যাদি সহায়তা করে।'}
+    ]
+  },
+  9: {
+    name: 'Set 9', icon: '🎓', topic: 'বুদ্ধিবৃত্তিক অক্ষমদের শিক্ষাদান ও পদ্ধতি',
+    questions: [
+      {q: '১. 1846 খ্রিস্টাব্দে কে শারীরবৃত্তীয় পদ্ধতির (Physiological method) উল্লেখ করেন?', opts: ['পিয়াজে', 'মস্তেসরী', 'এডওয়ার্ড সেগুইন', 'গোল্ডস্টেন'], ans: 2, exp: 'ব্যাখ্যা: 1846 খ্রিস্টাব্দে ফরাসি চিকিৎসক এডওয়ার্ড সেগুইন বুদ্ধিবৃত্তিক অক্ষমদের জন্য শারীরবৃত্তীয় পদ্ধতির প্রবর্তন করেন।'},
+      {q: '২. সেগুইনের শারীরবৃত্তীয় পদ্ধতিতে শিশুর কীসের প্রশিক্ষণের ওপর গুরুত্ব দেওয়া হয়?', opts: ['স্মৃতির', 'পঞ্চ-ইন্দ্রিয়ের', 'কল্পনার', 'বাচনিক ক্ষমতার'], ans: 1, exp: 'ব্যাখ্যা: এই পদ্ধতিতে শিশুর পঞ্চ-ইন্দ্রিয়ের প্রশিক্ষণের ওপর সবচেয়ে বেশি গুরুত্ব দান করা হয়।'},
+      {q: '৩. 1912 খ্রিস্টাব্দে কে আত্ম-শিক্ষণ পদ্ধতি (Self-education method) আবিষ্কার করেন?', opts: ['সেগুইন', 'পিয়াজে', 'রুশো', 'মাদাম মারিয়া মস্তেসরী'], ans: 3, exp: 'ব্যাখ্যা: মাদাম মারিয়া মস্তেসরী 1912 খ্রিস্টাব্দে এই পদ্ধতি আবিষ্কার করেন, যেখানে উপকরণ দ্বারা শিক্ষার কথা বলা হয়েছে।'},
+      {q: '৪. শিশুকে সরাসরি শিক্ষা না দিয়ে তার শিক্ষার জন্য পরিবেশ সৃষ্টি করা কোন্ পদ্ধতির মূল কথা?', opts: ['পিয়াজের পদ্ধতি', 'মস্তেসরীর আত্ম-শিক্ষণ পদ্ধতি', 'সেগুইনের পদ্ধতি', 'কর্ম বিশ্লেষণ পদ্ধতি'], ans: 1, exp: 'ব্যাখ্যা: মস্তেসরী মনে করতেন সরাসরি শিক্ষার বদলে খেলনা বা ব্লকের মাধ্যমে শিশুর জন্য একটি শিক্ষার পরিবেশ সৃষ্টি করতে হবে।'},
+      {q: '৫. মস্তেসরীর উত্তরসূরি কে ছিলেন?', opts: ['রুশো', 'সেগুইন', 'পিয়াজে', 'ফ্রয়েবেল'], ans: 2, exp: 'ব্যাখ্যা: মনোবিদ জিন পিয়াজে ছিলেন শিক্ষাবিদ মাদাম মারিয়া মস্তেসরীর সুযোগ্য উত্তরসূরি।'},
+      {q: '৬. "শিশুরা নিজেরাই তাদের পারিপার্শ্বিক অবস্থা আবিষ্কার করবে"—এটি কোন্ পদ্ধতির মূলকথা?', opts: ['মস্তেসরীর পদ্ধতি', 'পিয়াজের পদ্ধতি', 'নির্ণায়ক পদ্ধতি', 'সেগুইনের পদ্ধতি'], ans: 1, exp: 'ব্যাখ্যা: পিয়াজে জোর দিয়েছিলেন যে শিশুরা নিজেরাই পরিবেশ আবিষ্কার করার মাধ্যমে শিক্ষালাভ করবে।'},
+      {q: '৭. কর্মদক্ষতাকে ছোটো ছোটো অংশে ভাগ করে সবচেয়ে সহজ কর্মটি দ্বারা প্রশিক্ষণ শুরু করাকে কী বলে?', opts: ['আত্মশিক্ষণ পদ্ধতি', 'নির্ণায়ক পদ্ধতি', 'শারীরবৃত্তীয় পদ্ধতি', 'কর্ম বিশ্লেষণ পদ্ধতি'], ans: 3, exp: 'ব্যাখ্যা: কোনো জটিল কাজ বা সমস্যাকে ছোটো অংশে ভেঙে সহজ থেকে কঠিনের দিকে শিক্ষাদান করাই হলো কর্ম বিশ্লেষণ পদ্ধতি।'},
+      {q: '৮. বুদ্ধিবৃত্তিক অক্ষম শিশুদের শিক্ষাদানে শিক্ষকের ভূমিকা কেমন হওয়া উচিত?', opts: ['বিমূর্ত ধারণার মাধ্যমে শিক্ষা', 'মৌখিক পদ্ধতির ব্যবহার', 'বাস্তব উদাহরণ ও প্রত্যক্ষ অভিজ্ঞতার মাধ্যমে শিক্ষাদান', 'একটানা শিক্ষাদান'], ans: 2, exp: 'ব্যাখ্যা: শিক্ষক এই ধরনের শিশুদের মৌখিক পদ্ধতির পরিবর্তে বাস্তব উদাহরণ ও প্রত্যক্ষ অভিজ্ঞতার মাধ্যমে শিক্ষাদান করবেন।'},
+      {q: '৯. বুদ্ধিবৃত্তিক অক্ষম শিশুদের শিক্ষাদানের জন্য শিক্ষক কোন্ পদ্ধতি ব্যবহার করবেন?', opts: ['বক্তৃতা পদ্ধতি', 'কর্মবিশ্লেষণ পদ্ধতি', 'মুখস্থ পদ্ধতি', 'কোনোটিই নয়'], ans: 1, exp: 'ব্যাখ্যা: শিক্ষক প্রতিটি শিক্ষণীয় বিষয়কে ছোটো ছোটো এককে ভাগ করে কর্মবিশ্লেষণ পদ্ধতির মাধ্যমে পর্যায়ক্রমে উপস্থাপন করবেন।'},
+      {q: '১০. আইনগত দৃষ্টিহীন বলতে কোনো ব্যক্তির দুটি চোখেই ভিস্যুয়াল আকুইটি কত-এর বেশি নয়?', opts: ['20/200', '10/200', '20/20', '20/100'], ans: 0, exp: 'ব্যাখ্যা: আমেরিকান মেডিক্যাল অ্যাসোসিয়েশন অনুযায়ী লেন্স ব্যবহারের পরেও আইনগত অন্ধদের দৃষ্টিক্ষমতা 20/200-এর বেশি হয় না।'},
+      {q: '১১. স্পর্শভিত্তিক পাঠের একটি পদ্ধতি হলো—', opts: ['স্টাইলাস', 'অ্যাবাকাস', 'ব্রেইল', 'ওষ্ঠ পঠন'], ans: 2, exp: 'ব্যাখ্যা: ব্রেইল একটি স্পর্শভিত্তিক পাঠের পদ্ধতি যা দৃষ্টিহীনদের শিক্ষার মূল মাধ্যম।'},
+      {q: '১২. ওষ্ঠ পঠনের মাধ্যমে শিশুর কোন্ বিকাশ ঘটানো হয়?', opts: ['শারীরিক', 'নৈতিক', 'আধ্যাত্মিক', 'বাচনিক'], ans: 3, exp: 'ব্যাখ্যা: ঠোঁট নাড়া দেখে মনের ভাব বোঝা বা ওষ্ঠ পঠনের মাধ্যমে বধির শিশুর বাচনিক বা কথা বলার ক্ষমতার বিকাশ ঘটে।'},
+      {q: '১৩. Floor time একটি কী ধরনের পদ্ধতি?', opts: ['শ্রবণভিত্তিক', 'ভাষাভিত্তিক', 'খেলাভিত্তিক', 'সংগীত নির্ভর'], ans: 2, exp: 'ব্যাখ্যা: শিশু মনোবিদ স্ট্যানলি গ্রিনস্প্যান উদ্ভাবিত \'Floor time\' হলো অটিস্টিক শিশুদের জন্য একটি খেলাভিত্তিক পদ্ধতি।'},
+      {q: '১৪. কম্পন ও স্পর্শ পদ্ধতির প্রবর্তক কারা?', opts: ['জুয়ান পাবলো বোঁনে', 'পিরিয়ার', 'কেটি আলকন ও সোফিয়া আলকন', 'সেগুইন'], ans: 2, exp: 'ব্যাখ্যা: শিক্ষাবিদ কেটি আলকন এবং সোফিয়া আলকন শ্রবণ প্রতিবন্ধীদের জন্য এই কম্পন ও স্পর্শ পদ্ধতি আবিষ্কার করেন।'},
+      {q: '১৫. সঞ্চালনমূলক পদ্ধতি বা আঙুলের সাহায্যে বানান শেখানোর প্রবর্তক কে?', opts: ['সেগুইন', 'পিরিয়ার', 'জুয়ান পাবলো বোঁনে', 'মস্তেসরি'], ans: 1, exp: 'ব্যাখ্যা: শিক্ষাবিদ পিরিয়ার (Pereire) সঞ্চালনমূলক পদ্ধতি বা হাতের আঙুলের নাড়াচাড়ার মাধ্যমে শিক্ষাদানের প্রবর্তন করেন।'}
+    ]
+  },
+  10: {
+    name: 'Set 10', icon: '🔬', topic: 'বিবিধ ও কেস বেসড স্পেশাল প্রশ্নাবলি',
+    questions: [
+      {q: '১. অন্ধ শিশুদের পাঠ্যক্রমের জ্ঞানমূলক বিষয় কোনটি?', opts: ['ব্রেইল', 'স্বাস্থ্য বিজ্ঞান', 'সৃজনমূলক কাজ', 'ভাষা, বিজ্ঞান ও সমাজ বিজ্ঞান'], ans: 3, exp: 'ব্যাখ্যা: অন্ধ শিশুদের পাঠ্যক্রমে জ্ঞানমূলক বিষয়ের মধ্যে ভাষা, বিজ্ঞান, গণিত ও সমাজবিজ্ঞানকে রাখা হয়েছে।'},
+      {q: '২. অন্ধ শিশুদের শনাক্তকরণের একটি বৈশিষ্ট্য হলো চোখে রামধনুর রং দেখা—এটি সত্য না মিথ্যা?', opts: ['সত্য', 'মিথ্যা', 'আংশিক সত্য', 'কোনোটিই নয়'], ans: 0, exp: 'ব্যাখ্যা: পাঠ্যপুস্তকের তালিকা অনুযায়ী চোখে রামধনুর রং দেখা হলো দৃষ্টি প্রতিবন্ধীদের শনাক্তকরণের একটি অন্যতম বৈশিষ্ট্য।'},
+      {q: '৩. সাধারণত বামদিক থেকে ডানদিকে ব্রেইল পাঠ শিখতে হয়—এটি সত্য না মিথ্যা?', opts: ['সত্য', 'মিথ্যা', 'আংশিক সত্য', 'কোনোটিই নয়'], ans: 0, exp: 'ব্যাখ্যা: ব্রেইলের উঁচু বিন্দুগুলি স্পর্শ করে সাধারণত বামদিক থেকে ডানদিকে পড়তে হয়।'},
+      {q: '৪. পঠনগত অক্ষম শিশুরা সমধর্মী বর্ণগুলিকে সঠিকভাবে চিনতে ভুল করে—এটি সত্য না মিথ্যা?', opts: ['মিথ্যা', 'সত্য', 'আংশিক সত্য', 'কোনোটিই নয়'], ans: 1, exp: 'ব্যাখ্যা: ডিসলেক্সিয়া বা পঠনগত অক্ষমতায় আক্রান্ত শিশুরা \'b\' এবং \'d\' এর মতো সমধর্মী বর্ণ চিনতে ভুল করে।'},
+      {q: '৫. ব্রেইল পদ্ধতি আবিষ্কার, AMA, ভারতে অন্ধদের নিয়ন্ত্রিত শিক্ষা চালু, TEACCH—এগুলির সঠিক কালানুক্রমিক বিন্যাস কোনটি?', opts: ['ব্রেইল, AMA, ভারতে শিক্ষা, TEACCH', 'AMA, ব্রেইল, ভারতে শিক্ষা, TEACCH', 'TEACCH, AMA, ব্রেইল, ভারতে শিক্ষা', 'কোনোটিই নয়'], ans: 0, exp: 'ব্যাখ্যা: ব্রেইল আবিষ্কার (1829), AMA-এর সংজ্ঞা (1934), ভারতে অন্ধদের শিক্ষা (1943), এবং TEACCH গঠন (1970)।'},
+      {q: '৬. "স্বাভাবিক শিশুদের মতো অন্যান্য বিকাশ সমভাবে ঘটে থাকে। কেবলমাত্র দেহ সঞ্চালনগত বিকাশের ক্ষেত্রে কিছু পার্থক্য দেখা যায়।"—এটি কোন্ শিশুদের বৈশিষ্ট্য?', opts: ['বাচনিক বিকাশ', 'সামাজিক বিকাশ', 'দৃষ্টি প্রতিবন্ধী শিশুদের শারীরিক বিকাশ', 'বৌদ্ধিক বিকাশ'], ans: 2, exp: 'ব্যাখ্যা: দৃষ্টি প্রতিবন্ধী শিশুরা দেখতে পায় না বলে তাদের শারীরিক বা দেহ সঞ্চালনগত বিকাশে কিছুটা পার্থক্য দেখা যায়।'},
+      {q: '৭. "অনেক শিশুর মধ্যে এমন উপসর্গ দেখা যায় যা ৩০ মাস বয়সের পূর্বেই শুরু হয় এবং সম্পর্ক স্থাপনের ক্ষেত্রে প্রতিবন্ধকতা সৃষ্টি হয়।"—এটি কীসের লক্ষণ?', opts: ['অন্ধ শিশু', 'শ্রবণ প্রতিবন্ধী', 'শিখন অক্ষমতা', 'অটিজম'], ans: 3, exp: 'ব্যাখ্যা: ৩০ মাসের পূর্বে শুরু হওয়া এই সামাজিক যোগাযোগহীনতার স্নায়বিক বিকাশগত অসুখটি হলো অটিজম।'},
+      {q: '৮. "সমাজের এমন অনেক শিশু রয়েছে যারা নিজেকে কামড়ায়, দেওয়ালে মাথা ঠোকে, আঁচড়ে দেয়।"—এগুলি কোন্ ধরনের আচরণ?', opts: ['উৎসুকহীনতা', 'আত্ম পীড়নকারী আচরণ', 'বিপদ বুঝতে না পারা', 'হিংসাত্মক মনোভাব'], ans: 1, exp: 'ব্যাখ্যা: অটিস্টিক শিশুদের নিজেদের বা অন্যের ক্ষতি করার এই ধরনের জেদকে আত্মপীড়নকারী আচরণ বলা হয়।'},
+      {q: '৯. "সাধারণত গড় বুদ্ধির চেয়ে কম বুদ্ধিসম্পন্ন বা অভিযোজনমূলক আচরণের স্বল্পতা।"—এটি কী নির্দেশ করে?', opts: ['শিখন অক্ষমতা', 'বুদ্ধিভিত্তিক অক্ষমতা', 'অটিজম', 'শ্রবণ প্রতিবন্ধী'], ans: 1, exp: 'ব্যাখ্যা: বুদ্ধিবৃত্তিক অক্ষমতার সংজ্ঞাতেই বলা হয়েছে যে এটি হলো সাধারণ গড় বুদ্ধির চেয়ে স্পষ্টভাবে কম বুদ্ধিসম্পন্ন অবস্থা।'},
+      {q: '১০. "অনেক শিশু সাধারণ বিদ্যালয়ে শ্রেণিকক্ষ থেকে কিছু দক্ষতা অর্জন করে, তবে বিশেষজ্ঞ শিক্ষকের দ্বারা বিশেষ কক্ষে শিক্ষাদান করা হয়।"—এটি কোন্ কক্ষ?', opts: ['সমন্বিত শ্রেণিকক্ষ', 'বিশেষ বিদ্যালয়', 'বৃত্তিমূলক প্রশিক্ষণ', 'রিসোর্স কক্ষ'], ans: 3, exp: 'ব্যাখ্যা: সাধারণ বিদ্যালয়ে বিশেষজ্ঞ শিক্ষকের তত্ত্বাবধানে বিশেষ শিক্ষোপকরণ যুক্ত কক্ষকে \'রিসোর্স কক্ষ\' (Resource Room) বলা হয়।'},
+      {q: '১১. "শিখন অক্ষম শিশুদের আচরণের মধ্যে ধারাবাহিকতা থাকে না। এদের কোনো কোনো সময় আগ্রাসী মনোভাব সম্পন্ন বা বদমেজাজের প্রকাশ দেখা যায়।"—এটি কী ধরনের সমস্যা?', opts: ['মনোযোগহীনতা', 'অতি চঞ্চলতা', 'প্রক্ষোভগত সমস্যা', 'শ্রবণজনিত সমস্যা'], ans: 2, exp: 'ব্যাখ্যা: শিখন অক্ষম শিশুদের এই আচরণের অসংগতি ও বদমেজাজ হলো তাদের প্রক্ষোভগত সমস্যা।'},
+      {q: '১২. টেপরেকর্ডার, টকিং বুক ইত্যাদি অন্ধ শিশুদের শিক্ষাদানে ব্যবহার করা হয় কারণ এগুলি শব্দ নির্ভর শিক্ষাপদ্ধতি।', opts: ['উভয়ই মিথ্যা', 'বিবৃতি সত্য, কারণ মিথ্যা', 'বিবৃতি ও কারণ উভয়ই সত্য', 'কোনোটিই নয়'], ans: 2, exp: 'ব্যাখ্যা: অন্ধ শিশুরা দেখতে পায় না, তাই তাদের শিক্ষার জন্য এই শব্দনির্ভর ইলেকট্রনিক যন্ত্রপাতিগুলি ব্যবহার করা হয়।'},
+      {q: '১৩. শিখন অক্ষম শিশুকে সরাসরি শিক্ষা না দিয়ে শিক্ষার জন্য পরিবেশ সৃষ্টি করা হয় কারণ এতে শিক্ষার্থীর আত্ম-শিখনের ওপর গুরুত্ব প্রদান করা যায়।', opts: ['বিবৃতি ভুল', 'কারণ ভুল', 'বিবৃতি ও কারণ উভয়ই সঠিক', 'কোনোটিই নয়'], ans: 2, exp: 'ব্যাখ্যা: মাদাম মস্তেসরীর আত্ম-শিখন পদ্ধতিতে এভাবেই পরিবেশ সৃষ্টির মাধ্যমে শিক্ষার কথা বলা হয়েছে।'},
+      {q: '১৪. অন্ধ শিশুরা কোনো কিছু দেখতে পায় না, তাই তাদের অভিজ্ঞতা অর্জনে সাহায্য করার জন্য শ্রবণ ও স্পর্শ পদ্ধতি ব্যবহার করা হয়।', opts: ['বিবৃতি ও কারণ উভয়ই সঠিক এবং যথাযথ ব্যাখ্যা', 'কারণ ভুল', 'বিবৃতি ভুল', 'কোনোটিই নয়'], ans: 0, exp: 'ব্যাখ্যা: দর্শনের অভাব মেটাতে অন্যান্য ইন্দ্রিয় (শ্রবণ ও স্পর্শ)-এর মাধ্যমে এদের নির্ভুল অভিজ্ঞতা অর্জন করানো হয়।'},
+      {q: '১৫. পাঠ্যপুস্তকের \'Terms to Know\' অংশে উল্লিখিত \'ললিতকলা\' বলতে কী বোঝায়?', opts: ['কেবল খেলাধুলা', 'অঙ্কন, ভাস্কর্য, সংগীত প্রভৃতি শিল্পকলা', 'বিজ্ঞান ও প্রযুক্তি', 'সমাজসেবা'], ans: 1, exp: 'ব্যাখ্যা: ললিতকলা বলতে শিল্পকলার বিভিন্ন ধারা যেমন অঙ্কন, ভাস্কর্য, স্থাপত্য, সংগীত, কাব্য ইত্যাদিকে বোঝায়।'}
+    ]
+  }
+};
+
+// ================== STATE VARIABLES ==================
+let currentUser = "";
+let activeSetId = null;
+let questions = [];
+let currentQIndex = 0;
+let score = 0;
+let wrongAnswers = 0;
+let isReviewMode = false;
+let timerInterval;
+let timeLeft = TIME_LIMIT;
+let userAnswers = {};
+
+// ================== LOCAL STORAGE LOGIC ==================
+function getGlobalUsers() {
+  const data = localStorage.getItem("testBazarGlobalUsers");
+  return data ? JSON.parse(data) : {};
+}
+
+function getAttemptsData() {
+  const data = localStorage.getItem("testBazarAttemptsEdCh6");
+  return data ? JSON.parse(data) : {};
+}
+
+function getAttemptCount(username, setId) {
+  const attempts = getAttemptsData();
+  const key = username + '|' + setId;
+  return attempts[key] || 0;
+}
+
+function incrementAttempt(username, setId) {
+  const attempts = getAttemptsData();
+  const key = username + '|' + setId;
+  attempts[key] = (attempts[key] || 0) + 1;
+  localStorage.setItem("testBazarAttemptsEdCh6", JSON.stringify(attempts));
+  return attempts[key];
+}
+
+// ================== INITIALIZATION ==================
+window.onload = () => {
+  renderHub();
+};
+
+function renderHub() {
+  const grid = document.getElementById("setGrid");
+  grid.innerHTML = "";
+
+  for(let id in ALL_SETS) {
+    const set = ALL_SETS[id];
+    const div = document.createElement("div");
+    div.className = "set-card";
+
+    let attemptCount = 0;
+    let isLocked = false;
+
+    if (currentUser) {
+      attemptCount = getAttemptCount(currentUser, id);
+      isLocked = attemptCount >= MAX_ATTEMPTS;
+      if (isLocked) div.classList.add("locked");
+    }
+
+    div.innerHTML = `
+      <div class="icon">${set.icon}</div>
+      <div class="set-num">${set.name.split(' - ')}</div>
+      <div class="set-title">${set.topic}</div>
+      <div class="set-meta"><span>${set.questions.length} Qs</span><span>10 Mins</span></div>
+      ${currentUser ? `<div class="attempt-badge ${isLocked?'locked-badge':''}">${isLocked ? '🔒 Locked' : attemptCount + '/' + MAX_ATTEMPTS}</div>` : ''}
+    `;
+
+    div.onclick = () => {
+      if (isLocked) {
+        alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
+        return;
+      }
+      handleSetClick(id);
+    };
+    grid.appendChild(div);
+  }
+}
+
+function handleSetClick(setId) {
+  activeSetId = setId;
+  if (!currentUser) {
+    document.getElementById("loginSetName").innerText = `📚 ${ALL_SETS[setId].name}`;
+    document.getElementById("loginOverlay").classList.add("active");
+    document.getElementById("loginUsername").value = "";
+    document.getElementById("loginPassword").value = "";
+    document.getElementById("loginError").style.display = "none";
+  } else {
+    startQuiz(setId);
+  }
+}
+
+function doLogin() {
+  const u = document.getElementById("loginUsername").value.trim();
+  const p = document.getElementById("loginPassword").value.trim();
+  const err = document.getElementById("loginError");
+
+  const GLOBAL_USERS = getGlobalUsers();
+
+  if(!u || !p) {
+    err.innerText = "ইউজারনেম এবং পাসওয়ার্ড দিন!";
+    err.style.display = "block";
+    return;
+  }
+
+  if(GLOBAL_USERS[u] && GLOBAL_USERS[u] === p) {
+    let attempts = getAttemptCount(u, activeSetId);
+    if (attempts >= MAX_ATTEMPTS) {
+      err.innerText = `আপনি এই সেটে সর্বোচ্চ ${MAX_ATTEMPTS} বার পরীক্ষা দিয়েছেন!`;
+      err.style.display = "block";
+      return;
+    }
+
+    currentUser = u;
+    document.getElementById("loginOverlay").classList.remove("active");
+    document.getElementById("userDisplay").innerHTML = `👤 ${u}`;
+    document.getElementById("userDisplay").classList.remove("hidden");
+
+    renderHub();
+    startQuiz(activeSetId);
+  } else {
+    err.innerText = "ইউজারনেম বা পাসওয়ার্ড ভুল! (Index থেকে চেক করুন)";
+    err.style.display = "block";
+  }
+}
+
+function closeLogin() {
+  document.getElementById("loginOverlay").classList.remove("active");
+}
+
+function goToHub() {
+  document.getElementById("resultWrap").classList.remove("show");
+  document.getElementById("testArea").classList.add("hidden");
+  document.getElementById("hubPage").style.display = "block";
+  document.getElementById("timerBox").classList.add("hidden");
+  clearInterval(timerInterval);
+  renderHub();
+}
+
+// ================== QUIZ LOGIC ==================
+function startQuiz(setId) {
+  incrementAttempt(currentUser, setId);
+
+  questions = ALL_SETS[setId].questions;
+  currentQIndex = 0;
+  score = 0;
+  wrongAnswers = 0;
+  userAnswers = {};
+  isReviewMode = false;
+  timeLeft = TIME_LIMIT;
+
+  document.getElementById("hubPage").style.display = "none";
+  document.getElementById("resultWrap").classList.remove("show");
+  document.getElementById("testArea").classList.remove("hidden");
+  document.getElementById("timerBox").classList.remove("hidden");
+  document.getElementById("testSetLabel").innerText = ALL_SETS[setId].name;
+  document.getElementById("testTopic").innerText = ALL_SETS[setId].topic;
+
+  startTimer();
+  loadQuestion();
+}
+
+function loadQuestion() {
+  const qData = questions[currentQIndex];
+  document.getElementById("qNum").innerText = `প্রশ্ন ${currentQIndex + 1} / ${questions.length}`;
+  document.getElementById("qText").innerText = qData.q;
+
+  const progress = ((currentQIndex) / questions.length) * 100;
+  document.getElementById("progressFill").style.width = `${progress}%`;
+  document.getElementById("scoreShow").innerText = `সঠিক: ${score} | ভুল: ${wrongAnswers}`;
+
+  const optsBox = document.getElementById("qOpts");
+  optsBox.innerHTML = "";
+  document.getElementById("explanation").classList.remove("show");
+  document.getElementById("nextBtn").disabled = true;
+  document.getElementById("nextBtn").innerText = (currentQIndex === questions.length - 1) && !isReviewMode ? "টেস্ট জমা দিন" : "পরবর্তী →";
+
+  qData.opts.forEach((optText, idx) => {
+    const btn = document.createElement("button");
+    btn.className = "opt";
+    btn.innerHTML = `<div class="opt-circle">${LABELS[idx]}</div> <div class="opt-text">${optText}</div>`;
+
+    if (isReviewMode) {
+      btn.classList.add("disabled");
+      if (idx === qData.ans) btn.classList.add("correct");
+      else if (userAnswers[currentQIndex] === idx) btn.classList.add("wrong");
+    } else {
+      btn.onclick = () => selectOption(btn, idx, qData.ans, qData.exp);
+    }
+    optsBox.appendChild(btn);
+  });
+
+  if (isReviewMode) {
+    document.getElementById("explanationText").innerHTML = `<strong>ব্যাখ্যা:</strong> ${qData.exp.replace('ব্যাখ্যা: ', '')}`;
+    document.getElementById("explanation").classList.add("show");
+    document.getElementById("nextBtn").disabled = false;
+    if (currentQIndex === questions.length - 1) {
+      document.getElementById("nextBtn").innerText = "ফলাফলে ফিরুন";
+    }
+  }
+}
+
+function selectOption(btn, selectedIdx, correctIdx, exp) {
+  const allBtns = document.getElementById("qOpts").querySelectorAll(".opt");
+  allBtns.forEach(b => b.classList.add("disabled"));
+
+  userAnswers[currentQIndex] = selectedIdx;
+
+  if (selectedIdx === correctIdx) {
+    btn.classList.add("correct");
+    score++;
+  } else {
+    btn.classList.add("wrong");
+    allBtns[correctIdx].classList.add("correct");
+    wrongAnswers++;
+  }
+
+  document.getElementById("scoreShow").innerText = `সঠিক: ${score} | ভুল: ${wrongAnswers}`;
+  document.getElementById("explanationText").innerHTML = `<strong>ব্যাখ্যা:</strong> ${exp.replace('ব্যাখ্যা: ', '')}`;
+  document.getElementById("explanation").classList.add("show");
+  document.getElementById("nextBtn").disabled = false;
+}
+
+function nextQ() {
+  if (isReviewMode && currentQIndex === questions.length - 1) {
+    document.getElementById("testArea").classList.add("hidden");
+    document.getElementById("resultWrap").classList.add("show");
+    return;
+  }
+
+  if (!isReviewMode && currentQIndex === questions.length - 1) {
+    finishQuiz();
+    return;
+  }
+
+  currentQIndex++;
+  loadQuestion();
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  const tBox = document.getElementById("timerBox");
+  tBox.classList.remove("danger");
+
+  timerInterval = setInterval(() => {
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      finishQuiz();
+      return;
+    }
+    timeLeft--;
+    const m = Math.floor(timeLeft / 60);
+    const s = timeLeft % 60;
+    document.getElementById("timerDisplay").innerText = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+    if (timeLeft < 60) tBox.classList.add("danger");
+  }, 1000);
+}
+
+function finishQuiz() {
+  clearInterval(timerInterval);
+  document.getElementById("testArea").classList.add("hidden");
+  document.getElementById("timerBox").classList.add("hidden");
+  document.getElementById("resultWrap").classList.add("show");
+
+  const total = questions.length;
+  const skipped = total - (score + wrongAnswers);
+  const percent = Math.round((score / total) * 100);
+
+  document.getElementById("finalScore").innerText = `${percent}%`;
+  document.getElementById("rbCorrect").innerText = score;
+  document.getElementById("rbWrong").innerText = wrongAnswers + skipped;
+
+  const gradeEl = document.getElementById("resultGrade");
+  if (percent >= 80) { gradeEl.innerText = "🌟 অসাধারণ পারফরম্যান্স!"; gradeEl.style.color = "#1a7a4a"; document.getElementById("resultIcon").innerText = "🏆"; }
+  else if (percent >= 60) { gradeEl.innerText = "👍 খুব ভালো!"; gradeEl.style.color = "#2aad68"; document.getElementById("resultIcon").innerText = "⭐"; }
+  else { gradeEl.innerText = "💪 চেষ্টা চালিয়ে যাও!"; gradeEl.style.color = "#e8730a"; document.getElementById("resultIcon").innerText = "📚"; }
+
+  const remaining = MAX_ATTEMPTS - getAttemptCount(currentUser, activeSetId);
+  document.getElementById("attemptInfo").innerHTML = `👤 ${currentUser} — বাকি আছে <strong>${remaining}</strong> বার Test দেওয়ার সুযোগ।`;
+}
+
+function restartQuiz() {
+  if (getAttemptCount(currentUser, activeSetId) >= MAX_ATTEMPTS) {
+    alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
+    return;
+  }
+  startQuiz(activeSetId);
+}
+
+function showReview() {
+  isReviewMode = true;
+  currentQIndex = 0;
+  document.getElementById("resultWrap").classList.remove("show");
+  document.getElementById("testArea").classList.remove("hidden");
+  loadQuestion();
+}
+</script>
+</body>
+</html>
+
+
