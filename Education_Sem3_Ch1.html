@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Test Bazar - Education 3 Sem Chapter 1 (Selected Sets)</title>
-<!-- Google Fonts: Syne for English/Numbers, Tiro Bangla for Bengali -->
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<title>Test Bazar — Education 3rd Sem | Ch 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* ================= COLOR SCHEME & VARIABLES ================= */
 :root {
@@ -14,280 +13,296 @@
   --accent: #f9a825;
   --bg-main: #f0faf4;
   --bg-card: #ffffff;
-  --bg-selected: #e8f4ec;
+  --bg-correct: #e8f7ef;
+  --bg-wrong: #fdf0f0;
   --text-main: #1c2e24;
   --text-meta: #5a7a66;
-  --border-color: #c5dccb;
+  --text-exp: #2c4035;
   --alert-danger: #dc3545;
-  --alert-warning: #ffc107;
-  --correct: #28a745;
+  --alert-warning: #e8730a;
+  --border-color: #c5dccb;
 }
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Tiro Bangla', serif; background: var(--bg-main); color: var(--text-main); line-height: 1.5; overflow-x: hidden; }
+body { font-family: 'Syne', sans-serif; background: var(--bg-main); min-height: 100vh; color: var(--text-main); }
 .en-font { font-family: 'Syne', sans-serif; }
-a { text-decoration: none; }
-button { font-family: 'Tiro Bangla', serif; }
 
-/* TOP BAR */
-.top-bar { background: var(--primary); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; color: white; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-.logo { font-size: 1.2rem; font-weight: 800; font-family: 'Syne', sans-serif;}
-.logo span { color: var(--accent); }
-.timer-box { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 6px; font-weight: 700; font-size: 1rem; display: flex; align-items: center; gap: 5px; }
+/* Top Bar */
+.top-bar { background: var(--primary); padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.top-logo { font-size: 1.2rem; font-weight: 800; color: white; cursor: pointer; }
+.top-logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.2); padding: 0.4rem 1rem; border-radius: 8px; color: white; font-weight: 700; display: flex; align-items: center; gap: 6px; }
 .timer-box.danger { background: var(--alert-danger); animation: pulse 1s infinite; }
-@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-.user-info { background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 15px; font-size: 0.85rem; font-family: 'Syne', sans-serif; font-weight: bold;}
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+.user-info { font-size: 0.85rem; font-weight: 700; color: white; background: rgba(0,0,0,0.15); padding: 4px 10px; border-radius: 20px;}
 
-/* MAIN CONTAINER */
-.main-container { max-width: 850px; margin: 0 auto; padding: 25px 15px; }
+.main { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
 
-/* HUB VIEW */
-.hub-header { text-align: center; margin-bottom: 30px; }
-.hub-header h1 { color: var(--primary); font-size: 1.4rem; margin-bottom: 8px; line-height: 1.3;}
-.hub-header p { color: var(--text-meta); font-size: 0.9rem; }
-.set-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
-.set-card { background: var(--bg-card); border-radius: 10px; padding: 20px 15px; border: 2px solid var(--border-color); text-align: center; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; }
-.set-card:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 8px 15px rgba(26,122,74,0.1); }
-.set-icon { font-size: 2rem; margin-bottom: 10px; }
-.set-name { font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 5px; font-family: 'Syne', sans-serif;}
-.set-topic { font-size: 0.85rem; color: var(--text-meta); margin-bottom: 12px; height: 35px; display: flex; align-items: center; justify-content: center; line-height: 1.3;}
-.set-meta { display: flex; justify-content: center; gap: 10px; font-size: 0.8rem; font-weight: bold; color: var(--primary); font-family: 'Syne', sans-serif;}
-.set-meta span { background: var(--bg-main); padding: 3px 10px; border-radius: 15px; border: 1px solid var(--border-color); }
-.attempt-badge { position: absolute; top: 8px; right: 8px; background: #ffeeba; color: #856404; font-size: 0.75rem; font-weight: bold; padding: 2px 6px; border-radius: 8px; font-family: 'Syne', sans-serif;}
-.attempt-badge.locked { background: var(--alert-danger); color: white; border: none; }
+/* Hub View */
+.hub-header { text-align: center; margin-bottom: 2rem; }
+.hub-header h1 { font-family: 'Tiro Bangla', serif; color: var(--primary); font-size: 1.6rem; margin-bottom: 0.5rem; line-height: 1.4; }
+.hub-header p { color: var(--text-meta); font-size: 0.95rem; font-family: 'Tiro Bangla', serif;}
 
-/* LOGIN MODAL */
-.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(3px); }
-.login-modal { background: white; padding: 2rem 1.5rem; border-radius: 12px; width: 90%; max-width: 350px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
-.login-modal h2 { color: var(--primary); margin-bottom: 5px; text-align: center; font-size: 1.3rem;}
-.login-modal p { color: var(--text-meta); margin-bottom: 15px; text-align: center; font-size: 0.85rem;}
-.login-set-name { background: var(--bg-main); padding: 8px; border-radius: 6px; font-weight: bold; color: var(--primary); margin-bottom: 15px; text-align: center; font-family: 'Syne', sans-serif; font-size: 0.9rem;}
-.input-group { margin-bottom: 12px; }
-.input-group label { display: block; font-weight: bold; margin-bottom: 4px; color: var(--text-main); font-size: 0.85rem; }
-.input-group input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border-color); border-radius: 6px; font-size: 0.9rem; font-family: 'Syne', sans-serif; outline: none; transition: 0.2s; }
+.set-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+.set-card { background: var(--bg-card); border: 2px solid var(--border-color); border-radius: 12px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s; position: relative; }
+.set-card:hover:not(.locked) { transform: translateY(-3px); border-color: var(--primary); box-shadow: 0 8px 15px rgba(26,122,74,0.1); }
+.set-card.locked { opacity: 0.6; cursor: not-allowed; border-color: var(--alert-danger); }
+.set-card .icon { font-size: 2.2rem; margin-bottom: 0.5rem; }
+.set-card .set-num { font-weight: 700; font-size: 1.1rem; color: var(--primary); }
+.set-card .set-title { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-main); margin: 0.3rem 0 0.8rem; line-height: 1.3; height: 35px; display: flex; align-items: center; justify-content: center;}
+.set-card .set-meta { display: flex; justify-content: center; gap: 1rem; font-size: 0.75rem; color: var(--text-meta); font-weight: bold; }
+.set-card .set-meta span { background: var(--bg-main); padding: 0.2rem 0.6rem; border-radius: 6px; }
+.attempt-badge { position: absolute; top: 10px; right: 10px; background: #ffeeba; color: #856404; font-size: 0.75rem; font-weight: bold; padding: 3px 8px; border-radius: 10px; }
+.attempt-badge.locked-badge { background: var(--alert-danger); color: white; }
+
+/* Quiz View */
+.quiz-info { background: white; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; border: 1px solid var(--border-color); display: flex; gap: 1rem; flex-wrap: wrap; }
+.info-item { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-meta); font-weight: 600;}
+.info-item strong { color: var(--primary); }
+.progress-wrap { background: var(--border-color); border-radius: 4px; height: 6px; margin-bottom: 1.2rem; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--primary); transition: width 0.3s ease; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.q-num { font-size: 0.85rem; font-weight: 700; color: var(--primary); margin-bottom: 0.8rem; }
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; color: var(--text-main); font-weight: 700; line-height: 1.6; margin-bottom: 1.2rem; }
+.opts { display: flex; flex-direction: column; gap: 0.6rem; }
+.opt { display: flex; align-items: center; gap: 12px; padding: 0.8rem 1rem; border: 1.5px solid var(--border-color); border-radius: 10px; background: transparent; cursor: pointer; text-align: left; transition: all 0.2s; width: 100%; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: 600; color: var(--text-main);}
+.opt:not(.disabled):hover { border-color: var(--primary); background: var(--bg-selected); }
+.opt-circle { width: 26px; height: 26px; min-width: 26px; border-radius: 50%; border: 1.5px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; font-family: 'Syne', sans-serif; background: white; }
+.opt.correct { border-color: var(--primary); background: var(--bg-correct); }
+.opt.correct .opt-circle { background: var(--primary); border-color: var(--primary); color: white; }
+.opt.wrong { border-color: var(--alert-danger); background: var(--bg-wrong); }
+.opt.wrong .opt-circle { background: var(--alert-danger); border-color: var(--alert-danger); color: white; }
+.opt.disabled { cursor: default; }
+
+.explanation { background: var(--bg-main); border-left: 4px solid var(--primary); border-radius: 0 8px 8px 0; padding: 1rem; margin-top: 1rem; display: none; }
+.explanation.show { display: block; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-exp); line-height: 1.6; }
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; }
+.score-show { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: var(--text-meta); font-weight: bold;}
+.next-btn { background: var(--primary); color: white; border: none; padding: 0.7rem 1.5rem; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: 0.2s; }
+.next-btn:disabled { background: var(--border-color); cursor: not-allowed; }
+
+/* Result View */
+.result-wrap { background: white; border-radius: 14px; padding: 2rem 1.5rem; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.1); max-width: 500px; margin: 0 auto; display: none; }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; line-height: 1;}
+.result-score { font-size: 3rem; font-weight: 800; color: var(--primary); line-height: 1;}
+.result-total { font-size: 1rem; color: var(--text-meta); font-weight: bold; margin-bottom: 1rem; }
+.result-grade { font-family: 'Tiro Bangla', serif; font-size: 1.2rem; font-weight: 700; color: var(--accent); margin-bottom: 1.5rem; }
+.result-bars { display: flex; justify-content: center; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 10px; padding: 0.8rem; min-width: 80px; }
+.rb-num { font-size: 1.5rem; font-weight: 800; line-height: 1; margin-bottom: 5px;}
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.8rem; color: var(--text-meta); font-weight: bold;}
+.attempt-info-box { background: #fff3cd; color: #856404; padding: 10px; border-radius: 8px; font-size: 0.9rem; font-weight: 700; margin-bottom: 1.5rem; font-family: 'Tiro Bangla', serif; border: 1px solid #ffeeba;}
+.action-btns { display: flex; flex-direction: column; gap: 10px; }
+.action-btns button { width: 100%; padding: 12px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; cursor: pointer; border: none; transition: 0.2s; }
+.btn-retry { background: #17a2b8; color: white; }
+.btn-review { background: #28a745; color: white; }
+.btn-home { background: var(--bg-main); color: var(--text-main); border: 1.5px solid var(--border-color) !important; }
+
+/* Login Modal */
+.login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(3px); }
+.login-overlay.active { display: flex; }
+.login-modal { background: white; padding: 2.5rem 2rem; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); text-align: center; }
+.login-modal h2 { font-family: 'Tiro Bangla', serif; color: var(--primary); font-size: 1.4rem; margin-bottom: 0.5rem; }
+.login-modal p { font-family: 'Tiro Bangla', serif; color: var(--text-meta); font-size: 0.9rem; margin-bottom: 1.5rem; }
+.login-set-name { background: var(--bg-main); color: var(--primary); padding: 10px; border-radius: 8px; font-weight: 700; font-family: 'Tiro Bangla', serif; margin-bottom: 1.5rem; font-size: 0.95rem; }
+.input-group { text-align: left; margin-bottom: 1.2rem; }
+.input-group label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 5px; font-family: 'Tiro Bangla', serif;}
+.input-group input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border-color); border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 0.95rem; outline: none; transition: 0.2s; }
 .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,122,74,0.1); }
-.error-msg { color: var(--alert-danger); font-size: 0.85rem; font-weight: bold; text-align: center; margin-bottom: 12px; display: none; }
-.modal-buttons { display: flex; flex-direction: column; gap: 8px; }
-.btn-primary { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 6px; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%; }
-.btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
-.btn-secondary { background: var(--text-meta); color: white; border: none; padding: 10px; border-radius: 6px; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%; text-align: center;}
-.btn-secondary:hover { background: #4a6655; }
-
-/* QUIZ VIEW */
-.quiz-header-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 2px dashed var(--border-color); }
-.progress-container { width: 100%; height: 6px; background: var(--border-color); border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
-.progress-bar { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s ease; }
-.question-card { background: var(--bg-card); padding: 25px 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-
-.q-num { font-size: 0.85rem; color: var(--primary); font-weight: 800; margin-bottom: 8px; font-family: 'Syne', sans-serif;}
-.q-text { font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin-bottom: 18px; line-height: 1.4; }
-.options-container { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
-.opt { display: flex; align-items: center; padding: 10px 15px; border: 1.5px solid var(--border-color); border-radius: 8px; background: transparent; cursor: pointer; transition: 0.2s; text-align: left; font-size: 0.95rem; color: var(--text-main); font-weight: 600; }
-.opt:hover:not(.disabled) { border-color: var(--primary); background: var(--bg-selected); }
-.opt-circle { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--border-color); display: flex; align-items: center; justify-content: center; margin-right: 12px; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: bold; flex-shrink: 0; background: white;}
-.opt.opt-correct { border-color: var(--correct); background: #e8f7ef; color: #155724;}
-.opt.opt-correct .opt-circle { background: var(--correct); border-color: var(--correct); color: white; }
-.opt.opt-wrong { border-color: var(--alert-danger); background: #fdf0f0; color: #721c24;}
-.opt.opt-wrong .opt-circle { background: var(--alert-danger); border-color: var(--alert-danger); color: white; }
-.explanation-box { background: #e8f4ec; border-left: 3px solid var(--primary); padding: 12px; border-radius: 0 6px 6px 0; font-size: 0.9rem; line-height: 1.5; color: #2c4035; margin-bottom: 18px; display: none; }
-.nav-row { display: flex; justify-content: space-between; align-items: center; }
-.score-show { font-weight: bold; font-size: 0.85rem; color: var(--text-meta); font-family: 'Syne', sans-serif;}
-.btn-full { width: 100%; margin-top: 12px; }
-
-/* RESULT VIEW */
-.result-view { text-align: center; max-width: 450px; margin: 0 auto; background: white; padding: 30px 15px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
-.result-icon { font-size: 3rem; margin-bottom: 8px; line-height: 1;}
-.score-display { font-size: 2.8rem; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 5px;}
-.score-label { font-size: 0.9rem; color: var(--text-meta); font-weight: bold; margin-bottom: 15px;}
-.grade-text { font-size: 1.1rem; font-weight: 700; color: var(--accent); margin-bottom: 25px; }
-.result-stats { display: flex; justify-content: center; gap: 12px; margin-bottom: 25px; }
-.stat-box { background: var(--bg-main); padding: 10px; border-radius: 8px; width: 85px; border: 1px solid var(--border-color); }
-.stat-num { font-size: 1.4rem; font-weight: 800; font-family: 'Syne', sans-serif; line-height: 1; margin-bottom: 5px; }
-.stat-label { font-size: 0.8rem; font-weight: bold; color: var(--text-meta); }
-.user-attempt-info { background: #fff3cd; color: #856404; padding: 8px; border-radius: 6px; font-size: 0.85rem; font-weight: 700; margin-bottom: 18px; font-family: 'Syne', sans-serif;}
-.result-actions { display: flex; flex-direction: column; gap: 10px; }
+.login-btn { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
+.login-btn:hover { background: var(--primary-hover); }
+.cancel-btn { width: 100%; background: transparent; color: var(--text-meta); border: none; padding: 10px; margin-top: 5px; font-family: 'Tiro Bangla', serif; font-weight: 700; cursor: pointer;}
+.error-msg { color: var(--alert-danger); font-size: 0.85rem; font-weight: 700; margin-top: 10px; font-family: 'Tiro Bangla', serif; display: none; }
 .hidden { display: none !important; }
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
 <header class="top-bar">
-<div class="logo en-font" style="cursor:pointer;" onclick="location.reload()">Test<span>Bazar</span></div>
-<div class="timer-box en-font hidden" id="topTimerBox">⏱ <span id="timerDisplay">10:00</span></div>
-<div class="user-info" id="userDisplay">👤 Guest</div>
+  <div class="top-logo" onclick="location.reload()">Test<span>Bazar</span></div>
+  <div class="timer-box en-font hidden" id="timerBox">⏱ <span id="timerDisplay">10:00</span></div>
+  <div class="user-info en-font hidden" id="userDisplay"></div>
 </header>
 
-<div class="main-container">
+<div class="main">
 
-<!-- LOGIN MODAL -->
-<div class="modal-overlay hidden" id="setLoginModal">
-<div class="login-modal">
-<h2>লগইন করুন</h2>
-<p>Test শুরু করতে আপনার ইউজারনেম ও পাসওয়ার্ড দিন</p>
-<div class="login-set-name" id="loginSetName">📚 Set 1</div>
-<div class="input-group">
-<label>ইউজারনেম</label>
-<input type="text" id="username" placeholder="আপনার ইউজারনেম লিখুন">
-</div>
-<div class="input-group">
-<label>পাসওয়ার্ড</label>
-<input type="password" id="password" placeholder="আপনার পাসওয়ার্ড লিখুন" onkeydown="if(event.key==='Enter') verifySetLogin()">
-</div>
-<div class="error-msg" id="loginError">❌ ভুল ইউজারনেম বা পাসওয়ার্ড!</div>
-<div class="modal-buttons">
-<button class="btn-primary" onclick="verifySetLogin()">✅ লগইন করে Test শুরু করো</button>
-<button class="btn-secondary" onclick="closeSetLogin()">বাতিল</button>
-</div>
-</div>
-</div>
+  <!-- ================= LOGIN MODAL ================= -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-modal">
+      <h2>লগইন করুন</h2>
+      <p>Test শুরু করতে আপনার ইউজারনেম ও পাসওয়ার্ড দিন</p>
+      <div class="login-set-name" id="loginSetName">📚 Set 1</div>
+      <div class="input-group">
+        <label>ইউজারনেম</label>
+        <input type="text" id="loginUsername" placeholder="Username">
+      </div>
+      <div class="input-group">
+        <label>পাসওয়ার্ড</label>
+        <input type="password" id="loginPassword" placeholder="Password" onkeydown="if(event.key==='Enter') doLogin()">
+      </div>
+      <button class="login-btn" onclick="doLogin()">✅ লগইন করে Test শুরু করো</button>
+      <button class="cancel-btn" onclick="closeLogin()">বাতিল</button>
+      <div class="error-msg" id="loginError">❌ ভুল ইউজারনেম বা পাসওয়ার্ড! (Index থেকে চেক করুন)</div>
+    </div>
+  </div>
 
-<!-- HUB VIEW -->
-<div id="hubView">
-<div class="hub-header">
-<h1>শিক্ষাবিজ্ঞান 3rd Sem Chapter 1:<br>স্বাধীন ভারতের শিক্ষা কমিশন</h1>
-<p>আপনার বাছাই করা প্রতিটি সেটে ঠিক ১৫টি করে প্রশ্ন দেওয়া হয়েছে। Test শুরু করতে সেটে ক্লিক করুন।</p>
-<div id="hubUserInfo" style="font-family:'Tiro Bangla',serif;font-size:0.85rem;color:#5a7a66;margin-top:10px; font-weight:bold;"></div>
-</div>
-<div class="set-grid" id="setGrid"></div>
-<div style="text-align:center; margin-top:30px;">
-<button class="btn-secondary" style="width: auto; padding: 8px 15px;" onclick="window.history.back()">← Main Dashboard-এ ফিরুন</button>
-</div>
-</div>
+  <!-- ================= HUB PAGE ================= -->
+  <div id="hubPage">
+    <div class="hub-header">
+      <h1>শিক্ষাবিজ্ঞান 3rd Sem Chapter 1:<br>স্বাধীন ভারতের শিক্ষা কমিশন</h1>
+      <p>মোট ১৮০টি প্রশ্ন সম্বলিত ১২টি সেট। Test শুরু করতে সেটে ক্লিক করুন।</p>
+    </div>
+    <div class="set-grid" id="setGrid"></div>
+    <div style="text-align: center; margin-top: 30px;">
+      <button onclick="window.history.back()" style="background: white; border: 1.5px solid var(--border-color); padding: 10px 20px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-weight: bold; cursor: pointer; color: var(--text-meta);">← Main Dashboard-এ ফিরুন</button>
+    </div>
+  </div>
 
-<!-- QUIZ VIEW -->
-<div id="quizView" class="hidden">
-<div class="quiz-header-info">
-<div style="font-weight: 700; font-size: 1rem; color: var(--primary);" id="currentSetName">Set Name</div>
-</div>
-<div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
-<div class="question-card">
-<div class="q-num" id="qNum">প্রশ্ন ১ / ১৫</div>
-<div class="q-text" id="qText">Question goes here</div>
-<div class="options-container" id="optionsBox"></div>
-<div class="explanation-box" id="expBox"></div>
-<div class="nav-row">
-<div class="score-show en-font" id="scoreShow">Score: 0 | Wrong: 0</div>
-<button class="btn-primary" style="width: auto; padding: 8px 20px;" id="nextBtn" onclick="nextQuestion()" disabled>পরবর্তী →</button>
-</div>
-<button class="btn-primary btn-full hidden" id="submitBtn" onclick="finishQuiz()">টেস্ট জমা দিন</button>
-</div>
-</div>
+  <!-- ================= QUIZ AREA ================= -->
+  <div id="testArea" class="hidden">
+    <div class="quiz-info">
+      <div class="info-item">🎓 <strong>শিক্ষাবিজ্ঞান</strong> — 3rd Sem | <span id="testSetLabel">Set 1</span></div>
+      <div class="info-item">📝 <span id="testTopic">Topic Name</span></div>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
 
-<!-- RESULT VIEW -->
-<div id="resultView" class="hidden result-view">
-<div class="result-icon" id="resultIcon">🏆</div>
-<h2 style="margin-bottom: 5px; font-size:1.3rem;">আপনার ফলাফল</h2>
-<div class="score-display en-font" id="finalScoreText">33%</div>
-<div class="score-label">স্কোর</div>
-<div class="grade-text" id="gradeText">💪 চেষ্টা চালিয়ে যাও!</div>
-<div class="result-stats">
-<div class="stat-box"><div class="stat-num" style="color: var(--primary);" id="correctCount">0</div><div class="stat-label">সঠিক</div></div>
-<div class="stat-box"><div class="stat-num" style="color: var(--alert-danger);" id="wrongCount">0</div><div class="stat-label">ভুল/স্কিপ</div></div>
-</div>
-<div class="user-attempt-info" id="resultAttemptInfo">👤 User — Set X: বাকি আছে 9 বার...</div>
-<div class="result-actions">
-<button class="btn-primary" style="background: #17a2b8;" onclick="restartQuiz()">আবার চেষ্টা করো</button>
-<button class="btn-primary" style="background: #28a745;" onclick="reviewQuiz()">উত্তর দেখো</button>
-<button class="btn-secondary" onclick="location.reload()">← Hub এ ফিরে যাও</button>
-</div>
-</div>
+    <div class="q-card">
+      <div class="q-num en-font" id="qNum">প্রশ্ন ১ / ১৫</div>
+      <div class="q-text" id="qText">Question Text</div>
+      <div class="opts" id="qOpts"></div>
+      <div class="explanation" id="explanation"><p id="explanationText"></p></div>
+
+      <div class="nav-row">
+        <div class="score-show" id="scoreShow">সঠিক: ০ | ভুল: ০</div>
+        <button class="next-btn" id="nextBtn" onclick="nextQ()" disabled>পরবর্তী →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= RESULT AREA ================= -->
+  <div class="result-wrap" id="resultWrap">
+    <div class="result-icon" id="resultIcon">🏆</div>
+    <div class="result-score en-font" id="finalScore">100%</div>
+    <div class="result-total">স্কোর</div>
+    <div class="result-grade" id="resultGrade">অসাধারণ!</div>
+
+    <div class="result-bars">
+      <div class="result-bar">
+        <div class="rb-num en-font" id="rbCorrect" style="color:var(--primary)">15</div>
+        <div class="rb-label">সঠিক</div>
+      </div>
+      <div class="result-bar">
+        <div class="rb-num en-font" id="rbWrong" style="color:var(--alert-danger)">0</div>
+        <div class="rb-label">ভুল/স্কিপ</div>
+      </div>
+    </div>
+
+    <div class="attempt-info-box" id="attemptInfo"></div>
+
+    <div class="action-btns">
+      <button class="btn-retry" onclick="restartQuiz()">আবার চেষ্টা করো</button>
+      <button class="btn-review" onclick="showReview()">উত্তর দেখো</button>
+      <button class="btn-home" onclick="goToHub()">← Hub এ ফিরে যাও</button>
+    </div>
+  </div>
 
 </div>
 
 <script>
-// ================== DATA CONFIGURATION ==================
+// ============================================================
+//  Global Config & Database
+// ============================================================
 const MAX_ATTEMPTS = 10;
 const TIME_LIMIT = 10 * 60; // 10 Minutes
+const LABELS = ['ক', 'খ', 'গ', 'ঘ'];
 
-// ব্যবহারকারীর নির্দিষ্ট করা ৮টি সেট (১,২,৩,৪,৯,১০,১১,১২) এবং প্রতিটিতে ঠিক ১৫টি প্রশ্ন
-const QUIZ_SETS = {
+// 12 Sets x 15 Questions = 180 Questions (Education 3rd Sem Ch 1)
+const ALL_SETS = {
   1: {
-    name: "Set 1 - রাধাকৃষ্ণণ কমিশন গঠন ও গ্রামীণ শিক্ষা",
-    icon: "🏛️",
+    name: 'Set 1', icon: '🏛️', topic: 'বিশ্ববিদ্যালয় শিক্ষা কমিশন (রাধাকৃষ্ণণ কমিশন) - গঠন ও গ্রামীণ শিক্ষা',
     questions: [
       { q: "১. বিশ্ববিদ্যালয় কমিশন গঠিত হয়—", opts: ["1948 খ্রিস্টাব্দের 5 নভেম্বর", "1948 খ্রিস্টাব্দের 7 নভেম্বর", "1949 খ্রিস্টাব্দের 5 নভেম্বর", "1949 খ্রিস্টাব্দের 6 নভেম্বর"], ans: 0, exp: "ব্যাখ্যা: স্বাধীনতা লাভের পর দেশের শিক্ষাব্যবস্থার পুনর্গঠন ও উচ্চশিক্ষার পর্যালোচনার জন্য ভারত সরকারের এক বিশেষ আদেশে 1948 সালের 5 নভেম্বর এই কমিশন গঠিত হয়েছিল।" },
       { q: "২. বিশ্ববিদ্যালয় কমিশনের সদস্য সংখ্যা—", opts: ["9 জন", "8 জন", "10 জন", "11 জন"], ans: 2, exp: "ব্যাখ্যা: এই কমিশনে 7 জন বিশিষ্ট ভারতীয় শিক্ষাবিদ এবং 3 জন বিদেশি চিন্তাবিদ নিয়ে সর্বমোট 10 জন সদস্য ছিলেন।" },
-      { q: "৩. বিশ্ববিদ্যালয় কমিশনের সভাপতি ছিলেন—", opts: ["ড. এ. লক্ষ্মণস্বামী মুদালিয়র", "ড. সর্বপল্লী রাধাকৃষ্ণণ", "ড. জাকির হোসেন", "ড. জেমস এফ. ডাফ"], ans: 1, exp: "ব্যাখ্যা: প্রখ্যাত শিক্ষাবিদ ও পরবর্তীকালে ভারতের রাষ্ট্রপতি ড. সর্বপল্লী রাধাকৃষ্ণণ ছিলেন এই কমিশনের সভাপতি।" },
-      { q: "৪. বিশ্ববিদ্যালয় কমিশনের সুপারিশের সংখ্যা—", opts: ["208টি", "207টি", "747টি", "746টি"], ans: 1, exp: "ব্যাখ্যা: 1949 সালের আগস্ট মাসে কমিশন সরকারের কাছে তাদের প্রতিবেদন পেশ করে, যেখানে মোট 207টি সুপারিশ উল্লেখ ছিল।" },
-      { q: "৫. বিশ্ববিদ্যালয় কমিশনের অপর নাম হল—", opts: ["রাধাকৃষ্ণণ কমিশন", "মুদালিয়র কমিশন", "কোঠারি কমিশন", "স্যাডলার কমিশন"], ans: 0, exp: "ব্যাখ্যা: ড. সর্বপল্লী রাধাকৃষ্ণণের সভাপতিত্বে গঠিত হয়েছিল বলে এটি রাধাকৃষ্ণণ কমিশন নামেও পরিচিত।" },
-      { q: "৬. গ্রামীণ শিক্ষার উন্নয়নের গুরুত্বপূর্ণ প্রতিষ্ঠান হল—", opts: ["প্রাথমিক শিক্ষার প্রতিষ্ঠান", "মাধ্যমিক শিক্ষার প্রতিষ্ঠান", "গ্রামীণ বিশ্ববিদ্যালয়", "কোনোটিই নয়"], ans: 2, exp: "ব্যাখ্যা: গ্রামীণ মেধাবী শিক্ষার্থীদের নিজেদের পরিবেশেই উচ্চশিক্ষার সুযোগ দিতে এই গ্রামীণ বিশ্ববিদ্যালয় স্থাপনের ধারণাটি আনা হয়।" },
-      { q: "৭. বুনিয়াদি শিক্ষার সময়কাল—", opts: ["9 বছর", "6 বছর", "8 বছর", "4 বছর"], ans: 2, exp: "ব্যাখ্যা: গ্রামীণ শিক্ষার পরিকল্পনায় প্রথম স্তর বা প্রাথমিক স্তরে বুনিয়াদি শিক্ষার সময়কাল 6 থেকে 14 বছর বয়স পর্যন্ত (মোট 8 বছর) ধরা হয়েছে।" },
-      { q: "৮. রাধাকৃষ্ণণ কমিশনে বিদেশি সদস্য সংখ্যা ছিল—", opts: ["5 জন", "3 জন", "2 জন", "4 জন"], ans: 1, exp: "ব্যাখ্যা: এই কমিশনে ইংল্যান্ড ও আমেরিকার মোট 3 জন বিদেশি শিক্ষাবিদ ছিলেন।" },
-      { q: "৯. বিশ্ববিদ্যালয় কমিশনের সম্পাদক হলেন—", opts: ["ড. মেঘনাদ সাহা", "ড. নির্মল কুমার সিদ্ধান্ত", "ড. জন টিগার্ট", "ড. জাকির হোসেন"], ans: 1, exp: "ব্যাখ্যা: এই ঐতিহাসিক কমিশনের সম্পাদকের গুরুদায়িত্ব অত্যন্ত দক্ষতার সঙ্গে পালন করেছিলেন ড. নির্মল কুমার সিদ্ধান্ত।" },
-      { q: "১০. প্রত্যেকটি মাধ্যমিক শিক্ষাপ্রতিষ্ঠানের এলাকা হবে—", opts: ["20-60 একর", "30-60 একর", "30-50 একর", "30-65 একর"], ans: 1, exp: "ব্যাখ্যা: গ্রামীণ শিক্ষা পরিকল্পনায় কমিশন জানায়, প্রতিটি মাধ্যমিক বিদ্যালয় অন্তত 30 থেকে 60 একর জায়গা নিয়ে প্রতিষ্ঠিত হবে।" },
-      { q: "১১. মাধ্যমিক বিদ্যালয়ে তাত্ত্বিক ও ব্যবহারিক বিষয় শেখার জন্য সময়ের শতকরা হার—", opts: ["60 : 40", "50 : 50", "52 : 48", "55 : 45"], ans: 1, exp: "ব্যাখ্যা: গ্রামীণ বিদ্যালয়ের পাঠ্যক্রমে তাত্ত্বিক জ্ঞানের পাশাপাশি হাতেকলমে কাজের ওপর সমান গুরুত্ব দিয়ে 50% সময় তাত্ত্বিক এবং 50% সময় ব্যবহারিক কাজের জন্য রাখা হয়।" },
-      { q: "১২. প্রত্যেকটি গ্রামীণ কলেজে শিক্ষার্থীর সংখ্যা হবে—", opts: ["400 জন", "1500 জন", "300 জন", "800 জন"], ans: 2, exp: "ব্যাখ্যা: গ্রামীণ কলেজে শিক্ষাদানের গুণগত মান বজায় রাখতে শিক্ষার্থীর সংখ্যা কোনোভাবেই 300 জনের বেশি হবে না বলে কমিশন স্থির করেছিল।" },
-      { q: "১৩. প্রত্যেকটি বিশ্ববিদ্যালয়ে শিক্ষার্থীর সংখ্যা হবে—", opts: ["1500 জন", "2500 জন", "2000 জন", "1550 জন"], ans: 1, exp: "ব্যাখ্যা: গ্রামীণ বিশ্ববিদ্যালয়ের ক্ষেত্রে প্রতিটি বিশ্ববিদ্যালয়ে সর্বাধিক শিক্ষার্থীর সংখ্যা 2500 জন নির্দিষ্ট করা হয়েছিল।" },
-      { q: "১৪. ভারত সরকার কয়টি গ্রামীণ সংস্থা প্রতিষ্ঠা করেন?", opts: ["15টি", "14টি", "9টি", "16টি"], ans: 1, exp: "ব্যাখ্যা: বিশেষজ্ঞ কমিটির পরামর্শ মেনে ভারত সরকার প্রথমেই গ্রামীণ বিশ্ববিদ্যালয় না গড়ে পরীক্ষামূলকভাবে 14টি গ্রামীণ সংস্থা প্রতিষ্ঠা করেছিল।" },
-      { q: "১৫. গ্রামীণ উচ্চশিক্ষা জাতীয় পর্ষদ (National Council for Rural Higher Education) গঠিত হয়—", opts: ["1956 খ্রিস্টাব্দে", "1957 খ্রিস্টাব্দে", "1958 খ্রিস্টাব্দে", "1955 খ্রিস্টাব্দে"], ans: 0, exp: "ব্যাখ্যা: গ্রামীণ শিক্ষা ও সংস্থাগুলির মান উন্নয়ন ও নিয়ন্ত্রণের জন্য 1956 সালে এই জাতীয় পর্ষদ গঠিত হয়েছিল।" }
+      { q: "৩. বিশ্ববিদ্যালয় কমিশনের অপর নাম হল—", opts: ["রাধাকৃষ্ণণ কমিশন", "মুদালিয়র কমিশন", "কোঠারি কমিশন", "স্যাডলার কমিশন"], ans: 0, exp: "ব্যাখ্যা: ড. সর্বপল্লী রাধাকৃষ্ণণের সভাপতিত্বে গঠিত হয়েছিল বলে এটি রাধাকৃষ্ণণ কমিশন নামেও পরিচিত।" },
+      { q: "৪. গ্রামীণ শিক্ষার উন্নয়নের গুরুত্বপূর্ণ প্রতিষ্ঠান হল—", opts: ["প্রাথমিক শিক্ষার প্রতিষ্ঠান", "মাধ্যমিক শিক্ষার প্রতিষ্ঠান", "গ্রামীণ বিশ্ববিদ্যালয়", "কোনোটিই নয়"], ans: 2, exp: "ব্যাখ্যা: গ্রামীণ মেধাবী শিক্ষার্থীদের নিজেদের পরিবেশেই উচ্চশিক্ষার সুযোগ দিতে এই গ্রামীণ বিশ্ববিদ্যালয় স্থাপনের ধারণাটি আনা হয়।" },
+      { q: "৫. বুনিয়াদি শিক্ষার সময়কাল—", opts: ["9 বছর", "6 বছর", "8 বছর", "4 বছর"], ans: 2, exp: "ব্যাখ্যা: গ্রামীণ শিক্ষার পরিকল্পনায় প্রথম স্তর বা প্রাথমিক স্তরে বুনিয়াদি শিক্ষার কথা বলা হয়েছে, যার সময়কাল ধরা হয়েছে 6 থেকে 14 বছর বয়স পর্যন্ত (মোট 8 বছর)।" },
+      { q: "৬. রাধাকৃষ্ণণ কমিশনে বিদেশি সদস্য সংখ্যা ছিল—", opts: ["5 জন", "3 জন", "2 জন", "4 জন"], ans: 1, exp: "ব্যাখ্যা: এই কমিশনে ইংল্যান্ড ও আমেরিকার মোট 3 জন বিদেশি শিক্ষাবিদ (জেমস এফ. ডাফ, আর্থার ই. মরগ্যান, জন টিগার্ট) ছিলেন।" },
+      { q: "৭. বিশ্ববিদ্যালয় কমিশনের সম্পাদক হলেন—", opts: ["ড. মেঘনাদ সাহা", "ড. নির্মল কুমার সিদ্ধান্ত", "ড. জন টিগার্ট", "ড. জাকির হোসেন"], ans: 1, exp: "ব্যাখ্যা: এই ঐতিহাসিক কমিশনের সম্পাদকের গুরুদায়িত্ব অত্যন্ত দক্ষতার সঙ্গে পালন করেছিলেন ড. নির্মল কুমার সিদ্ধান্ত।" },
+      { q: "৮. প্রত্যেকটি মাধ্যমিক শিক্ষাপ্রতিষ্ঠানের এলাকা হবে—", opts: ["20-60 একর", "30-60 একর", "30-50 একর", "30-65 একর"], ans: 1, exp: "ব্যাখ্যা: গ্রামীণ শিক্ষা পরিকল্পনায় কমিশন জানায়, প্রতিটি মাধ্যমিক বিদ্যালয় অন্তত 30 থেকে 60 একর জায়গা নিয়ে প্রতিষ্ঠিত হবে যেখানে খামার, বাগান ও কর্মশালা থাকবে।" },
+      { q: "৯. মাধ্যমিক বিদ্যালয়ে তাত্ত্বিক ও ব্যবহারিক বিষয় শেখার জন্য সময়ের শতকরা হার—", opts: ["60 : 40", "50 : 50", "52 : 48", "55 : 45"], ans: 1, exp: "ব্যাখ্যা: গ্রামীণ বিদ্যালয়ের পাঠ্যক্রমে তাত্ত্বিক জ্ঞানের পাশাপাশি হাতেকলমে কাজের ওপর সমান গুরুত্ব দিয়ে 50% সময় তাত্ত্বিক এবং 50% সময় ব্যবহারিক কাজের জন্য রাখা হয়।" },
+      { q: "১০. প্রত্যেকটি গ্রামীণ কলেজে শিক্ষার্থীর সংখ্যা হবে—", opts: ["400 জন", "1500 জন", "300 জন", "800 জন"], ans: 2, exp: "ব্যাখ্যা: গ্রামীণ কলেজে শিক্ষাদানের গুণগত মান বজায় রাখতে শিক্ষার্থীর সংখ্যা 300 জনের বেশি হবে না।" },
+      { q: "১১. প্রত্যেকটি বিশ্ববিদ্যালয়ে শিক্ষার্থীর সংখ্যা হবে—", opts: ["1500 জন", "2500 জন", "2000 জন", "1550 জন"], ans: 1, exp: "ব্যাখ্যা: গ্রামীণ বিশ্ববিদ্যালয়ের ক্ষেত্রে প্রতিটি বিশ্ববিদ্যালয়ে সর্বাধিক শিক্ষার্থীর সংখ্যা 2500 জন নির্দিষ্ট করা হয়েছিল।" },
+      { q: "১২. ভারত সরকার পরীক্ষামূলকভাবে কয়টি গ্রামীণ সংস্থা প্রতিষ্ঠা করেন?", opts: ["15টি", "14টি", "9টি", "16টি"], ans: 1, exp: "ব্যাখ্যা: ভারত সরকার পরীক্ষামূলকভাবে 14টি গ্রামীণ সংস্থা বা Rural Institutes প্রতিষ্ঠা করেছিল।" },
+      { q: "১৩. গ্রামীণ উচ্চশিক্ষা জাতীয় পর্ষদ (NCRHE) গঠিত হয়—", opts: ["1956 খ্রিস্টাব্দে", "1957 খ্রিস্টাব্দে", "1958 খ্রিস্টাব্দে", "1955 খ্রিস্টাব্দে"], ans: 0, exp: "ব্যাখ্যা: গ্রামীণ শিক্ষা ও সংস্থাগুলির মান উন্নয়ন ও নিয়ন্ত্রণের জন্য 1956 সালে এই জাতীয় পর্ষদ বা NCRHE গঠিত হয়েছিল।" },
+      { q: "১৪. রাধাকৃষ্ণণ কমিশনের সভাপতি কে ছিলেন?", opts: ["ড. এস. রাধাকৃষ্ণণ", "ড. জাকির হোসেন", "ড. তারাচাঁদ", "ড. মেঘনাদ সাহা"], ans: 0, exp: "ব্যাখ্যা: স্বাধীন ভারতের প্রথম এই শিক্ষা কমিশনের সভাপতিত্ব করেছিলেন বিশিষ্ট দার্শনিক ড. সর্বপল্লী রাধাকৃষ্ণণ।" },
+      { q: "১৫. বিশ্ববিদ্যালয় শিক্ষা কমিশন কত খ্রিস্টাব্দে তাদের রিপোর্ট পেশ করে?", opts: ["1948 খ্রিস্টাব্দে", "1949 খ্রিস্টাব্দে", "1950 খ্রিস্টাব্দে", "1952 খ্রিস্টাব্দে"], ans: 1, exp: "ব্যাখ্যা: 1948 সালে গঠিত হয়ে প্রায় একবছর অক্লান্ত পরিশ্রমের পর কমিশন 1949 সালের আগস্ট মাসে তাদের রিপোর্ট ভারত সরকারের কাছে পেশ করে।" }
     ]
   },
   2: {
-    name: "Set 2 - রাধাকৃষ্ণণ কমিশনের ধারণা ও সুপারিশ",
-    icon: "📖",
+    name: 'Set 2', icon: '📚', topic: 'রাধাকৃষ্ণণ কমিশনের ধারণা ও সুপারিশ',
     questions: [
       { q: "১. প্রত্যেকটি মাধ্যমিক বিদ্যালয়ের অবস্থান হবে—", opts: ["গ্রামের শেষ প্রান্তে", "গ্রামের শুরুতে", "গ্রামের কেন্দ্রস্থলে", "গ্রামের বাইরে"], ans: 2, exp: "ব্যাখ্যা: গ্রামীণ মাধ্যমিক বিদ্যালয়গুলি গ্রামের কেন্দ্রস্থলে অবস্থান করবে যাতে আশেপাশের সকল শিক্ষার্থী সহজেই শিক্ষালাভের জন্য আসতে পারে।" },
       { q: "২. গ্রামীণ কলেজ ও বিশ্ববিদ্যালয়গুলি পরিচালনার জন্য থাকবে—", opts: ["পরিচালন সমিতি", "ম্যানেজিং কমিটি", "গ্রাম কমিটি", "পরিচালনা সমিতি"], ans: 0, exp: "ব্যাখ্যা: এই প্রতিষ্ঠানগুলিকে স্বাধীনভাবে কাজ করার সুযোগ দিতে এবং সুপরিচালনার জন্য প্রতিটি প্রতিষ্ঠানে পরিচালন সমিতি রাখার কথা বলা হয়।" },
       { q: "৩. বিশ্ববিদ্যালয় কমিশনের তিনজন বিদেশি সদস্যের নাম—", opts: ["ড. জেমস এফ. ডাফ, ড. আর্থার ই. মরগ্যান, ড. জন টিগার্ট", "ড. আর্থার ই. মরগ্যান, ড. জেমস এফ. ডাফ, ড. টিগার্ট", "ড. জন আর্থার ই. মরগ্যান, ড. জন টিগার্ট, ড. জাকির হোসেন", "ড. জন টিগার্ট, ড. জাকির হোসেন, ড. এ. লক্ষ্মণস্বামী মুদালিয়র"], ans: 0, exp: "ব্যাখ্যা: ইংল্যান্ডের ড. জেমস এফ. ডাফ এবং আমেরিকার ড. আর্থার ই. মরগ্যান ও ড. জন টিগার্ট—এই তিনজন বিদেশি চিন্তাবিদ কমিশনের অত্যন্ত গুরুত্বপূর্ণ সদস্য ছিলেন।" },
-      { q: "৪. গ্রামীণ বিশ্ববিদ্যালয়ের উদ্দেশ্য ছিল—", opts: ["গ্রামীণ কৃষি, শিল্প, পশুপালন ইত্যাদির বিজ্ঞানসম্মত উন্নয়ন", "গ্রামীণ কৃষি ও রাস্তাঘাট প্রভৃতির বিজ্ঞানসম্মত উন্নয়ন", "গ্রামীণ শিল্প, পশুপালন ও মৎস্যচাষের বিজ্ঞানসম্মত উন্নয়ন", "গ্রামীণ পানীয় জল ও স্বাস্থ্যের উন্নয়ন"], ans: 0, exp: "ব্যাখ্যা: গ্রামগুলিকে বিজ্ঞানসম্মতভাবে পুনর্গঠন করে গ্রামীণ অর্থনীতি, শিল্প ও পশুপালনের সার্বিক উন্নয়নই ছিল গ্রামীণ বিশ্ববিদ্যালয়ের প্রধান লক্ষ্য।" },
-      { q: "৫. শিক্ষার মাধ্যম সম্পর্কে ত্রিভাষা সূত্রটি হল—", opts: ["আঞ্চলিক ভাষা বা মাতৃভাষা, রাষ্ট্রীয় ভাষা (হিন্দি), ইংরেজি ভাষা", "মাতৃভাষা, বিদেশি যে-কোনো ভাষা, রাষ্ট্রীয় ভাষা", "রাষ্ট্রীয় ভাষা, ইংরেজি ভাষা, উর্দু ভাষা", "আঞ্চলিক ভাষা, উর্দু ভাষা, হিন্দি ভাষা"], ans: 0, exp: "ব্যাখ্যা: বিশ্ববিদ্যালয় শিক্ষা কমিশন মাধ্যমিক থেকে বিশ্ববিদ্যালয় স্তর পর্যন্ত ভাষার মাধ্যম হিসেবে এই তিনটি ভাষার সুপারিশ প্রথম করেছিল।" },
+      { q: "৪. গ্রামীণ বিশ্ববিদ্যালয়ের উদ্দেশ্য ছিল—", opts: ["গ্রামীণ কৃষি, শিল্প, পশুপালন ইত্যাদির বিজ্ঞানসম্মত উন্নয়ন", "গ্রামীণ কৃষি ও রাস্তাঘাট প্রভৃতির বিজ্ঞানসম্মত উন্নয়ন", "গ্রামীণ শিল্প, পশুপালন ও মৎস্যচাষের বিজ্ঞানসম্মত উন্নয়ন", "গ্রামীণ পানীয় জল ও স্বাস্থ্যের উন্নয়ন"], ans: 0, exp: "ব্যাখ্যা: গ্রামীণ অর্থনীতি, শিল্প ও পশুপালনের সার্বিক উন্নয়নই ছিল গ্রামীণ বিশ্ববিদ্যালয়ের প্রধান লক্ষ্য।" },
+      { q: "৫. শিক্ষার মাধ্যম সম্পর্কে ত্রিভাষা সূত্রটি হল—", opts: ["আঞ্চলিক ভাষা বা মাতৃভাষা, রাষ্ট্রীয় ভাষা (হিন্দি), ইংরেজি ভাষা", "মাতৃভাষা, বিদেশি যে-কোনো ভাষা, রাষ্ট্রীয় ভাষা", "রাষ্ট্রীয় ভাষা, ইংরেজি ভাষা, উর্দু ভাষা", "আঞ্চলিক ভাষা, উর্দু ভাষা, হিন্দি ভাষা"], ans: 0, exp: "ব্যাখ্যা: বিশ্ববিদ্যালয় শিক্ষা কমিশন মাধ্যমিক থেকে বিশ্ববিদ্যালয় স্তর পর্যন্ত ত্রিভাষা সূত্রের সুপারিশ প্রথম করেছিল।" },
       { q: "৬. স্নাতক স্তরে কোন্ ধরনের ধর্মীয় শিক্ষা দেওয়া হয়?", opts: ["মহাপুরুষদের জীবনী পাঠ", "ধর্মীয় গ্রন্থের সংকলন পাঠ", "ধর্মীয় দর্শনের মূল সমস্যা নিয়ে আলোচনা", "সব ক-টি"], ans: 3, exp: "ব্যাখ্যা: স্নাতক স্তরে ধর্মীয় শিক্ষার জন্য প্রথম বর্ষে মহাপুরুষদের জীবনী, দ্বিতীয় বর্ষে ধর্মগ্রন্থের সংকলন এবং তৃতীয় বর্ষে ধর্মীয় দর্শনের মূল সমস্যাগুলি নিয়ে আলোচনার কথা বলা হয়েছিল।" },
       { q: "৭. UGC-এর সম্পূর্ণ নাম—", opts: ["University Grants Commission", "University Grants Committee", "Universal Grants Commission", "University Grade Commission"], ans: 0, exp: "ব্যাখ্যা: উচ্চশিক্ষার ব্যয়ভার নির্বাহের দায়িত্ব রাষ্ট্রকে গ্রহণ করতে বলা হয় এবং অবিলম্বে বিশ্ববিদ্যালয় মঞ্জুরি কমিশন বা UGC গঠনের সুপারিশ করা হয়।" },
-      { q: "৮. স্বাধীনতা লাভের পর প্রথম শিক্ষা কমিশন হল—", opts: ["মুদালিয়র কমিশন", "কোঠারি কমিশন", "রাধাকৃষ্ণণ কমিশন", "অশোক মিত্র কমিশন"], ans: 2, exp: "ব্যাখ্যা: ১৯৪৭ সালে দেশ স্বাধীন হওয়ার পর, দেশের উচ্চশিক্ষার সংস্কার ও পুনর্গঠনের জন্য ১৯৪৮ সালে রাধাকৃষ্ণণ কমিশন গঠিত হয়, যা প্রথম শিক্ষা কমিশন।" },
-      { q: "৯. রাধাকৃষ্ণণ কমিশন (1948-49)-এ ভারতীয় সদস্য সংখ্যা হল—", opts: ["আটজন", "দশজন", "তিনজন", "সাতজন"], ans: 3, exp: "ব্যাখ্যা: মোট ১০ জন সদস্যের মধ্যে ড. রাধাকৃষ্ণণ, ড. মেঘনাদ সাহা, ড. জাকির হোসেন-সহ ৭ জন ছিলেন ভারতীয় শিক্ষাবিদ।" },
-      { q: "১০. বিশ্ববিদ্যালয় শিক্ষা কমিশন (1948-49)-এ বিদেশি সদস্য সংখ্যা হল—", opts: ["তিনজন", "পাঁচজন", "সাতজন", "আটজন"], ans: 0, exp: "ব্যাখ্যা: পূর্ববর্তী প্রশ্নে উল্লেখিত তিনজন বিদেশি শিক্ষাবিদ এই কমিশনের সদস্য পদ অলংকৃত করেছিলেন।" },
-      { q: "১১. বিশ্ববিদ্যালয় শিক্ষা কমিশন (1948-49)-এর সুপারিশটি ছিল—", opts: ["207 পৃষ্ঠার", "747 পৃষ্ঠার", "509 পৃষ্ঠার", "477 পৃষ্ঠার"], ans: 1, exp: "ব্যাখ্যা: ১৯৪৯ সালের আগস্ট মাসে জমা দেওয়া কমিশনের রিপোর্ট বা প্রতিবেদনটি ছিল সুদীর্ঘ ৭৪৭ পৃষ্ঠার এবং এতে ২০৭টি সুপারিশ ছিল।" },
-      { q: "১২. বিশ্ববিদ্যালয় শিক্ষা কমিশনে উত্তর বুনিয়াদি শিক্ষার জন্য সময়কালের সুপারিশ করা হয়—", opts: ["পাঁচ বছর", "ছয় বছর", "তিন বছর", "তিন-চার বছর"], ans: 3, exp: "ব্যাখ্যা: গ্রামীণ শিক্ষার কাঠামো অনুযায়ী প্রাথমিক শিক্ষার পর ১৫ থেকে ১৭ বছর বয়সিদের জন্য উত্তর বুনিয়াদি বা মাধ্যমিক স্তরের শিক্ষাকাল ছিল ৩-৪ বছর।" },
-      { q: "১৩. NCRHE-এর সম্পূর্ণ নাম কী?", opts: ["National Central for Rural Higher Education", "National Council for Rural Heard Education", "National Council for Rural Higher Education", "National Council for Realized Higher Education"], ans: 2, exp: "ব্যাখ্যা: ১৯৫৬ সালে গ্রামীণ উচ্চশিক্ষার প্রসারের জন্য এই গ্রামীণ উচ্চশিক্ষা জাতীয় পর্ষদ (NCRHE) গঠন করা হয়েছিল।" },
-      { q: "১৪. রাধাকৃষ্ণণ কমিশন, শিক্ষাপ্রতিষ্ঠানগুলিতে দিনের কাজ শুরু করার আগে শিক্ষার্থীদের কয়েক মিনিট কীসের সুপারিশ করা হয়?", opts: ["নীরব প্রার্থনার", "জাতীয় সংগীত গাওয়ার", "খবর পড়ার", "গান গাওয়ার"], ans: 0, exp: "ব্যাখ্যা: ধর্ম ও আধ্যাত্মিকতার প্রতি শ্রদ্ধাশীল হতে শিক্ষাপ্রতিষ্ঠানের কাজ শুরুর আগে কয়েক মিনিট নীরব প্রার্থনার সুপারিশ করা হয়েছিল।" },
-      { q: "১৫. জাতীয় উন্নয়নের মূল ভিত্তি হল—", opts: ["শিক্ষা", "আস্থা", "শিল্প", "বাণিজ্য"], ans: 0, exp: "ব্যাখ্যা: স্বাধীন ভারতের সমাজ ও জাতীয় জীবনের সমস্ত ক্ষেত্রে অগ্রগতি ও অর্থনৈতিক উন্নতি সাধন একমাত্র শিক্ষার মাধ্যমেই সম্ভব।" }
+      { q: "৮. বিশ্ববিদ্যালয় শিক্ষা কমিশন (1948-49)-এর সুপারিশটি ছিল—", opts: ["207 পৃষ্ঠার", "747 পৃষ্ঠার", "509 পৃষ্ঠার", "477 পৃষ্ঠার"], ans: 1, exp: "ব্যাখ্যা: 1949 সালের আগস্টে জমা দেওয়া রিপোর্টটি ছিল সুদীর্ঘ 747 পৃষ্ঠার এবং এতে 207টি সুপারিশ ছিল।" },
+      { q: "৯. বিশ্ববিদ্যালয় শিক্ষা কমিশনে উত্তর বুনিয়াদি শিক্ষার জন্য সময়কালের সুপারিশ করা হয়—", opts: ["পাঁচ বছর", "ছয় বছর", "তিন বছর", "তিন-চার বছর"], ans: 3, exp: "ব্যাখ্যা: প্রাথমিক শিক্ষার পর মাধ্যমিক বা উত্তর বুনিয়াদি স্তরের শিক্ষাকাল ছিল 3-4 বছর।" },
+      { q: "১০. NCRHE-এর সম্পূর্ণ নাম কী?", opts: ["National Central for Rural Higher Education", "National Council for Rural Heard Education", "National Council for Rural Higher Education", "National Council for Realized Higher Education"], ans: 2, exp: "ব্যাখ্যা: 1956 সালে গ্রামীণ উচ্চশিক্ষার প্রসারের জন্য এই গ্রামীণ উচ্চশিক্ষা জাতীয় পর্ষদ (NCRHE) গঠন করা হয়েছিল।" },
+      { q: "১১. শিক্ষাপ্রতিষ্ঠানগুলিতে দিনের কাজ শুরু করার আগে শিক্ষার্থীদের কয়েক মিনিট কীসের সুপারিশ করা হয়?", opts: ["নীরব প্রার্থনার", "জাতীয় সংগীত গাওয়ার", "খবর পড়ার", "গান গাওয়ার"], ans: 0, exp: "ব্যাখ্যা: ধর্ম ও আধ্যাত্মিকতার প্রতি শ্রদ্ধাশীল হতে শিক্ষাপ্রতিষ্ঠানের কাজ শুরুর আগে কয়েক মিনিট নীরব প্রার্থনার সুপারিশ করা হয়েছিল।" },
+      { q: "১২. জাতীয় উন্নয়নের মূল ভিত্তি হল—", opts: ["শিক্ষা", "আস্থা", "শিল্প", "বাণিজ্য"], ans: 0, exp: "ব্যাখ্যা: স্বাধীন ভারতের সমাজ ও জাতীয় জীবনের সমস্ত ক্ষেত্রে অগ্রগতি ও অর্থনৈতিক উন্নতি সাধন একমাত্র শিক্ষার মাধ্যমেই সম্ভব।" },
+      { q: "১৩. ড. জেমস এফ. ডাফ কোন্ দেশের শিক্ষাবিদ ছিলেন?", opts: ["আমেরিকা", "ইংল্যান্ড", "ফ্রান্স", "জার্মানি"], ans: 1, exp: "ব্যাখ্যা: তিনি ইংল্যান্ডের বিশিষ্ট শিক্ষাবিদ এবং রাধাকৃষ্ণণ কমিশনের একজন অত্যন্ত গুরুত্বপূর্ণ বিদেশি সদস্য ছিলেন।" },
+      { q: "১৪. ড. জন টিগার্ট কোন্ দেশের শিক্ষাবিদ ছিলেন?", opts: ["আমেরিকা", "ইংল্যান্ড", "জাপান", "রাশিয়া"], ans: 0, exp: "ব্যাখ্যা: ড. জন টিগার্ট ছিলেন আমেরিকার একজন প্রখ্যাত শিক্ষাবিদ।" },
+      { q: "১৫. বিশ্ববিদ্যালয় কমিশনের সুপারিশ অনুযায়ী গ্রামীণ বিশ্ববিদ্যালয়ে শিক্ষকদের কী থাকা বাধ্যতামূলক?", opts: ["শহরের প্রতি ঝোঁক", "পল্লিগ্রামের প্রতি অনুরাগ", "শুধুমাত্র আর্থিক সচ্ছলতা", "কোনোটিই নয়"], ans: 1, exp: "ব্যাখ্যা: গ্রামীণ বিশ্ববিদ্যালয়ের শিক্ষকদের অবশ্যই পল্লিগ্রামের পরিবেশ ও মানুষের প্রতি গভীর অনুরাগ থাকতে হবে বলে কমিশন মনে করে।" }
     ]
   },
   3: {
-    name: "Set 3 - রাধাকৃষ্ণণ কমিশনের বিভিন্ন ধারা ও সুপারিশ",
-    icon: "📜",
+    name: 'Set 3', icon: '📜', topic: 'রাধাকৃষ্ণণ কমিশনের বিভিন্ন ধারা ও সুপারিশ',
     questions: [
-      { q: "১. DPI-এর সম্পূর্ণ নাম হল—", opts: ["District of Public Instruction", "Director of Public Institution", "Director of Public Instruction", "Director of Public Instruction"], ans: 2, exp: "ব্যাখ্যা: শিক্ষা প্রশাসনের সর্বোচ্চ স্তরে Director of Public Instruction-এর অত্যন্ত গুরুত্বপূর্ণ ভূমিকার কথা শিক্ষাব্যবস্থার নানা স্তরে উল্লেখিত থাকে।" },
-      { q: "২. বহুমুখী বিদ্যালয়ের উদ্দেশ্য হল—", opts: ["শিক্ষার্থীর চাহিদা ও সামর্থ্য অনুযায়ী শিক্ষা", "শিক্ষার্থীকে গুরুত্ব না দিয়ে শিক্ষা", "শিক্ষক নির্ভর শিক্ষার ব্যবস্থা", "কারিগরি শিক্ষা প্রদান"], ans: 0, exp: "ব্যাখ্যা: একই ছাদের তলায় শিক্ষার্থীদের নানা রুচি ও সামর্থ্য অনুসারে বিভিন্ন শিক্ষার সুযোগ দেওয়াই এর লক্ষ্য।" },
-      { q: "৩. রাধাকৃষ্ণণ কমিশনের একজন বিদেশি সদস্য হলেন—", opts: ["ড. জাকির হোসেন", "জন ডিউই", "ড. জন টিগার্ট", "ড. এ. লক্ষ্মণস্বামী মুদালিয়র"], ans: 2, exp: "ব্যাখ্যা: আমেরিকার শিক্ষাবিদ ড. জন টিগার্ট ছিলেন এই কমিশনের ৩ জন বিদেশি সদস্যের মধ্যে অন্যতম।" },
-      { q: "৪. রাধাকৃষ্ণণ কমিশনের একজন ভারতীয় সদস্য হলেন—", opts: ["ড. জেমস এফ. ডাফ", "রবীন্দ্রনাথ ঠাকুর", "ড. এস. কোঠারি", "ড. কমল নারায়ণ বহল"], ans: 3, exp: "ব্যাখ্যা: অপশনগুলির মধ্যে ড. কমল নারায়ণ বহল ছিলেন রাধাকৃষ্ণণ কমিশনের ১০ জন সদস্যের মধ্যে একজন উল্লেখযোগ্য ভারতীয় সদস্য।" },
-      { q: "৫. বিশ্ববিদ্যালয় কমিশন সুপারিশটি সরকারের কাছে পেশ করেন—", opts: ["1949 খ্রিস্টাব্দের নভেম্বর মাসে", "1948 খ্রিস্টাব্দের আগস্ট মাসে", "1949 খ্রিস্টাব্দের জুন মাসে", "1949 খ্রিস্টাব্দের আগস্ট মাসে"], ans: 3, exp: "ব্যাখ্যা: ১৯৪৮ সালের নভেম্বরে কাজ শুরু করে দীর্ঘ নয় মাস পর্যালোচনার পর ১৯৪৯ সালের আগস্টে তারা এই সুপারিশটি সরকারের কাছে জমা দেন।" },
-      { q: "৬. UGC গঠনের একটি উদ্দেশ্য হল—", opts: ["কলেজগুলিকে আর্থিক সাহায্য দান", "কলেজ ও বিশ্ববিদ্যালয়গুলিকে আর্থিক সাহায্য দান", "কলেজ পরিচালন কমিটি গঠন", "সরকারি বিশ্ববিদ্যালয়গুলিকে আর্থিক সাহায্য দান"], ans: 1, exp: "ব্যাখ্যা: উচ্চশিক্ষার ব্যয়ভার বহন করে দেশের সমস্ত কলেজ ও বিশ্ববিদ্যালয়গুলিকে উপযুক্ত আর্থিক অনুদান প্রদান করার জন্যই UGC গঠনের সুপারিশ করা হয়।" },
-      { q: "৭. গ্রামীণ কলেজ ও বিশ্ববিদ্যালয়গুলি পরিচালনার জন্য থাকবে—", opts: ["পরিচালন ব্যবস্থা", "পরিচালন সমিতি", "পরিচালনার কেন্দ্রীয় সংস্থা", "রাজ্য সংস্থা"], ans: 1, exp: "ব্যাখ্যা: প্রতিষ্ঠানগুলিকে স্বাধীনভাবে কাজ করার সুযোগ দিতে পরিচালনার জন্য এই সমিতির কথা বলা হয়।" },
-      { q: "৮. গ্রামীণ বিজ্ঞানের সার্টিফিকেট কোর্সের সময়কাল হল—", opts: ["তিন বছর", "চার বছর", "দুই বছর", "এক বছর"], ans: 2, exp: "ব্যাখ্যা: গ্রামীণ শিক্ষার প্রসারের জন্য নানা কোর্সের পাশাপাশি গ্রামীণ বিজ্ঞানের সার্টিফিকেট কোর্সের মেয়াদ দু-বছর রাখা হয়েছিল।" },
-      { q: "৯. NCRHE-এর সুপারিশ অনুযায়ী গ্রামসেবা বিজ্ঞানের ডিপ্লোমা কোর্সের সময়কাল হল—", opts: ["চার বছর", "তিন বছর", "দুই বছর", "এক বছর"], ans: 1, exp: "ব্যাখ্যা: গ্রামসেবা বা রুরাল সার্ভিসকে পেশা হিসেবে গ্রহণ করার জন্য এই ডিপ্লোমা কোর্সটি তিন বছরের জন্য নির্দিষ্ট করা হয়।" },
-      { q: "১০. NCRHE-এর সুপারিশে কৃষিবিজ্ঞানে সার্টিফিকেট কোর্সের সময়কাল হল—", opts: ["দুই বছর", "তিন বছর", "চার বছর", "এক বছর"], ans: 0, exp: "ব্যাখ্যা: গ্রামের অর্থনীতির মূল চালিকাশক্তি কৃষির উন্নতির জন্য এই সার্টিফিকেট কোর্সের সময়কাল দু-বছর ধার্য করা হয়েছিল।" },
-      { q: "১১. গ্রামীণ বিশ্ববিদ্যালয়ের স্নাতকোত্তর স্তরে শিক্ষার সময়কাল হল—", opts: ["দুই বছর", "তিন বছর", "পাঁচ বছর", "এক বছর"], ans: 0, exp: "ব্যাখ্যা: গ্রামীণ শিক্ষাকাঠামোতে স্নাতক বা কলেজীয় শিক্ষার মেয়াদ ৩ বছর এবং বিশ্ববিদ্যালয় বা স্নাতকোত্তর শিক্ষার মেয়াদ ২ বছরের জন্য সুপারিশ করা হয়েছিল।" },
-      { q: "১২. ‘বিশ্ববিদ্যালয় মঞ্জুরি কমিটি’ প্রতিষ্ঠিত হয়—", opts: ["1953 খ্রিস্টাব্দে", "1945 খ্রিস্টাব্দে", "1947 খ্রিস্টাব্দে", "1948 খ্রিস্টাব্দে"], ans: 1, exp: "ব্যাখ্যা: স্বাধীনতা লাভের ঠিক আগে ১৯৪৫ সালে প্রথম একটি কমিটি গঠিত হয় যা পরবর্তীকালে কমিশনে উন্নীত হয়।" },
-      { q: "১৩. বিশ্ববিদ্যালয় মঞ্জুরি কমিশন (UGC) প্রতিষ্ঠিত হয়—", opts: ["1945 খ্রিস্টাব্দে", "1948 খ্রিস্টাব্দে", "1953 খ্রিস্টাব্দে", "1956 খ্রিস্টাব্দে"], ans: 2, exp: "ব্যাখ্যা: রাধাকৃষ্ণণ কমিশনের জোরালো সুপারিশের পর ১৯৫৩ সালে এটি প্রতিষ্ঠিত হয় এবং ১৯৫৬ সালে এটি বিধিবদ্ধ স্বীকৃতি পায়।" },
-      { q: "১৪. কোন কমিশনের সুপারিশে ‘বিশ্ববিদ্যালয় মঞ্জুরি কমিশন’ প্রতিষ্ঠিত হয়?", opts: ["মুদালিয়র কমিশন", "কোঠারি কমিশন", "রাধাকৃষ্ণণ কমিশন", "হান্টার কমিশন"], ans: 2, exp: "ব্যাখ্যা: উচ্চশিক্ষার সংস্কারের জন্য গঠিত এই কমিশনই প্রথম অনুদান সংস্থা বা UGC গঠনের প্রস্তাব দিয়েছিল।" },
-      { q: "১৫. গ্রামীণ উচ্চশিক্ষার বিষয়ে ভারত সরকারকে পরামর্শদানের উদ্দেশ্যে 1956 খ্রিস্টাব্দে প্রতিষ্ঠিত হয়—", opts: ["জাতীয় গ্রামীণ উচ্চশিক্ষা পর্ষদ", "জাতীয় নগর উচ্চশিক্ষা পর্ষদ", "রাজ্য গ্রামীণ উচ্চশিক্ষা পর্ষদ", "গ্রামীণ উচ্চশিক্ষা পর্ষদ"], ans: 0, exp: "ব্যাখ্যা: ১৯৫৬ সালে বিশেষজ্ঞ কমিটির মতামতের ভিত্তিতে National Council for Rural Higher Education বা এই পর্ষদটি গঠিত হয়।" }
+      { q: "১. DPI-এর সম্পূর্ণ নাম হল—", opts: ["District of Public Instruction", "Director of Public Institution", "Director of Public Instruction", "Direction of Public Instruction"], ans: 2, exp: "ব্যাখ্যা: শিক্ষা প্রশাসনের সর্বোচ্চ স্তরে Director of Public Instruction (DPI)-এর অত্যন্ত গুরুত্বপূর্ণ ভূমিকার কথা উল্লেখিত থাকে।" },
+      { q: "২. বহুমুখী বিদ্যালয়ের উদ্দেশ্য হল—", opts: ["শিক্ষার্থীর চাহিদা ও সামর্থ্য অনুযায়ী শিক্ষা", "শিক্ষার্থীকে গুরুত্ব না দিয়ে শিক্ষা", "শিক্ষক নির্ভর শিক্ষার ব্যবস্থা", "কারিগরি শিক্ষা প্রদান"], ans: 0, exp: "ব্যাখ্যা: একই ছাদের তলায় শিক্ষার্থীদের নানা রুচি ও সামর্থ্য অনুসারে শিক্ষার সুযোগ দেওয়াই এর লক্ষ্য।" },
+      { q: "৩. বিশ্ববিদ্যালয় কমিশনের একজন বিদেশি সদস্য হলেন—", opts: ["ড. জাকির হোসেন", "জন ডিউই", "ড. জন টিগার্ট", "ড. এ. লক্ষ্মণস্বামী মুদালিয়র"], ans: 2, exp: "ব্যাখ্যা: আমেরিকার শিক্ষাবিদ ড. জন টিগার্ট ছিলেন এই কমিশনের বিদেশি সদস্য।" },
+      { q: "৪. বিশ্ববিদ্যালয় কমিশনের একজন ভারতীয় সদস্য হলেন—", opts: ["ড. জেমস এফ. ডাফ", "রবীন্দ্রনাথ ঠাকুর", "ড. ডি. এস. কোঠারি", "ড. কমল নারায়ণ বহল"], ans: 3, exp: "ব্যাখ্যা: ড. কমল নারায়ণ বহল রাধাকৃষ্ণণ কমিশনের ৭ জন ভারতীয় সদস্যের মধ্যে অন্যতম ছিলেন।" },
+      { q: "৫. UGC গঠনের একটি উদ্দেশ্য হল—", opts: ["কলেজগুলিকে আর্থিক সাহায্য দান", "কলেজ ও বিশ্ববিদ্যালয়গুলিকে আর্থিক সাহায্য দান", "কলেজ পরিচালন কমিটি গঠন", "সরকারি বিশ্ববিদ্যালয়গুলিকে আর্থিক সাহায্য দান"], ans: 1, exp: "ব্যাখ্যা: উচ্চশিক্ষার ব্যয়ভার বহন করে সমস্ত কলেজ ও বিশ্ববিদ্যালয়গুলিকে আর্থিক অনুদান প্রদান করা।" },
+      { q: "৬. গ্রামীণ কলেজ ও বিশ্ববিদ্যালয়গুলি পরিচালনার জন্য থাকবে—", opts: ["পরিচালন ব্যবস্থা", "পরিচালন সমিতি", "পরিচালনার কেন্দ্রীয় সংস্থা", "রাজ্য সংস্থা"], ans: 1, exp: "ব্যাখ্যা: প্রতিষ্ঠানগুলিকে স্বাধীনভাবে কাজ করার সুযোগ দিতে পরিচালন সমিতির কথা বলা হয়।" },
+      { q: "৭. গ্রামীণ বিশ্ববিদ্যালয়ে স্নাতক স্তরের সময়কাল কত বছর নির্ধারণ করা হয়?", opts: ["2 বছর", "3 বছর", "4 বছর", "5 বছর"], ans: 1, exp: "ব্যাখ্যা: অন্যান্য বিশ্ববিদ্যালয়ের মতোই গ্রামীণ বিশ্ববিদ্যালয়েও স্নাতক স্তরের সময়কাল 3 বছর রাখার প্রস্তাব দেওয়া হয়।" },
+      { q: "৮. রাধাকৃষ্ণন কমিশন গ্রামীণ শিক্ষার কটি স্তরের কথা বলেছিল?", opts: ["2টি", "3টি", "4টি", "5টি"], ans: 2, exp: "ব্যাখ্যা: বুনিয়াদি, উত্তর-বুনিয়াদি, স্নাতক এবং স্নাতকোত্তর—এই 4টি স্তরে গ্রামীণ শিক্ষাকে ভাগ করা হয়েছিল।" },
+      { q: "৯. রাধাকৃষ্ণন কমিশনে ইন্টারমিডিয়েট বা উচ্চমাধ্যমিক স্তরের শিক্ষার সময়কাল কত বছর?", opts: ["1 বছর", "2 বছর", "3 বছর", "4 বছর"], ans: 1, exp: "ব্যাখ্যা: কমিশনের সুপারিশ অনুযায়ী ইন্টারমিডিয়েট বা উচ্চমাধ্যমিক স্তরের সময়কাল হবে 2 বছর।" },
+      { q: "১০. বিশ্ববিদ্যালয় শিক্ষা কমিশনের রিপোর্ট কটি খণ্ডে বিভক্ত ছিল?", opts: ["1টি খণ্ডে", "2টি খণ্ডে", "3টি খণ্ডে", "4টি খণ্ডে"], ans: 1, exp: "ব্যাখ্যা: 1949 সালে প্রকাশিত রাধাকৃষ্ণন কমিশনের বিস্তৃত রিপোর্টটি সর্বমোট 2টি খণ্ডে বিভক্ত ছিল।" },
+      { q: "১১. গ্রামীণ বিশ্ববিদ্যালয়ের সর্বোচ্চ নিয়ামক সংস্থা কোনটি?", opts: ["UGC", "AICTE", "National Council for Rural Higher Education", "CABE"], ans: 2, exp: "ব্যাখ্যা: গ্রামীণ শিক্ষার প্রসার ও নিয়ন্ত্রণের জন্য এই জাতীয় পর্ষদ (NCRHE) গঠনের কথা বলা হয়েছিল।" },
+      { q: "১২. গ্রামীণ শিক্ষায় 'পল্লি বিদ্যাপীঠ' কীসের সমতুল্য?", opts: ["প্রাথমিক", "মাধ্যমিক", "উচ্চমাধ্যমিক বা ইন্টারমিডিয়েট", "স্নাতকোত্তর"], ans: 2, exp: "ব্যাখ্যা: গ্রামীণ ব্যবস্থায় এই 'পল্লি বিদ্যাপীঠ' (Rural Vidyapith) ইন্টারমিডিয়েট স্তরের সমতুল্য প্রতিষ্ঠান ছিল।" },
+      { q: "১৩. গ্রামীণ বিশ্ববিদ্যালয়ের শিক্ষার কাঠামোর প্রথম স্তর কোনটি?", opts: ["মাধ্যমিক শিক্ষা", "বুনিয়াদি শিক্ষা", "স্নাতক", "প্রাক্-প্রাথমিক"], ans: 1, exp: "ব্যাখ্যা: গ্রামীণ শিক্ষা কাঠামোর একদম প্রথম স্তরটি হলো 8 বছরের বুনিয়াদি শিক্ষা।" },
+      { q: "১৪. বিশ্ববিদ্যালয় কমিশনের মতে শিক্ষক-শিক্ষার্থী অনুপাত কত হওয়া উচিত?", opts: ["1:30", "1:10 বা 1:15 এর কাছাকাছি", "1:50", "1:40"], ans: 1, exp: "ব্যাখ্যা: উচ্চশিক্ষার মান সঠিক রাখতে শিক্ষক-শিক্ষার্থীর এই নির্দিষ্ট অনুপাতের কথা কমিশন বলেছিল।" },
+      { q: "১৫. রাধাকৃষ্ণন কমিশনে উচ্চশিক্ষার অন্যতম প্রধান লক্ষ্য হিসেবে কোনটিকে চিহ্নিত করা হয়েছে?", opts: ["কেবল অর্থোপার্জন", "নেতৃত্ব গঠনের শিক্ষা", "মুখস্থ বিদ্যার প্রসার", "কোনোটিই নয়"], ans: 1, exp: "ব্যাখ্যা: ভারতের মতো একটি নতুন গণতান্ত্রিক দেশে সমাজ ও রাজনীতিতে যোগ্য নেতৃত্ব গঠনের শিক্ষাকেই উচ্চশিক্ষার বড়ো লক্ষ্য ধরা হয়েছে।" }
     ]
   },
   4: {
-    name: "Set 4 - বিশ্ববিদ্যালয় কমিশনের পাঠ্যক্রম, শিক্ষক ও পরীক্ষাব্যবস্থা",
-    icon: "📋",
+    name: 'Set 4', icon: '📖', topic: 'বিশ্ববিদ্যালয় কমিশনের পাঠ্যক্রম, শিক্ষক ও পরীক্ষাব্যবস্থা',
     questions: [
       { q: "১. প্রথম কোন কমিশনে ত্রিভাষা সূত্রের কথা বলা হয়েছিল?", opts: ["কোঠারি কমিশনে", "মুদালিয়র কমিশনে", "রাধাকৃষ্ণণ কমিশনে", "হান্টার কমিশনে"], ans: 2, exp: "ব্যাখ্যা: কোঠারি বা মুদালিয়র কমিশন এটিকে আরও উন্নত করলেও, প্রথম রাধাকৃষ্ণণ কমিশনই মাধ্যম হিসেবে ত্রিভাষা সূত্রের প্রস্তাব দেয়।" },
       { q: "২. বিশ্ববিদ্যালয় শিক্ষা কমিশনের সম্পাদক ছিলেন—", opts: ["ড. এস. রাধাকৃষ্ণণ", "ড. জাকির হোসেন", "ড. তারাচাঁদ", "ড. এন. কে. সিদ্ধান্ত"], ans: 3, exp: "ব্যাখ্যা: ড. নির্মল কুমার সিদ্ধান্ত (এন. কে. সিদ্ধান্ত) ছিলেন এই ঐতিহাসিক কমিশনের অন্যতম প্রধান রূপকার ও সম্পাদক।" },
-      { q: "৩. বিশ্ববিদ্যালয় শিক্ষা কমিশনে কলেজের অনার্স কোর্সের জন্য শিক্ষার সময়কালের সুপারিশ করা হয়—", opts: ["দুই বছর", "তিন বছর", "পাঁচ বছর", "আট বছর"], ans: 1, exp: "ব্যাখ্যা: স্নাতক স্তরে শিক্ষার্থীদের জন্য পাস কোর্সের মেয়াদ দুই বছর এবং অনার্স কোর্সের মেয়াদ তিন বছর করার প্রস্তাব দেওয়া হয়েছিল।" },
-      { q: "৪. বিশ্ববিদ্যালয় শিক্ষার পাঠ্যক্রমে কোনটি পেশাগত শিক্ষার বিষয় নয়?", opts: ["বাণিজ্য", "আইন", "মানবিক বিষয়", "চিকিৎসাবিজ্ঞান"], ans: 2, exp: "ব্যাখ্যা: মানবিক বিষয় (যেমন সাহিত্য, দর্শন, সমাজবিজ্ঞান) সাধারণ শিক্ষার অন্তর্গত। বাণিজ্য, আইন বা চিকিৎসা হলো পেশাগত শিক্ষা।" },
-      { q: "৫. বিশ্ববিদ্যালয় শিক্ষার পাঠ্যক্রমের পেশাগত শিক্ষার বিষয় কোনটি?", opts: ["কৃষি", "বাণিজ্য", "আইন", "সব ক-টি"], ans: 3, exp: "ব্যাখ্যা: কমিশনের পেশাগত শিক্ষার তালিকায় এই তিনটি বিষয়সহ চিকিৎসাবিজ্ঞান, ইঞ্জিনিয়ারিং ও শিক্ষাবিজ্ঞান—এই ছয়টি বিষয় ছিল।" },
-      { q: "৬. বিশ্ববিদ্যালয় কমিশনে কৃষি শিক্ষাকে অগ্রাধিকার দেওয়ার কথা বলা হয়েছে কেন?", opts: ["সামাজিক অবস্থার উন্নয়নের জন্য", "জাতীয় অর্থনৈতিক অবস্থার উন্নয়নের জন্য", "খাদ্যে স্বনির্ভর হওয়ার জন্য", "দারিদ্র্য দূরীকরণের জন্য"], ans: 1, exp: "ব্যাখ্যা: ভারত কৃষিপ্রধান দেশ, তাই কৃষির আধুনিকীকরণ ও কৃষি গবেষণার মাধ্যমে সামগ্রিক জাতীয় অর্থনীতির চাকা ঘোরানোই ছিল এর লক্ষ্য।" },
-      { q: "৭. বিশ্ববিদ্যালয় কমিশন কয় ধরনের পেশাগত শিক্ষার সুপারিশ করেছেন?", opts: ["চার ধরনের", "পাঁচ ধরনের", "তিন ধরনের", "ছয় ধরনের"], ans: 3, exp: "ব্যাখ্যা: এই ছয়টি পেশাগত শিক্ষা হলো—কৃষি, বাণিজ্য, শিক্ষাবিজ্ঞান, ইঞ্জিনিয়ারিং ও প্রযুক্তিবিদ্যা, আইন এবং চিকিৎসাবিজ্ঞান।" },
-      { q: "৮. বিশ্ববিদ্যালয় কমিশনে শিক্ষকদের কয়টি শ্রেণি থাকার কথা বলেছেন?", opts: ["তিনটি", "চারটি", "পাঁচটি", "দুইটি"], ans: 1, exp: "ব্যাখ্যা: বিশ্ববিদ্যালয় বা কলেজে শিক্ষকদের যোগ্যতা ও পদের ওপর ভিত্তি করে অধ্যাপক, রিডার, লেকচারার ও ইনস্ট্রাক্টর—এই চারটি শ্রেণিতে ভাগ করার কথা বলা হয়।" },
-      { q: "৯. বিশ্ববিদ্যালয় কমিশনে শিক্ষকদের অবসর গ্রহণের সাধারণ বয়স কত করার সুপারিশ করা হয়েছে?", opts: ["55 বছর", "60 বছর", "65 বছর", "60 বছর"], ans: 1, exp: "ব্যাখ্যা: শিক্ষকদের সামাজিক নিরাপত্তা সুনিশ্চিত করতে তাদের অবসরের সাধারণ বয়স ৬০ বছর ধার্য করা হয়েছিল (যদিও সুস্থ থাকলে ৬৪ পর্যন্ত বাড়ানো যেত)।" },
-      { q: "১০. বিশ্ববিদ্যালয় কমিশনের সুপারিশ অনুযায়ী সমগ্র পরীক্ষার মূল্যায়নের কত অংশে অভ্যন্তরীণ পরীক্ষার কথা বলা হয়েছে?", opts: ["দুই-তৃতীয়াংশ", "এক-তৃতীয়াংশ", "তিন-চতুর্থাংশ", "অর্ধাংশ"], ans: 1, exp: "ব্যাখ্যা: সারা বছর ধরে ধারাবাহিক মূল্যায়নের গুরুত্ব বোঝাতে মোট নম্বরের এক-তৃতীয়াংশ অভ্যন্তরীণ মূল্যায়নের জন্য বরাদ্দ করার কথা বলা হয়।" },
+      { q: "৩. কলেজের অনার্স কোর্সের জন্য শিক্ষার সময়কালের সুপারিশ করা হয়—", opts: ["দুই বছর", "তিন বছর", "পাঁচ বছর", "আট বছর"], ans: 1, exp: "ব্যাখ্যা: অনার্স কোর্সের মেয়াদ তিন বছর করার প্রস্তাব দেওয়া হয়েছিল।" },
+      { q: "৪. বিশ্ববিদ্যালয় শিক্ষার পাঠ্যক্রমে কোনটি পেশাগত শিক্ষার বিষয় নয়?", opts: ["বাণিজ্য", "আইন", "মানবিক বিষয়", "চিকিৎসাবিজ্ঞান"], ans: 2, exp: "ব্যাখ্যা: মানবিক বিষয় (সাহিত্য, দর্শন, সমাজবিজ্ঞান) সাধারণ শিক্ষার অন্তর্গত, পেশাগত শিক্ষার নয়।" },
+      { q: "৫. পেশাগত শিক্ষার বিষয় কোনটি?", opts: ["কৃষি", "বাণিজ্য", "আইন", "সব ক-টি"], ans: 3, exp: "ব্যাখ্যা: কমিশনের ৬টি পেশাগত শিক্ষার তালিকায় কৃষি, বাণিজ্য, আইন প্রভৃতি বিষয়গুলি ছিল।" },
+      { q: "৬. কৃষি শিক্ষাকে অগ্রাধিকার দেওয়ার কারণ—", opts: ["সামাজিক অবস্থার উন্নয়নের জন্য", "জাতীয় অর্থনৈতিক উন্নয়নের জন্য", "খাদ্যে স্বনির্ভর হওয়ার জন্য", "দারিদ্র্য দূরীকরণের জন্য"], ans: 1, exp: "ব্যাখ্যা: ভারত কৃষিপ্রধান দেশ, তাই কৃষির মাধ্যমে জাতীয় অর্থনীতির উন্নয়নই লক্ষ্য ছিল।" },
+      { q: "৭. কমিশন কয় ধরনের পেশাগত শিক্ষার সুপারিশ করেছেন?", opts: ["চার ধরনের", "পাঁচ ধরনের", "তিন ধরনের", "ছয় ধরনের"], ans: 3, exp: "ব্যাখ্যা: ছয় ধরনের পেশাগত শিক্ষা — কৃষি, বাণিজ্য, শিক্ষাবিজ্ঞান, ইঞ্জিনিয়ারিং, আইন ও চিকিৎসাবিজ্ঞান।" },
+      { q: "৮. শিক্ষকদের শ্রেণিবিভাগ কয়টি?", opts: ["তিনটি", "চারটি", "পাঁচটি", "দুইটি"], ans: 1, exp: "ব্যাখ্যা: অধ্যাপক, রিডার, লেকচারার ও ইনস্ট্রাক্টর — এই চারটি শ্রেণিতে ভাগ করার কথা বলা হয়।" },
+      { q: "৯. শিক্ষকদের অবসর গ্রহণের সাধারণ বয়স কত করার সুপারিশ করা হয়েছে?", opts: ["55 বছর", "60 বছর", "65 বছর", "58 বছর"], ans: 1, exp: "ব্যাখ্যা: শিক্ষকদের অবসরের সাধারণ বয়স ৬০ বছর ধার্য করা হয়েছিল।" },
+      { q: "১০. সমগ্র পরীক্ষার মূল্যায়নের কত অংশে অভ্যন্তরীণ পরীক্ষার কথা বলা হয়েছে?", opts: ["দুই-তৃতীয়াংশ", "এক-তৃতীয়াংশ", "তিন-চতুর্থাংশ", "অর্ধাংশ"], ans: 1, exp: "ব্যাখ্যা: মোট নম্বরের এক-তৃতীয়াংশ অভ্যন্তরীণ মূল্যায়নের জন্য বরাদ্দ করার কথা বলা হয়।" },
       { q: "১১. শিক্ষার্থীরা পরীক্ষায় কত শতাংশ নম্বর পেলে প্রথম বিভাগ বলা হবে?", opts: ["60 শতাংশে", "65 শতাংশে", "55 শতাংশে", "70 শতাংশে"], ans: 3, exp: "ব্যাখ্যা: কমিশনের মূল্যায়ন পদ্ধতি অনুযায়ী প্রথম বিভাগ পাওয়ার জন্য ন্যূনতম ৭০ শতাংশ নম্বর নির্ধারণ করা হয়েছিল।" },
-      { q: "১২. বিশ্ববিদ্যালয় কমিশনে পরীক্ষাব্যবস্থার সংস্কারের ক্ষেত্রে গ্রেড নম্বর দানের সুপারিশটি কী ছিল?", opts: ["গ্রেড প্রথা বর্জন", "গ্রেড প্রথা গ্রহণ", "প্রথম বিভাগের ক্ষেত্রে গ্রেড প্রদান", "কোনোটিই নয়"], ans: 0, exp: "ব্যাখ্যা: রাধাকৃষ্ণণ কমিশন মূল্যায়নের ক্ষেত্রে গ্রেড প্রথার পরিবর্তে নম্বরের ওপর ভিত্তি করে বিভিন্ন বিভাগ (প্রথম, দ্বিতীয়, তৃতীয়) প্রদানের কথা বলেছিল।" },
+      { q: "১২. পরীক্ষাব্যবস্থার সংস্কারের ক্ষেত্রে গ্রেড নম্বর দানের সুপারিশটি কী ছিল?", opts: ["গ্রেড প্রথা বর্জন", "গ্রেড প্রথা গ্রহণ", "প্রথম বিভাগের ক্ষেত্রে গ্রেড প্রদান", "কোনোটিই নয়"], ans: 0, exp: "ব্যাখ্যা: রাধাকৃষ্ণণ কমিশন মূল্যায়নের ক্ষেত্রে গ্রেড প্রথার পরিবর্তে নম্বরের ওপর ভিত্তি করে বিভিন্ন বিভাগ প্রদানের কথা বলেছিল।" },
       { q: "১৩. শিক্ষার্থীরা কত নম্বর পেলে দ্বিতীয় বিভাগে উত্তীর্ণ বলে ঘোষণা করা হবে?", opts: ["40-54 নম্বর", "45-59 নম্বর", "55-69 নম্বর", "35-45 নম্বর"], ans: 2, exp: "ব্যাখ্যা: প্রথম বিভাগ ৭০ শতাংশ এবং দ্বিতীয় বিভাগের পরিধি ৫৫% থেকে ৬৯% এর মধ্যে নির্দিষ্ট করা হয়েছিল।" },
       { q: "১৪. পরীক্ষক হওয়ার জন্য কত বছরের অভিজ্ঞতা প্রয়োজন?", opts: ["অন্তত চার বছর", "অন্তত পাঁচ বছর", "অন্তত তিন বছর", "অন্তত ছয় বছর"], ans: 1, exp: "ব্যাখ্যা: পরীক্ষার উত্তরপত্র মূল্যায়নে গুণগত মান বজায় রাখতে অন্তত পাঁচ বছরের অভিজ্ঞতা সম্পন্ন শিক্ষকদের পরীক্ষক করার কথা বলা হয়েছিল।" },
       { q: "১৫. বিশ্ববিদ্যালয় কমিশন বলেছেন, ধর্মই ভারতের কীসের প্রতীক?", opts: ["আধ্যাত্মিকতার", "অন্তরাত্মার", "সামাজিকতার", "নৈতিকতার"], ans: 1, exp: "ব্যাখ্যা: ভারতের সমাজ ও কৃষ্টির সঙ্গে ধর্ম গভীরভাবে যুক্ত, তাই ধর্মকে বাদ দিয়ে ভারতীয় সমাজকে চেনা যায় না বলে একে অন্তরাত্মার প্রতীক বলা হয়েছে।" }
     ]
   },
- 5: {
-    name: "Set 5 - বিশ্ববিদ্যালয় শিক্ষার মান ও মুদালিয়র কমিশনের শুরু",
-    icon: "🎓",
+  5: {
+    name: 'Set 5', icon: '🎓', topic: 'বিশ্ববিদ্যালয় শিক্ষার মান ও মুদালিয়র কমিশনের শুরু',
     questions: [
       { q: "১. সাধারণধর্মী শিক্ষার ওপর চাপ কমাতে অধিক সংখ্যায় কোন ধরনের প্রতিষ্ঠান গড়ে তোলার কথা বলা হয়েছে?", opts: ["বৃত্তিমূলক শিক্ষার", "কারিগরি শিক্ষার", "সামাজিক শিক্ষার", "নারীশিক্ষার"], ans: 0, exp: "ব্যাখ্যা: বিশ্ববিদ্যালয়ে পঠনপাঠনের মান বজায় রাখতে এবং কলেজে অযথা ভিড় এড়াতে প্রচুর বৃত্তিশিক্ষা প্রতিষ্ঠান গড়ার ওপর জোর দেওয়া হয়।" },
       { q: "২. পরীক্ষাব্যবস্থার কোন বিষয়টি দূর করার জন্য বিশ্ববিদ্যালয় ডিগ্রিকে সরকারি নিয়োগে গুরুত্ব না দিয়ে নিয়োগের জন্য পৃথক পরীক্ষা গ্রহণের সুপারিশ করা হয়েছে?", opts: ["সামগ্রিক উন্নয়ন", "কুফল দূরীকরণ", "পরীক্ষার মান উন্নয়ন", "কোনোটিই নয়"], ans: 1, exp: "ব্যাখ্যা: শুধু ডিগ্রির পেছনে ছোটো এবং মুখস্থ বিদ্যার ওপর নির্ভর করার যে কুফল শিক্ষাব্যবস্থায় ছিল, তা দূর করতেই ডিগ্রির সঙ্গে চাকরির সম্পর্ক বিচ্ছিন্ন করার কথা বলা হয়।" },
@@ -307,8 +322,7 @@ const QUIZ_SETS = {
     ]
   },
   6: {
-    name: "Set 6 - মুদালিয়র কমিশন - সুপারিশসমূহ ও পাঠ্যক্রম",
-    icon: "📋",
+    name: 'Set 6', icon: '📋', topic: 'মুদালিয়র কমিশন - সুপারিশসমূহ ও পাঠ্যক্রম',
     questions: [
       { q: "১. উচ্চমাধ্যমিক শিক্ষার সময়কাল হল—", opts: ["4 বছর", "1 বছর", "3 বছর", "2 বছর"], ans: 2, exp: "ব্যাখ্যা: মুদালিয়র কমিশন ইন্টারমিডিয়েট কোর্স তুলে দিয়ে নবম থেকে একাদশ শ্রেণি পর্যন্ত 3 বছরের উচ্চমাধ্যমিক স্তরের প্রস্তাব দেয়।" },
       { q: "২. বিদ্যালয় শিক্ষার কাঠামোটি হল—", opts: ["5 + 3 + 3 = 11 বছর", "4 + 4 + 3 = 11 বছর", "6 + 2 + 3 = 11 বছর", "4 + 5 + 2 = 11 বছর"], ans: 0, exp: "ব্যাখ্যা: প্রাথমিক স্তর (4 বা 5 বছর), নিম্ন মাধ্যমিক (4 বা 3 বছর) এবং উচ্চমাধ্যমিক (3 বছর) মিলিয়ে মোট 11 বছরের বিদ্যালয় শিক্ষার কাঠামো দেওয়া হয়।" },
@@ -328,8 +342,7 @@ const QUIZ_SETS = {
     ]
   },
   7: {
-    name: "Set 7 - মুদালিয়র কমিশনের সুপারিশ ও মূল্যায়ন",
-    icon: "⭐",
+    name: 'Set 7', icon: '⭐', topic: 'মুদালিয়র কমিশনের সুপারিশ ও মূল্যায়ন',
     questions: [
       { q: "১. ঐচ্ছিক পাঠ্যক্রমের মানবিক বিজ্ঞান বিভাগের একটি বিষয় হল—", opts: ["পদার্থবিদ্যা", "রসায়নবিদ্যা", "গণিত", "বুককিপিং"], ans: 2, exp: "ব্যাখ্যা: মুদালিয়র কমিশনের ঐচ্ছিক পাঠ্যক্রমের মানবিক বিজ্ঞান প্রবাহে ইতিহাস, ভূগোল, অর্থনীতি, পৌরবিজ্ঞান ও গণিত প্রভৃতি বিষয় অন্তর্ভুক্ত ছিল।" },
       { q: "২. 1948 খ্রিস্টাব্দে মাধ্যমিক শিক্ষার পুনর্গঠনের জন্য একটি কমিটি গঠনের সুপারিশ করে—", opts: ["CABE", "UGC", "SABE", "NCERT"], ans: 0, exp: "ব্যাখ্যা: স্বাধীন ভারতে সর্বপ্রথম মাধ্যমিক শিক্ষাব্যবস্থার পুনর্গঠনের উদ্দেশ্যে কেন্দ্রীয় শিক্ষা উপদেষ্টা পর্ষদ বা CABE সরকারের কাছে একটি সর্বভারতীয় কমিশন গঠনের প্রস্তাব করেন।" },
@@ -349,8 +362,7 @@ const QUIZ_SETS = {
     ]
   },
   8: {
-    name: "Set 8 - মুদালিয়র কমিশনের অন্যান্য দিক ও কোঠারি কমিশনের সূচনা",
-    icon: "🏫",
+    name: 'Set 8', icon: '🏫', topic: 'মুদালিয়র কমিশনের অন্যান্য দিক ও কোঠারি কমিশনের সূচনা',
     questions: [
       { q: "১. শিক্ষকদের ছেলেমেয়েরা বিদ্যালয়ে কোন্ সুযোগসুবিধা গ্রহণ করতে পারবে?", opts: ["ভরতির সুযোগ", "হোস্টেলে থাকার সুযোগ", "বিনা বেতনে শিক্ষাগ্রহণ", "কোনোটিই নয়"], ans: 2, exp: "ব্যাখ্যা: শিক্ষকদের সামাজিক ও অর্থনৈতিক নিরাপত্তার কথা মাথায় রেখে কমিশন সুপারিশ করে যে শিক্ষকদের ছেলেমেয়েরা বিদ্যালয়ে বিনা বেতনে শিক্ষাগ্রহণের সুযোগ পাবে।" },
       { q: "২. মাধ্যমিক উত্তীর্ণ শিক্ষকদের প্রশিক্ষণকাল কত হবে?", opts: ["এক বছর", "দুই বছর", "তিন বছর", "চার বছর"], ans: 1, exp: "ব্যাখ্যা: মুদালিয়র কমিশনের মতে, বিদ্যালয়ে শিক্ষণের মান বৃদ্ধির জন্য মাধ্যমিক উত্তীর্ণ শিক্ষকদের প্রশিক্ষণ বা ট্রেনিং-এর সময়কাল হবে 2 বছর।" },
@@ -362,7 +374,7 @@ const QUIZ_SETS = {
       { q: "৮. জাতীয় দৃষ্টিভঙ্গিকে ভিত্তি করে মাধ্যমিক শিক্ষার লক্ষ্য কোনটি?", opts: ["গণতান্ত্রিক নাগরিক গঠন", "কর্মদক্ষতা বৃদ্ধি", "সংস্কৃতির সংরক্ষণ ও বিকাশ সাধন", "সব ক-টি"], ans: 3, exp: "ব্যাখ্যা: এই জাতীয় আকাঙ্ক্ষাকে ভিত্তি করে যোগ্য গণতান্ত্রিক নাগরিক গঠন, কর্মদক্ষতা বৃদ্ধি এবং সংস্কৃতির সংরক্ষণ ও বিকাশসাধন করা শিক্ষার লক্ষ্য হিসেবে বিবেচিত হয়েছে।" },
       { q: "৯. মাধ্যমিক শিক্ষাব্যবস্থাকে সুপরিচালনার জন্য প্রতিটি রাজ্যে কী গঠন করার সুপারিশ করেছেন?", opts: ["মাধ্যমিক শিক্ষা পরিষদ গঠন", "শিক্ষাসংস্থা গঠন", "মাধ্যমিক বিদ্যালয় স্থাপন", "কোনোটিই নয়"], ans: 0, exp: "ব্যাখ্যা: বিদ্যালয় পরিচালনার ক্ষেত্রে মাধ্যমিক শিক্ষাব্যবস্থাকে সুপরিচালনার জন্য প্রতিটি রাজ্যে একটি করে মাধ্যমিক শিক্ষা পর্ষদ বা পরিষদ গঠনের সুপারিশ করা হয়।" },
       { q: "১০. কোঠারি কমিশনের প্রকাশিত রিপোর্টের শিরোনাম হল—", opts: ["শিক্ষা এবং জাতীয় উন্নয়ন", "শিক্ষা এবং জাতীয় বিকাশ", "শিক্ষা এবং আন্তর্জাতিক বিকাশ", "শিক্ষা এবং রাষ্ট্রের বিকাশ"], ans: 1, exp: "ব্যাখ্যা: কোঠারি কমিশন তাঁদের সুপারিশগুলিকে ‘শিক্ষা ও জাতীয় অগ্রগতি’ (Education and National Development) শিরোনামে প্রকাশ করেছিলেন, যা জাতীয় বিকাশের সমার্থক।" },
-      { q: "১১. কোঠারি কমিশনের মতে শিক্ষা কাঠামোটি হল—", opts: ["10 + 1 + 2 + 3", "10 + 2 + 3 + 2", "10 + 2 + 3 + 2", "4 + 4 + 2 + 2 + 3 + 2"], ans: 1, exp: "ব্যাখ্যা: কোঠারি কমিশনের প্রস্তাবিত স্বাধীন ভারতের জন্য সাধারণ শিক্ষা কাঠামোটি হলো 10 + 2 + 3 + 2।" },
+      { q: "১১. কোঠারি কমিশনের মতে শিক্ষা কাঠামোটি হল—", opts: ["10 + 1 + 2 + 3", "10 + 2 + 3", "10 + 2 + 3 + 2", "4 + 4 + 2 + 2 + 3 + 2"], ans: 1, exp: "ব্যাখ্যা: কোঠারি কমিশনের প্রস্তাবিত স্বাধীন ভারতের জন্য সাধারণ শিক্ষা কাঠামোটি হলো 10 + 2 + 3 (বা 10+2+3+2)।" },
       { q: "১২. ভারতীয় শিক্ষা কমিশনের অপর নাম হল—", opts: ["মুদালিয়র কমিশন", "রাধাকৃষ্ণণ কমিশন", "কোঠারি কমিশন", "হান্টার কমিশন"], ans: 2, exp: "ব্যাখ্যা: বিশিষ্ট শিক্ষাবিদ ড. ডি. এস. কোঠারির সভাপতিত্বে গঠিত হওয়ায় ভারতীয় শিক্ষা কমিশন (1964-66)-কে কোঠারি কমিশন বলা হয়।" },
       { q: "১৩. কোঠারি কমিশন মোট কতজন সদস্য নিয়ে গঠিত?", opts: ["16 জন", "15 জন", "19 জন", "17 জন"], ans: 3, exp: "ব্যাখ্যা: ভারতীয় শিক্ষার সামগ্রিক উন্নয়নের জন্য ভারত সরকার 17 জন বিশিষ্ট ভারতীয় ও বিদেশি শিক্ষাবিদদের নিয়ে এই কমিশনটি গঠন করেন।" },
       { q: "১৪. কোঠারি কমিশনের রিপোর্টটি প্রকাশিত হয়—", opts: ["1906 খ্রিস্টাব্দের মে মাসে", "1966 খ্রিস্টাব্দের জুন মাসে", "1964 খ্রিস্টাব্দের জুলাই মাসে", "1967 খ্রিস্টাব্দের মে মাসে"], ans: 1, exp: "ব্যাখ্যা: দীর্ঘ সময় ধরে কাজ করার পর এই কমিশন 1966 খ্রিস্টাব্দের 29 জুন তৎকালীন শিক্ষামন্ত্রীর কাছে তাঁদের রিপোর্ট জমা দেন বা প্রকাশ করেন।" },
@@ -370,338 +382,388 @@ const QUIZ_SETS = {
     ]
   },
   9: {
-    name: "Set 9 - কোঠারি কমিশনের প্রাথমিক স্তর ও উচ্চশিক্ষা",
-    icon: "🎓",
+    name: 'Set 9', icon: '📖', topic: 'কোঠারি কমিশনের প্রাথমিক স্তর ও উচ্চশিক্ষা',
     questions: [
-      { q: "১. কোঠারি কমিশনের সভাপতি হলেন—", opts: ["ড. জে. পি. নায়েক", "ডি. এস. কোঠারি", "ড. এ. লক্ষ্মণস্বামী মুদালিয়র", "লর্ড কার্জন"], ans: 1, exp: "ব্যাখ্যা: বিশিষ্ট ভারতীয় জ্যোতির্বিদ ও শিক্ষাবিদ ড. দৌলত সিং কোঠারি (ডি. এস. কোঠারি) ছিলেন এই ঐতিহাসিক কমিশনের সভাপতি।" },
-      { q: "২. কোঠারি কমিশনে বিদেশি সদস্য সংখ্যা হল—", opts: ["10 জন", "11 জন", "5 জন", "7 জন"], ans: 3, exp: "ব্যাখ্যা: এই কমিশনে ইউনেস্কো, ইংল্যান্ড, আমেরিকা, জাপান, রাশিয়া ও ফ্রান্সের সর্বমোট ৭ জন বিদেশি চিন্তাবিদ ও শিক্ষাবিদ যুক্ত ছিলেন।" },
-      { q: "৩. কোঠারি কমিশনে Working Group-এর সংখ্যা হল—", opts: ["7টি", "8টি", "4টি", "10টি"], ans: 0, exp: "ব্যাখ্যা: কোঠারি কমিশন শিক্ষার বিভিন্ন দিক বিস্তারিত পর্যালোচনার জন্য ১২টি Task Force এবং ৭টি Working Group বা কর্মদল নিয়ে কাজ করেছিল।" },
-      { q: "৪. কোঠারি কমিশনের মতে প্রাথমিক শিক্ষার সময়কাল হল—", opts: ["7/8 বছর", "5/6 বছর", "8 বছর", "4/5 বছর"], ans: 0, exp: "ব্যাখ্যা: কমিশনের মতে প্রাথমিক শিক্ষার স্তরটি সর্বমোট সাত বা আট বছরের হবে, যা নিম্ন প্রাথমিক এবং উচ্চ প্রাথমিক এই দুই ভাগে বিভক্ত।" },
-      { q: "৫. নিম্ন প্রাথমিক শিক্ষা হবে—", opts: ["প্রথম শ্রেণি থেকে চতুর্থ বা পঞ্চম শ্রেণি পর্যন্ত", "প্রথম শ্রেণি থেকে চতুর্থ শ্রেণি পর্যন্ত", "প্রথম শ্রেণি থেকে ষষ্ঠ শ্রেণি পর্যন্ত", "প্রথম শ্রেণি থেকে অষ্টম শ্রেণি পর্যন্ত"], ans: 0, exp: "ব্যাখ্যা: চার বা পাঁচ বছরের যে শিক্ষাকাল, অর্থাৎ প্রথম শ্রেণি থেকে শুরু হয়ে চতুর্থ বা পঞ্চম শ্রেণি পর্যন্ত শিক্ষাই হলো নিম্ন প্রাথমিক স্তর।" },
-      { q: "৬. নিম্ন প্রাথমিক শিক্ষার সর্বোচ্চ সময়কাল হল—", opts: ["4/5 বছর", "2 বছর", "3/4 বছর", "2/3 বছর"], ans: 0, exp: "ব্যাখ্যা: নিম্ন প্রাথমিক শিক্ষাস্তরে শিক্ষার্থীদের বয়স ৬ থেকে ১০ বা ১১ বছর এবং এর শিক্ষাকাল ৪ বা ৫ বছর হিসেবে নির্দিষ্ট করা হয়েছে।" },
-      { q: "৭. উচ্চ প্রাথমিক শিক্ষার সর্বোচ্চ শ্রেণি হল—", opts: ["সপ্তম", "অষ্টম", "সপ্তম/অষ্টম", "কোনোটিই নয়"], ans: 2, exp: "ব্যাখ্যা: উচ্চ প্রাথমিক শিক্ষাস্তরটি পঞ্চম বা ষষ্ঠ শ্রেণিতে শুরু হয়ে সর্বোচ্চ সপ্তম বা অষ্টম শ্রেণি পর্যন্ত বিস্তৃত থাকে।" },
-      { q: "৮. উচ্চশিক্ষার কয়টি স্তর?", opts: ["2টি", "3টি", "4টি", "5টি"], ans: 0, exp: "ব্যাখ্যা: কোঠারি কমিশন তার শিক্ষা কাঠামোয় উচ্চশিক্ষাকে প্রধানত দুটি স্তরে (স্নাতক স্তর এবং স্নাতকোত্তর স্তর) ভাগ করার সুপারিশ করেছেন।" },
-      { q: "৯. স্নাতকোত্তর স্তর হল—", opts: ["উচ্চশিক্ষার প্রথম স্তর", "উচ্চশিক্ষার সর্বশেষ স্তর", "উচ্চমাধ্যমিক স্তর", "মাধ্যমিক স্তর"], ans: 1, exp: "ব্যাখ্যা: স্নাতক স্তরের তিন বছরের শিক্ষা শেষ করে শিক্ষার্থীরা যে স্তরে ভরতি হয়, তা হলো স্নাতকোত্তর স্তর যা উচ্চশিক্ষার সর্বশেষ পর্যায়।" },
-      { q: "১০. উচ্চশিক্ষার প্রথম স্তরের শিক্ষাকাল হল—", opts: ["5 বছর", "4 বছর", "2 বছর", "3 বছর"], ans: 3, exp: "ব্যাখ্যা: উচ্চশিক্ষার প্রথম স্তর অর্থাৎ স্নাতক স্তরের শিক্ষাকাল হলো তিন বছর, যেখানে শিক্ষার্থীরা ১৮ থেকে ২১ বছর বয়সে পড়াশোনা করে।" },
-      { q: "১১. কোঠারি কমিশন কয়টি Task Force গঠন করেছিল?", opts: ["12টি", "17টি", "9টি", "10টি"], ans: 0, exp: "ব্যাখ্যা: ভারতীয় শিক্ষার নানাবিধ সমস্যা ও উন্নয়নের রূপরেখা তৈরির জন্য কোঠারি কমিশন মোট ১২টি টাস্ক ফোর্স বা Task Force গঠন করেছিল।" },
-      { q: "১২. কর্মের মাধ্যমে শিক্ষা হল—", opts: ["সাধারণ শিক্ষা", "বৃত্তি ও কারিগরি শিক্ষা", "কর্ম অভিজ্ঞতা", "কোনোটিই নয়"], ans: 2, exp: "ব্যাখ্যা: কমিশন প্রত্যক্ষভাবে কাজে অংশগ্রহণের মাধ্যমে যে অভিজ্ঞতা অর্জনের প্রক্রিয়ার কথা বলেছেন, তাকে কর্ম অভিজ্ঞতা বা Work Experience বলা হয়েছে।" },
-      { q: "১৩. বৃত্তিমুখী শিক্ষার একটি বৈশিষ্ট্য হল—", opts: ["স্থিতিশীল প্রক্রিয়া", "সংগতিবিধানের প্রক্রিয়া", "নির্বাচনধর্মিতা", "সৌন্দর্যবোধ বিকাশের প্রক্রিয়া"], ans: 2, exp: "ব্যাখ্যা: বৃত্তিমুখী ও কারিগরি শিক্ষার একটি বড় বৈশিষ্ট্য হলো শিক্ষার্থীরা তাদের নিজস্ব দক্ষতা ও ঝোঁক অনুযায়ী বিষয় বেছে নিতে বা নির্বাচন করতে পারে।" },
-      { q: "১৪. কোঠারি কমিশনের মতে উচ্চশিক্ষার প্রথম স্তরে শিক্ষার মাধ্যম হবে—", opts: ["ইংরেজি ভাষা", "আঞ্চলিক ভাষা", "হিন্দি ভাষা", "সংস্কৃত ভাষা"], ans: 1, exp: "ব্যাখ্যা: কোঠারি কমিশন সুপারিশ করেছেন যে বৃত্তিমুখী, কারিগরি শিক্ষা এবং উচ্চশিক্ষার মাধ্যম হিসেবে আঞ্চলিক ভাষাকেই ব্যবহার করা উচিত।" },
-      { q: "১৫. উচ্চশিক্ষার উচ্চমানের শিক্ষা ও গবেষণার জন্য প্রতিষ্ঠিত করতে হবে—", opts: ["প্রধান বিশ্ববিদ্যালয়", "বিশ্ববিদ্যালয়", "ডিপ্লোমা কোর্সের বিশ্ববিদ্যালয়", "সাধারণ মানের বিশ্ববিদ্যালয়"], ans: 0, exp: "ব্যাখ্যা: পৃথিবীর শ্রেষ্ঠ বিশ্ববিদ্যালয়গুলির সমকক্ষ হিসেবে ভারতে অতি উচ্চমানের গবেষণা ও শিক্ষার জন্য 'প্রধান বিশ্ববিদ্যালয়' বা Major Universities প্রতিষ্ঠা করতে হবে।" }
+      { q: "১. কোঠারি কমিশনের সভাপতি হলেন—", opts: ["ড. জে. পি. নায়েক", "ডি. এস. কোঠারি", "ড. এ. লক্ষ্মণস্বামী মুদালিয়র", "লর্ড কার্জন"], ans: 1, exp: "ব্যাখ্যা: বিশিষ্ট জ্যোতির্বিদ ড. দৌলত সিং কোঠারি ছিলেন কমিশনের সভাপতি।" },
+      { q: "২. কোঠারি কমিশনে বিদেশি সদস্য সংখ্যা হল—", opts: ["10 জন", "11 জন", "5 জন", "7 জন"], ans: 3, exp: "ব্যাখ্যা: ইউনেস্কো, ইংল্যান্ড, আমেরিকা, জাপান, রাশিয়া ও ফ্রান্সের 7 জন বিদেশি সদস্য ছিলেন।" },
+      { q: "৩. কোঠারি কমিশনে Working Group-এর সংখ্যা হল—", opts: ["7টি", "8টি", "4টি", "10টি"], ans: 0, exp: "ব্যাখ্যা: 12টি Task Force এবং 7টি Working Group নিয়ে কাজ করেছিল।" },
+      { q: "৪. কোঠারি কমিশনের মতে প্রাথমিক শিক্ষার সময়কাল হল—", opts: ["7/8 বছর", "5/6 বছর", "8 বছর", "4/5 বছর"], ans: 0, exp: "ব্যাখ্যা: প্রাথমিক শিক্ষার স্তরটি সাত বা আট বছরের হবে।" },
+      { q: "৫. নিম্ন প্রাথমিক শিক্ষা হবে—", opts: ["প্রথম থেকে চতুর্থ বা পঞ্চম শ্রেণি", "প্রথম থেকে চতুর্থ শ্রেণি", "প্রথম থেকে ষষ্ঠ শ্রেণি", "প্রথম থেকে অষ্টম শ্রেণি"], ans: 0, exp: "ব্যাখ্যা: চার বা পাঁচ বছরের শিক্ষাকাল নিম্ন প্রাথমিক স্তর।" },
+      { q: "৬. নিম্ন প্রাথমিক শিক্ষার সর্বোচ্চ সময়কাল হল—", opts: ["4/5 বছর", "2 বছর", "3/4 বছর", "2/3 বছর"], ans: 0, exp: "ব্যাখ্যা: শিক্ষার্থীদের বয়স 6 থেকে 10 বা 11 বছর এবং শিক্ষাকাল 4 বা 5 বছর।" },
+      { q: "৭. উচ্চ প্রাথমিক শিক্ষার সর্বোচ্চ শ্রেণি হল—", opts: ["সপ্তম", "অষ্টম", "সপ্তম/অষ্টম", "কোনোটিই নয়"], ans: 2, exp: "ব্যাখ্যা: পঞ্চম বা ষষ্ঠ থেকে সর্বোচ্চ সপ্তম বা অষ্টম শ্রেণি পর্যন্ত।" },
+      { q: "৮. উচ্চশিক্ষার কয়টি স্তর?", opts: ["2টি", "3টি", "4টি", "5টি"], ans: 0, exp: "ব্যাখ্যা: উচ্চশিক্ষা প্রধানত দুটি স্তরে (স্নাতক ও স্নাতকোত্তর) ভাগ করা হয়েছে।" },
+      { q: "৯. স্নাতকোত্তর স্তর হল—", opts: ["উচ্চশিক্ষার প্রথম স্তর", "উচ্চশিক্ষার সর্বশেষ স্তর", "উচ্চমাধ্যমিক স্তর", "মাধ্যমিক স্তর"], ans: 1, exp: "ব্যাখ্যা: স্নাতকোত্তর স্তর হলো উচ্চশিক্ষার সর্বশেষ পর্যায়।" },
+      { q: "১০. উচ্চশিক্ষার প্রথম স্তরের শিক্ষাকাল হল—", opts: ["5 বছর", "4 বছর", "2 বছর", "3 বছর"], ans: 3, exp: "ব্যাখ্যা: স্নাতক স্তরের শিক্ষাকাল তিন বছর।" },
+      { q: "১১. কোঠারি কমিশন কয়টি Task Force গঠন করেছিল?", opts: ["12টি", "17টি", "9টি", "10টি"], ans: 0, exp: "ব্যাখ্যা: মোট 12টি টাস্ক ফোর্স গঠন করেছিল।" },
+      { q: "১২. কর্মের মাধ্যমে শিক্ষা হল—", opts: ["সাধারণ শিক্ষা", "বৃত্তি ও কারিগরি শিক্ষা", "কর্ম অভিজ্ঞতা", "কোনোটিই নয়"], ans: 2, exp: "ব্যাখ্যা: কমিশন প্রত্যক্ষ কাজের মাধ্যমে অভিজ্ঞতা অর্জনকে কর্ম অভিজ্ঞতা বলেছেন।" },
+      { q: "১৩. বৃত্তিমুখী শিক্ষার একটি বৈশিষ্ট্য হল—", opts: ["স্থিতিশীল প্রক্রিয়া", "সংগতিবিধানের প্রক্রিয়া", "নির্বাচনধর্মিতা", "সৌন্দর্যবোধ বিকাশের প্রক্রিয়া"], ans: 2, exp: "ব্যাখ্যা: শিক্ষার্থীরা নিজস্ব দক্ষতা অনুযায়ী বিষয় নির্বাচন করতে পারে।" },
+      { q: "১৪. কোঠারি কমিশনের মতে উচ্চশিক্ষার প্রথম স্তরে শিক্ষার মাধ্যম হবে—", opts: ["ইংরেজি ভাষা", "আঞ্চলিক ভাষা", "হিন্দি ভাষা", "সংস্কৃত ভাষা"], ans: 1, exp: "ব্যাখ্যা: উচ্চশিক্ষার মাধ্যম হিসেবে আঞ্চলিক ভাষা ব্যবহারের সুপারিশ করা হয়েছে।" },
+      { q: "১৫. উচ্চশিক্ষার উচ্চমানের শিক্ষা ও গবেষণার জন্য প্রতিষ্ঠিত করতে হবে—", opts: ["প্রধান বিশ্ববিদ্যালয়", "বিশ্ববিদ্যালয়", "ডিপ্লোমা কোর্সের বিশ্ববিদ্যালয়", "সাধারণ মানের বিশ্ববিদ্যালয়"], ans: 0, exp: "ব্যাখ্যা: Major Universities বা প্রধান বিশ্ববিদ্যালয় প্রতিষ্ঠা করতে হবে।" }
     ]
   },
   10: {
-    name: "Set 10 - কোঠারি কমিশনের সংগঠন ও ভাষানীতি",
-    icon: "🗣️",
+    name: 'Set 10', icon: '🗣️', topic: 'কোঠারি কমিশনের সংগঠন ও ভাষানীতি',
     questions: [
-      { q: "১. কোঠারি কমিশনের একজন ভারতীয় সদস্য হলেন—", opts: ["অধ্যাপক সুনভোষি", "ড. বি. পি. পল", "অধ্যাপক রোজার রেভেলি", "ড. ডি. এস."], ans: 1, exp: "ব্যাখ্যা: ড. বি. পি. পল ছিলেন কোঠারি কমিশনে অন্তর্ভুক্ত ১০ জন বিশিষ্ট ভারতীয় সদস্যের মধ্যে অন্যতম একজন।" },
-      { q: "২. কোঠারি কমিশনের একটি Task Force হল—", opts: ["বিজ্ঞান শিক্ষা এবং গবেষণা", "প্রাক্-প্রাথমিক শিক্ষা", "নারীশিক্ষা", "মধ্যশিক্ষা পর্ষদ"], ans: 0, exp: "ব্যাখ্যা: 'বিজ্ঞান শিক্ষা এবং গবেষণা' (Science Education and Research) হলো কোঠারি কমিশনের গঠিত ১২টি টাস্ক ফোর্সের অন্তর্গত একটি গুরুত্বপূর্ণ বিষয়।" },
-      { q: "৩. কোঠারি কমিশনের একজন বিদেশি সদস্য হলেন—", opts: ["ড. টি. সেন", "ড. পি. এন. কিরাপাল", "ড. জে. পি. নায়েক", "মিস্টার এম. জেন থমাস"], ans: 3, exp: "ব্যাখ্যা: ফ্রান্সের প্রতিনিধি মিস্টার এম. জেন থমাস ছিলেন এই কমিশনের একজন উল্লেখযোগ্য বিদেশি সদস্য।" },
-      { q: "৪. কোন কমিশন প্রতিটি রাজ্যে ‘রাজ্য শিক্ষা পরিষদ’ গঠনের সুপারিশ করেছেন?", opts: ["রাধাকৃষ্ণণ কমিশন", "মুদালিয়র কমিশন", "হান্টার কমিশন", "কোঠারি কমিশন"], ans: 3, exp: "ব্যাখ্যা: কোঠারি কমিশন বিদ্যালয় শিক্ষার গুণগত মান উন্নয়ন ও শিক্ষক শিক্ষণ ব্যবস্থা তদারকি করতে রাজ্য স্তরে শিক্ষা পর্ষদ বা পরিষদ গঠনের জোরালো সুপারিশ করেছিল।" },
-      { q: "৫. স্কুল কমপ্লেক্স (বিদ্যালয়গুচ্ছ) গঠনের সুপারিশ করা হয়—", opts: ["মুদালিয়র কমিশনে", "কোঠারি কমিশনে", "জনার্দন রেডি কমিশনে", "রাধাকৃষ্ণণ কমিশনে"], ans: 1, exp: "ব্যাখ্যা: জাতীয় ঐক্য সস্থাপন এবং বিদ্যালয় শিক্ষার মান উন্নয়নের জন্য কোঠারি কমিশন প্রথম বিদ্যালয়গুচ্ছ বা School Complex গড়ে তোলার সুপারিশ করেন।" },
-      { q: "৬. কোঠারি কমিশনের মতে, বিদ্যালয়গুলির কাজের দিনসংখ্যা হবে—", opts: ["210 দিন", "215 দিন", "234 দিন", "307 দিন"], ans: 2, exp: "ব্যাখ্যা: কমিশন বিদ্যালয়গুলিতে পঠনপাঠনের মান নিশ্চিত করতে কাজের দিনসংখ্যা ২৩৪ দিন করার কথা সুপারিশ করেছিলেন।" },
-      { q: "৭. কোঠারি কমিশনের সুপারিশে ‘কমন স্কুলব্যবস্থা’-র দ্বারা কোন বিষয়কে গুরুত্ব দেওয়া হয়েছে?", opts: ["শিক্ষায় সমসুযোগ", "অপচয় ও অনুন্নয়ন", "সমাজসেবা", "জাতীয় উৎপাদন"], ans: 0, exp: "ব্যাখ্যা: জাতি, ধর্ম, বর্ণ নির্বিশেষে সকলকে শিক্ষাক্ষেত্রে সমান সুযোগ প্রদান করার জন্য 'কমন স্কুল' (Common School) ব্যবস্থার ওপর বিশেষ গুরুত্ব প্রদান করা হয়েছে।" },
-      { q: "৮. কোন শিক্ষার স্তরের ওপর অপচয় ও অনুন্নয়ন সর্বাধিক প্রভাব বিস্তার করে?", opts: ["উচ্চশিক্ষা", "প্রাক্-প্রাথমিক শিক্ষা", "প্রাথমিক শিক্ষা", "মাধ্যমিক শিক্ষা"], ans: 2, exp: "ব্যাখ্যা: প্রাথমিক শিক্ষাস্তরে শিক্ষার্থীরা পড়াশোনা শেষ না করেই বিদ্যালয় ছেড়ে দেয়, ফলে অপচয় ও অনুন্নয়নের সমস্যা এই স্তরে সবচেয়ে বেশি দেখা যায়।" },
-      { q: "৯. কোঠারি কমিশনে বহিঃপরীক্ষার উন্নয়নের জন্য সুপারিশ হল—", opts: ["প্রশ্নের সংখ্যা বৃদ্ধি", "রচনাধর্মী প্রশ্নের ওপর গুরুত্ব প্রদান", "প্রশ্নের মানের পরিবর্তন / নম্বর দেওয়ার পদ্ধতি বিজ্ঞান ভিত্তিক করা", "পরীক্ষকের সংখ্যা বৃদ্ধি"], ans: 2, exp: "ব্যাখ্যা: বহিঃপরীক্ষার মান উন্নত করার জন্য প্রশ্ন প্রস্তুতকারীদের দক্ষতা বৃদ্ধি এবং নম্বর দেওয়ার পদ্ধতিকে বিজ্ঞানভিত্তিক করে তোলার সুপারিশ করা হয়।" },
-      { q: "১০. কোঠারি কমিশনের মতে, প্রাক্-প্রাথমিক শিক্ষার প্রধান উদ্দেশ্য হল—", opts: ["নেতৃত্ব দান", "সু-অভ্যাস গঠন করা", "বিজ্ঞান শিক্ষা", "সৃজনশীলতার বিকাশ"], ans: 1, exp: "ব্যাখ্যা: প্রাক্-প্রাথমিক শিক্ষার একটি প্রধান ও গুরুত্বপূর্ণ উদ্দেশ্য হলো শৈশবকাল থেকেই শিশুর মধ্যে সু-অভ্যাস গঠন করা, যা তার পরবর্তী চরিত্র গঠনে সহায়ক হয়।" },
-      { q: "১১. কোঠারি কমিশনের মতে, প্রাথমিক শিক্ষাস্তরে ভরতির ন্যূনতম বয়স হবে—", opts: ["4 বছর", "6+ বছর", "7+ বছর", "10+ বছর"], ans: 1, exp: "ব্যাখ্যা: প্রাথমিক স্তরের শিক্ষা ৬ থেকে ১৪ বছর বয়স পর্যন্ত নির্দিষ্ট, তাই ৬ বছর বয়সকাল থেকে শিশুদের নিম্ন প্রাথমিক শিক্ষাস্তরে ভরতি হওয়ার কথা বলা হয়েছে।" },
-      { q: "১২. কোঠারি কমিশনের ভিত্তিতে কোন্ জাতীয় শিক্ষানীতি রচিত হয়?", opts: ["1968 খ্রিস্টাব্দের জাতীয় শিক্ষানীতি", "1978 খ্রিস্টাব্দের জাতীয় শিক্ষানীতি", "1986 খ্রিস্টাব্দের জাতীয় শিক্ষানীতি", "কোনোটিই নয়"], ans: 0, exp: "ব্যাখ্যা: কোঠারি কমিশনের বিস্তৃত সুপারিশের ওপর ভিত্তি করে ভারত সরকার ১৯৬৮ খ্রিস্টাব্দে দেশের প্রথম জাতীয় শিক্ষানীতি রচনা করেন।" },
-      { q: "১৩. কোঠারি কমিশনের মূল রিপোর্ট ছিল—", opts: ["692 পৃষ্ঠার", "747 পৃষ্ঠার", "489 পৃষ্ঠার", "542 পৃষ্ঠার"], ans: 2, exp: "ব্যাখ্যা: ৬৯২ পৃষ্ঠার সুবিশাল রিপোর্টের মধ্যে কোঠারি কমিশনের মূল বা আসল রিপোর্টটি ছিল ৪৮৯ পৃষ্ঠার।" },
-      { q: "১৪. কোঠারি কমিশন, তাঁদের রিপোর্টটি জমা দেন—", opts: ["Union Education Minister-এর নিকট", "United Education Minister-এর নিকট", "Union Educational Minister-এর নিকট", "Universal Education Minister-এর নিকট"], ans: 0, exp: "ব্যাখ্যা: ১৯৬৬ সালের ২৯ জুন কমিশন তৎকালীন শিক্ষামন্ত্রী বা Union Education Minister-এর কাছে তাঁদের প্রণীত রিপোর্ট জমা দেন।" },
-      { q: "১৫. কোঠারি কমিশন কত খ্রিস্টাব্দে কাজ শুরু করে?", opts: ["1966 খ্রিস্টাব্দের 29 জুন", "1964 খ্রিস্টাব্দের 2 অক্টোবর", "1965 খ্রিস্টাব্দের 2 অক্টোবর", "1964 খ্রিস্টাব্দের 29 জুন"], ans: 1, exp: "ব্যাখ্যা: ১৯৬৪ সালের ১৪ জুলাই কমিশন গঠিত হলেও তারা আনুষ্ঠানিকভাবে ১৯৬৪ সালের ২ অক্টোবর থেকে নিজেদের কাজ শুরু করেন।" }
+      { q: "১. কোঠারি কমিশনের একজন ভারতীয় সদস্য হলেন—", opts: ["অধ্যাপক সুনভোষি", "ড. বি. পি. পল", "অধ্যাপক রোজার রেভেলি", "ড. ডি. এস."], ans: 1, exp: "ব্যাখ্যা: ড. বি. পি. পল ছিলেন 10 জন ভারতীয় সদস্যের একজন।" },
+      { q: "২. কোঠারি কমিশনের একটি Task Force হল—", opts: ["বিজ্ঞান শিক্ষা এবং গবেষণা", "প্রাক্-প্রাথমিক শিক্ষা", "নারীশিক্ষা", "মধ্যশিক্ষা পর্ষদ"], ans: 0, exp: "ব্যাখ্যা: বিজ্ঞান শিক্ষা এবং গবেষণা ছিল 12টি টাস্ক ফোর্সের একটি।" },
+      { q: "৩. কোঠারি কমিশনের একজন বিদেশি সদস্য হলেন—", opts: ["ড. টি. সেন", "ড. পি. এন. কিরাপাল", "ড. জে. পি. নায়েক", "মিস্টার এম. জেন থমাস"], ans: 3, exp: "ব্যাখ্যা: ফ্রান্সের প্রতিনিধি মিস্টার এম. জেন থমাস ছিলেন বিদেশি সদস্য।" },
+      { q: "৪. কোন কমিশন প্রতিটি রাজ্যে রাজ্য শিক্ষা পরিষদ গঠনের সুপারিশ করেছেন?", opts: ["রাধাকৃষ্ণণ কমিশন", "মুদালিয়র কমিশন", "হান্টার কমিশন", "কোঠারি কমিশন"], ans: 3, exp: "ব্যাখ্যা: কোঠারি কমিশন রাজ্য শিক্ষা পরিষদ গঠনের সুপারিশ করেছিল।" },
+      { q: "৫. স্কুল কমপ্লেক্স (বিদ্যালয়গুচ্ছ) গঠনের সুপারিশ করা হয়—", opts: ["মুদালিয়র কমিশনে", "কোঠারি কমিশনে", "জনার্দন রেডি কমিশনে", "রাধাকৃষ্ণণ কমিশনে"], ans: 1, exp: "ব্যাখ্যা: কোঠারি কমিশন প্রথম বিদ্যালয়গুচ্ছ গঠনের সুপারিশ করেন।" },
+      { q: "৬. কোঠারি কমিশনের মতে, বিদ্যালয়গুলির কাজের দিনসংখ্যা হবে—", opts: ["210 দিন", "215 দিন", "234 দিন", "307 দিন"], ans: 2, exp: "ব্যাখ্যা: কমিশন কাজের দিনসংখ্যা 234 দিন করার সুপারিশ করেছিলেন।" },
+      { q: "৭. কোঠারি কমিশনের সুপারিশে কমন স্কুলব্যবস্থার দ্বারা কোন বিষয়কে গুরুত্ব দেওয়া হয়েছে?", opts: ["শিক্ষায় সমসুযোগ", "অপচয় ও অনুন্নয়ন", "সমাজসেবা", "জাতীয় উৎপাদন"], ans: 0, exp: "ব্যাখ্যা: সকলকে শিক্ষাক্ষেত্রে সমান সুযোগ প্রদান করাই কমন স্কুল ব্যবস্থার লক্ষ্য।" },
+      { q: "৮. কোন শিক্ষার স্তরের ওপর অপচয় ও অনুন্নয়ন সর্বাধিক প্রভাব বিস্তার করে?", opts: ["উচ্চশিক্ষা", "প্রাক্-প্রাথমিক শিক্ষা", "প্রাথমিক শিক্ষা", "মাধ্যমিক শিক্ষা"], ans: 2, exp: "ব্যাখ্যা: প্রাথমিক শিক্ষাস্তরে শিক্ষার্থীরা বিদ্যালয় ছেড়ে দেয়ায় অপচয় সর্বাধিক।" },
+      { q: "৯. কোঠারি কমিশনে বহিঃপরীক্ষার উন্নয়নের জন্য সুপারিশ হল—", opts: ["প্রশ্নের সংখ্যা বৃদ্ধি", "রচনাধর্মী প্রশ্নের ওপর গুরুত্ব", "প্রশ্নের মানের পরিবর্তন ও বিজ্ঞানভিত্তিক নম্বর দেওয়া", "পরীক্ষকের সংখ্যা বৃদ্ধি"], ans: 2, exp: "ব্যাখ্যা: নম্বর দেওয়ার পদ্ধতিকে বিজ্ঞানভিত্তিক করার সুপারিশ করা হয়।" },
+      { q: "১০. কোঠারি কমিশনের মতে, প্রাক্-প্রাথমিক শিক্ষার প্রধান উদ্দেশ্য হল—", opts: ["নেতৃত্ব দান", "সু-অভ্যাস গঠন করা", "বিজ্ঞান শিক্ষা", "সৃজনশীলতার বিকাশ"], ans: 1, exp: "ব্যাখ্যা: শৈশবকালে সু-অভ্যাস গঠন করাই প্রাক্-প্রাথমিক শিক্ষার প্রধান উদ্দেশ্য।" },
+      { q: "১১. কোঠারি কমিশনের মতে, প্রাথমিক শিক্ষাস্তরে ভরতির ন্যূনতম বয়স হবে—", opts: ["4 বছর", "6+ বছর", "7+ বছর", "10+ বছর"], ans: 1, exp: "ব্যাখ্যা: 6 বছর বয়স থেকে শিশুদের প্রাথমিক শিক্ষাস্তরে ভরতি হওয়ার কথা বলা হয়েছে।" },
+      { q: "১২. কোঠারি কমিশনের ভিত্তিতে কোন্ জাতীয় শিক্ষানীতি রচিত হয়?", opts: ["1968 খ্রিস্টাব্দের জাতীয় শিক্ষানীতি", "1978 খ্রিস্টাব্দের জাতীয় শিক্ষানীতি", "1986 খ্রিস্টাব্দের জাতীয় শিক্ষানীতি", "কোনোটিই নয়"], ans: 0, exp: "ব্যাখ্যা: কোঠারি কমিশনের সুপারিশের ভিত্তিতে 1968 সালে প্রথম জাতীয় শিক্ষানীতি রচিত হয়।" },
+      { q: "১৩. কোঠারি কমিশনের মূল রিপোর্ট ছিল—", opts: ["692 পৃষ্ঠার", "747 পৃষ্ঠার", "489 পৃষ্ঠার", "542 পৃষ্ঠার"], ans: 2, exp: "ব্যাখ্যা: 692 পৃষ্ঠার রিপোর্টের মধ্যে মূল রিপোর্টটি ছিল 489 পৃষ্ঠার।" },
+      { q: "১৪. কোঠারি কমিশন, তাঁদের রিপোর্টটি জমা দেন—", opts: ["Union Education Minister-এর নিকট", "United Education Minister-এর নিকট", "Union Educational Minister-এর নিকট", "Universal Education Minister-এর নিকট"], ans: 0, exp: "ব্যাখ্যা: 1966 সালের 29 জুন তৎকালীন শিক্ষামন্ত্রীর কাছে রিপোর্ট জমা দেওয়া হয়।" },
+      { q: "১৫. কোঠারি কমিশন কত খ্রিস্টাব্দে কাজ শুরু করে?", opts: ["1966 খ্রিস্টাব্দের 29 জুন", "1964 খ্রিস্টাব্দের 2 অক্টোবর", "1965 খ্রিস্টাব্দের 2 অক্টোবর", "1964 খ্রিস্টাব্দের 29 জুন"], ans: 1, exp: "ব্যাখ্যা: 1964 সালের 2 অক্টোবর থেকে আনুষ্ঠানিকভাবে কাজ শুরু করে।" }
     ]
   },
   11: {
-    name: "Set 11 - কোঠারি কমিশনের ভাষা, কারিগরি ও বিদ্যালয়গুচ্ছ",
-    icon: "🌐",
+    name: 'Set 11', icon: '🌐', topic: 'কোঠারি কমিশনের ভাষা, কারিগরি ও বিদ্যালয়গুচ্ছ',
     questions: [
-      { q: "১. অধ্যাপক সদতোশি কোন দেশের লোক ছিলেন?", opts: ["ইংল্যান্ড", "রাশিয়া", "ফ্রান্স", "জাপান"], ans: 3, exp: "ব্যাখ্যা: অধ্যাপক সদতোশি ইহারা ছিলেন জাপানের একজন বিশিষ্ট শিক্ষাবিদ এবং কোঠারি কমিশনের ৭ জন বিদেশি সদস্যের মধ্যে একজন।" },
-      { q: "২. কোঠারি কমিশন কোন শ্রেণি থেকে ইংরেজি ভাষাশিক্ষা শুরু করার কথা বলেছেন?", opts: ["প্রথম শ্রেণি", "দ্বিতীয় শ্রেণি", "পঞ্চম শ্রেণি", "চতুর্থ শ্রেণি"], ans: 2, exp: "ব্যাখ্যা: উচ্চ প্রাথমিক স্তর অর্থাৎ পঞ্চম শ্রেণি থেকে শিক্ষার্থীদের মাতৃভাষার পাশাপাশি একটি দ্বিতীয় ভাষা হিসেবে হিন্দি বা ইংরেজি শেখার কথা বলা হয়েছে।" },
-      { q: "৩. কোঠারি কমিশনে বৃত্তিমুখী শিক্ষা কোন্ স্তর থেকে শুরু করার কথা বলা হয়েছে?", opts: ["প্রাক প্রাথমিক", "প্রাথমিক", "নিম্ন মাধ্যমিক", "উচ্চমাধ্যমিক"], ans: 2, exp: "ব্যাখ্যা: নিম্ন মাধ্যমিক স্তর (অষ্টম বা নবম শ্রেণি) থেকে শিক্ষার্থীদের সাধারণ শিক্ষার পাশাপাশি বৃত্তিমুখী ও কারিগরি শিক্ষা দেওয়ার সুপারিশ করা হয়েছে।" },
-      { q: "৪. কারিগরি শিক্ষার সঙ্গে কোন্ ধরনের শিক্ষার গভীর সম্পর্ক বিশেষভাবে লক্ষ করা যায়?", opts: ["সাহিত্য", "গার্হস্থ্য বিজ্ঞান", "বাণিজ্য", "বিজ্ঞান শিক্ষা"], ans: 3, exp: "ব্যাখ্যা: কোঠারি কমিশন জাতীয় উৎপাদনশীলতা ও অর্থনৈতিক উন্নতির মূল চাবিকাঠি হিসেবে বিজ্ঞান এবং কারিগরি শিক্ষাকে একে অপরের পরিপূরক হিসেবে দেখেছেন।" },
-      { q: "৫. কারিগরি শিক্ষার সঙ্গে সম্পর্কিত একটি সংস্থা হল—", opts: ["NCERT", "NCTE", "UGC", "AICTE"], ans: 3, exp: "ব্যাখ্যা: AICTE বা All India Council for Technical Education হলো ভারতের কারিগরি ও প্রযুক্তি শিক্ষার উন্নয়ন এবং নিয়ন্ত্রণের সর্বোচ্চ জাতীয় সংস্থা।" },
-      { q: "৬. ভারতীয় শিক্ষা কমিশন গঠিত হয়—", opts: ["1964 খ্রিস্টাব্দে", "1966 খ্রিস্টাব্দে", "1948 খ্রিস্টাব্দে", "1952 খ্রিস্টাব্দে"], ans: 0, exp: "ব্যাখ্যা: স্বাধীন ভারতের শিক্ষার সামগ্রিক উন্নয়নের জন্য ১৯৬৪ খ্রিস্টাব্দের ১৪ জুলাই ভারত সরকার ভারতীয় শিক্ষা কমিশন বা কোঠারি কমিশন গঠন করেন।" },
-      { q: "৭. বিদ্যালয় স্তরে পাঠ্যক্রম রচনা করে—", opts: ["NCERT", "NCTE", "CABE", "UGC"], ans: 0, exp: "ব্যাখ্যা: কোঠারি কমিশনের সুপারিশ বাস্তবায়নে NCERT বা রাষ্ট্রীয় শিক্ষা গবেষণা ও প্রশিক্ষণ পরিষদ বিদ্যালয় স্তরের পাঠ্যক্রম রচনা ও গবেষণায় অত্যন্ত গুরুত্বপূর্ণ ভূমিকা পালন করে।" },
-      { q: "৮. কোঠারি কমিশনের মতে, নিম্ন প্রাথমিক স্তরে কয়টি ভাষা শিক্ষার কথা বলা হয়েছে?", opts: ["একটি ভাষা", "দুটি ভাষা", "তিনটি ভাষা", "সব ক-টি"], ans: 0, exp: "ব্যাখ্যা: নিম্ন প্রাথমিক স্তরে (প্রথম-চতুর্থ শ্রেণি) শিশুদের ওপর চাপ কমাতে কেবল একটি ভাষা অর্থাৎ মাতৃভাষা বা আঞ্চলিক ভাষা শেখার কথা বলা হয়েছে।" },
-      { q: "৯. উচ্চ প্রাথমিক স্তরে কয়টি ভাষা শিক্ষার কথা বলা হয়েছে?", opts: ["একটি ভাষা", "দুটি ভাষা", "তিনটি ভাষা", "সব ক-টি"], ans: 1, exp: "ব্যাখ্যা: উচ্চ প্রাথমিক স্তরে শিক্ষার্থীদের জন্য দুটি ভাষা আবশ্যিক করা হয়েছে, যার মধ্যে একটি মাতৃভাষা এবং অপরটি হিন্দি বা ইংরেজি।" },
-      { q: "১০. নিম্ন মাধ্যমিক স্তরে কয়টি ভাষা শিক্ষার কথা বলা হয়েছে?", opts: ["একটি ভাষা", "দুটি ভাষা", "তিনটি ভাষা", "সব ক-টি"], ans: 2, exp: "ব্যাখ্যা: নিম্ন মাধ্যমিক স্তরে ত্রিভাষা সূত্রের পরিপূর্ণ প্রয়োগ ঘটে, যেখানে অহিন্দিভাষী অঞ্চলে মাতৃভাষা, হিন্দি এবং ইংরেজি—এই তিনটি ভাষা শিখতে হয়।" },
-      { q: "১১. উচ্চমাধ্যমিক স্তরে কয়টি ভাষা শিক্ষার কথা বলা হয়েছে?", opts: ["একটি ভাষা", "দুটি ভাষা", "তিনটি ভাষা", "সব ক-টি"], ans: 1, exp: "ব্যাখ্যা: উচ্চমাধ্যমিক স্তরে পুনরায় চাপ কমিয়ে দুটি ভাষা বাধ্যতামূলক করা হয়েছে, যেগুলির মধ্যে একটি আধুনিক ভারতীয় ভাষা এবং অপরটি বিদেশি বা প্রাচীন ভাষা হতে পারে।" },
-      { q: "১২. বিদ্যালয় শিক্ষার গুণগত মান উন্নয়নের জন্য কী গড়ে তোলার কথা বলা হয়েছে?", opts: ["বিদ্যালয় সংগঠন", "বিদ্যালয় সংস্থা", "বিদ্যালয়গুচ্ছ", "বিদ্যালয় পাঠ্যক্রম"], ans: 2, exp: "ব্যাখ্যা: সমগ্র শিক্ষাব্যবস্থাকে আরও গতিশীল ও সক্রিয় করে তুলতে কমিশন বিদ্যালয়গুলির মধ্যে সহযোগিতার ভিত্তিতে বিদ্যালয়গুচ্ছ বা School Complex গঠনের সুপারিশ করেন।" },
-      { q: "১৩. প্রথম পর্যায়ে কতগুলি বিদ্যালয় নিয়ে বিদ্যালয়গুচ্ছ গঠনের কথা বলা হয়েছে?", opts: ["8-15টি", "8-10টি", "10-14টি", "15-20টি"], ans: 1, exp: "ব্যাখ্যা: প্রথম পর্যায়ের বিদ্যালয়গুচ্ছে একটি উচ্চ প্রাথমিক বিদ্যালয়কে কেন্দ্র করে ৮ থেকে ১০টি নিম্ন প্রাথমিক বিদ্যালয় নিয়ে কাজ করার কথা বলা হয়েছে।" },
-      { q: "১৪. প্রথম পর্যায়ে বিদ্যালয়গুচ্ছের কেন্দ্রে কোন্ বিদ্যালয় থাকবে?", opts: ["নিম্ন প্রাথমিক বিদ্যালয়", "উচ্চ প্রাথমিক বিদ্যালয়", "মাধ্যমিক বিদ্যালয়", "উচ্চমাধ্যমিক বিদ্যালয়"], ans: 1, exp: "ব্যাখ্যা: প্রথম পর্যায়ের বিদ্যালয়গুচ্ছের কেন্দ্রবিন্দুতে একটি উচ্চ প্রাথমিক বিদ্যালয় অবস্থান করবে এবং তার চারপাশে নিম্ন প্রাথমিক বিদ্যালয়গুলি থাকবে।" },
-      { q: "১৫. দ্বিতীয় পর্যায়ে বিদ্যালয়গুচ্ছ কতগুলি বিদ্যালয় নিয়ে গঠিত হবে?", opts: ["15-20টি", "10-15টি", "18-25", "10-30টি"], ans: 0, exp: "ব্যাখ্যা: দ্বিতীয় পর্যায়ের বিদ্যালয়গুচ্ছ আরও বড়ো ও ব্যাপক হবে, যা ১৫ থেকে ২০টি নিম্ন ও উচ্চ প্রাথমিক বিদ্যালয় নিয়ে গঠিত হবে।" }
+      { q: "১. অধ্যাপক সদতোশি কোন দেশের লোক ছিলেন?", opts: ["ইংল্যান্ড", "রাশিয়া", "ফ্রান্স", "জাপান"], ans: 3, exp: "ব্যাখ্যা: অধ্যাপক সদতোশি ইহারা ছিলেন জাপানের শিক্ষাবিদ।" },
+      { q: "২. কোঠারি কমিশন কোন শ্রেণি থেকে ইংরেজি ভাষাশিক্ষা শুরু করার কথা বলেছেন?", opts: ["প্রথম শ্রেণি", "দ্বিতীয় শ্রেণি", "পঞ্চম শ্রেণি", "চতুর্থ শ্রেণি"], ans: 2, exp: "ব্যাখ্যা: পঞ্চম শ্রেণি থেকে ইংরেজি শেখার কথা বলা হয়েছে।" },
+      { q: "৩. কোঠারি কমিশনে বৃত্তিমুখী শিক্ষা কোন্ স্তর থেকে শুরু করার কথা বলা হয়েছে?", opts: ["প্রাক প্রাথমিক", "প্রাথমিক", "নিম্ন মাধ্যমিক", "উচ্চমাধ্যমিক"], ans: 2, exp: "ব্যাখ্যা: নিম্ন মাধ্যমিক স্তর (অষ্টম/নবম শ্রেণি) থেকে বৃত্তিমুখী শিক্ষা দেওয়ার সুপারিশ করা হয়েছে।" },
+      { q: "৪. কারিগরি শিক্ষার সঙ্গে কোন্ ধরনের শিক্ষার গভীর সম্পর্ক বিশেষভাবে লক্ষ করা যায়?", opts: ["সাহিত্য", "গার্হস্থ্য বিজ্ঞান", "বাণিজ্য", "বিজ্ঞান শিক্ষা"], ans: 3, exp: "ব্যাখ্যা: বিজ্ঞান এবং কারিগরি শিক্ষা একে অপরের পরিপূরক।" },
+      { q: "৫. কারিগরি শিক্ষার সঙ্গে সম্পর্কিত একটি সংস্থা হল—", opts: ["NCERT", "NCTE", "UGC", "AICTE"], ans: 3, exp: "ব্যাখ্যা: AICTE হলো ভারতের কারিগরি শিক্ষার সর্বোচ্চ সংস্থা।" },
+      { q: "৬. ভারতীয় শিক্ষা কমিশন গঠিত হয়—", opts: ["1964 খ্রিস্টাব্দে", "1966 খ্রিস্টাব্দে", "1948 খ্রিস্টাব্দে", "1952 খ্রিস্টাব্দে"], ans: 0, exp: "ব্যাখ্যা: 1964 সালের 14 জুলাই ভারতীয় শিক্ষা কমিশন গঠিত হয়।" },
+      { q: "৭. বিদ্যালয় স্তরে পাঠ্যক্রম রচনা করে—", opts: ["NCERT", "NCTE", "CABE", "UGC"], ans: 0, exp: "ব্যাখ্যা: NCERT বিদ্যালয় স্তরের পাঠ্যক্রম রচনা করে।" },
+      { q: "৮. কোঠারি কমিশনের মতে, নিম্ন প্রাথমিক স্তরে কয়টি ভাষা শিক্ষার কথা বলা হয়েছে?", opts: ["একটি ভাষা", "দুটি ভাষা", "তিনটি ভাষা", "সব ক-টি"], ans: 0, exp: "ব্যাখ্যা: নিম্ন প্রাথমিক স্তরে শুধু একটি ভাষা (মাতৃভাষা) শেখার কথা বলা হয়েছে।" },
+      { q: "৯. উচ্চ প্রাথমিক স্তরে কয়টি ভাষা শিক্ষার কথা বলা হয়েছে?", opts: ["একটি ভাষা", "দুটি ভাষা", "তিনটি ভাষা", "সব ক-টি"], ans: 1, exp: "ব্যাখ্যা: উচ্চ প্রাথমিক স্তরে দুটি ভাষা আবশ্যিক করা হয়েছে।" },
+      { q: "১০. নিম্ন মাধ্যমিক স্তরে কয়টি ভাষা শিক্ষার কথা বলা হয়েছে?", opts: ["একটি ভাষা", "দুটি ভাষা", "তিনটি ভাষা", "সব ক-টি"], ans: 2, exp: "ব্যাখ্যা: নিম্ন মাধ্যমিক স্তরে ত্রিভাষা সূত্র প্রয়োগ হয়।" },
+      { q: "১১. উচ্চমাধ্যমিক স্তরে কয়টি ভাষা শিক্ষার কথা বলা হয়েছে?", opts: ["একটি ভাষা", "দুটি ভাষা", "তিনটি ভাষা", "সব ক-টি"], ans: 1, exp: "ব্যাখ্যা: উচ্চমাধ্যমিক স্তরে দুটি ভাষা বাধ্যতামূলক।" },
+      { q: "১২. বিদ্যালয় শিক্ষার গুণগত মান উন্নয়নের জন্য কী গড়ে তোলার কথা বলা হয়েছে?", opts: ["বিদ্যালয় সংগঠন", "বিদ্যালয় সংস্থা", "বিদ্যালয়গুচ্ছ", "বিদ্যালয় পাঠ্যক্রম"], ans: 2, exp: "ব্যাখ্যা: শিক্ষার মান উন্নয়নে বিদ্যালয়গুচ্ছ বা School Complex গঠনের কথা বলা হয়েছে।" },
+      { q: "১৩. প্রথম পর্যায়ে কতগুলি বিদ্যালয় নিয়ে বিদ্যালয়গুচ্ছ গঠনের কথা বলা হয়েছে?", opts: ["8-15টি", "8-10টি", "10-14টি", "15-20টি"], ans: 1, exp: "ব্যাখ্যা: প্রথম পর্যায়ে 8 থেকে 10টি বিদ্যালয় নিয়ে গুচ্ছ গঠনের কথা বলা হয়েছে।" },
+      { q: "১৪. প্রথম পর্যায়ে বিদ্যালয়গুচ্ছের কেন্দ্রে কোন্ বিদ্যালয় থাকবে?", opts: ["নিম্ন প্রাথমিক বিদ্যালয়", "উচ্চ প্রাথমিক বিদ্যালয়", "মাধ্যমিক বিদ্যালয়", "উচ্চমাধ্যমিক বিদ্যালয়"], ans: 1, exp: "ব্যাখ্যা: প্রথম পর্যায়ের কেন্দ্রে একটি উচ্চ প্রাথমিক বিদ্যালয় থাকবে।" },
+      { q: "১৫. দ্বিতীয় পর্যায়ে বিদ্যালয়গুচ্ছ কতগুলি বিদ্যালয় নিয়ে গঠিত হবে?", opts: ["15-20টি", "10-15টি", "18-25", "10-30টি"], ans: 0, exp: "ব্যাখ্যা: দ্বিতীয় পর্যায়ে 15 থেকে 20টি বিদ্যালয় নিয়ে গুচ্ছ গঠিত হবে।" }
     ]
   },
   12: {
-    name: "Set 12 - কোঠারি কমিশনের শিক্ষক শিক্ষণ, বয়স্ক শিক্ষা ও নারীশিক্ষা",
-    icon: "👩‍🏫",
+    name: 'Set 12', icon: '👩‍🏫', topic: 'কোঠারি কমিশনের শিক্ষক শিক্ষণ, বয়স্ক শিক্ষা ও নারীশিক্ষা',
     questions: [
-      { q: "১. দ্বিতীয় পর্যায়ে বিদ্যালয়গুচ্ছের কেন্দ্রে কোন বিদ্যালয় থাকবে?", opts: ["একটি উচ্চমাধ্যমিক বিদ্যালয়", "নিম্ন প্রাথমিক বিদ্যালয়", "একটি মাধ্যমিক বিদ্যালয়", "উচ্চমাধ্যমিক বিদ্যালয়"], ans: 2, exp: "ব্যাখ্যা: দ্বিতীয় পর্যায়ের বিদ্যালয়গুচ্ছের কেন্দ্রবিন্দুতে একটি মাধ্যমিক বিদ্যালয় অবস্থান করবে, যা অধীনস্থ প্রাথমিক বিদ্যালয়গুলিকে সাহায্য করবে।" },
-      { q: "২. ‘প্রতিবেশী বিদ্যালয় প্রথা গঠন’-এর কথা কোন্ কমিশনে বলা হয়েছে?", opts: ["মুদালিয়র কমিশন", "রাধাকৃষ্ণণ কমিশন", "কোঠারি কমিশন", "অশোক মিত্র কমিশন"], ans: 2, exp: "ব্যাখ্যা: সমাজব্যবস্থায় নানাবিধ সামাজিক ও অর্থনৈতিক বিভেদ দূর করে সমতা আনতে কোঠারি কমিশন 'প্রতিবেশী বিদ্যালয় প্রথা' (Neighbourhood School System) গঠনের কথা বলেছেন।" },
-      { q: "৩. ‘প্রতিবেশী বিদ্যালয় প্রথা’-র উদ্দেশ্য কী?", opts: ["অনুদান প্রদান", "সকল শিশুকে বিদ্যালয়ে ভরতি", "সকলের শিক্ষায় অধিকার প্রদান", "আঞ্চলিক শিক্ষায় গুরুত্ব দান"], ans: 2, exp: "ব্যাখ্যা: জাতি, ধর্ম, বর্ণ, অর্থ, লিঙ্গ নির্বিশেষে নির্দিষ্ট অঞ্চলের সকল শিশুর সেই বিদ্যালয়ে সমান শিক্ষার অধিকার নিশ্চিত করাই এর প্রধান উদ্দেশ্য।" },
-      { q: "৪. SBTE-এর সম্পূর্ণ নাম কী?", opts: ["State Board of Teacher Education", "State Board of Teacher Educo", "State Board of Talent Education", "কোনোটিই নয়"], ans: 0, exp: "ব্যাখ্যা: বিদ্যালয় শিক্ষার গুণগত মান এবং শিক্ষকদের দক্ষতা বাড়াতে রাজ্য স্তরে এই State Board of Teacher Education প্রতিষ্ঠা করার কথা বলা হয়েছে।" },
-      { q: "৫. শিক্ষক শিক্ষণ ব্যবস্থা তদারকি করার জন্য প্রতিটি রাজ্যে কী গঠন করার কথা বলা হয়েছে?", opts: ["শিক্ষক শিক্ষণ সংস্থা", "রাজ্য শিক্ষক শিক্ষণ পর্ষদ", "রাজ্য শিক্ষক শিক্ষণ কমিটি", "রাজ্য শিক্ষক সংগঠন"], ans: 1, exp: "ব্যাখ্যা: শিক্ষক শিক্ষণ ব্যবস্থার নিয়মিত তদারকি ও মান উন্নয়নের জন্য প্রতিটি রাজ্যে একটি করে রাজ্য শিক্ষক শিক্ষণ পর্ষদ (State Board of Teacher Education) গঠনের প্রস্তাব দেওয়া হয়।" },
-      { q: "৬. কর্মরত শিক্ষকদের জ্ঞানের নবীকরণের জন্য কত বছর অন্তর প্রশিক্ষণের ব্যবস্থা করতে হবে?", opts: ["তিন বছর", "চার বছর", "পাঁচ বছর", "দশ বছর"], ans: 2, exp: "ব্যাখ্যা: কর্মরত শিক্ষকদের আধুনিক জ্ঞান ও পরিবর্তনশীল শিক্ষাদান পদ্ধতির সাথে যুক্ত রাখতে প্রতি ৫ বছর অন্তর স্বল্প সময়ের প্রশিক্ষণের কথা বলা হয়েছে।" },
-      { q: "৭. বয়স্ক নারীদের সাক্ষর করে তোলার জন্য কাদের নিয়োগ করতে হবে?", opts: ["গ্রামের শিক্ষক", "গ্রামের ভগিনী", "গ্রামের মানুষ", "কোনোটিই নয়"], ans: 1, exp: "ব্যাখ্যা: নিরক্ষরতা দূরীকরণ কর্মসূচিতে বয়স্ক নারীদের সাক্ষর করে তোলার উদ্দেশ্যে বিশেষভাবে 'গ্রামের ভগিনী' (Village Sister) নিয়োগ করার কথা বলা হয়েছে।" },
-      { q: "৮. কোঠারি কমিশন নিরক্ষরতা দূরীকরণের জন্য কোন্ কোন্ পদ্ধতির উল্লেখ করেছেন?", opts: ["নির্বাচনমূলক ও ব্যাপক পদ্ধতি", "নির্বাচনমূলক ও অনুকরণমূলক পদ্ধতি", "ব্যাপক ও সংকীর্ণ পদ্ধতি", "ব্যাপক ও পর্যবেক্ষণ পদ্ধতি"], ans: 0, exp: "ব্যাখ্যা: কমিশন নিরক্ষরতা দূরীকরণের জন্য মূলত দুটি পদ্ধতি—নির্বাচনমূলক পদ্ধতি (Selective approach) এবং ব্যাপক পদ্ধতি (Mass approach)-র ওপর জোর দিয়েছেন।" },
-      { q: "৯. বয়স্ক ব্যক্তিদের পাঠে আগ্রহ সৃষ্টি করতে গ্রন্থাগার বিষয়ক উপদেষ্টা কমিটি সারা দেশে কী তৈরির সুপারিশ করেন?", opts: ["Library", "Home Library", "Library Net Work", "কোনোটিই নয়"], ans: 2, exp: "ব্যাখ্যা: বয়স্ক ব্যক্তিদের পাঠে আগ্রহ সৃষ্টি করতে এবং শিক্ষাকে ধারাবাহিক করতে গ্রন্থাগারগুলিকে বৈচিত্র্যপূর্ণ করে সারা দেশে Library Network তৈরির সুপারিশ করা হয়।" },
-      { q: "১০. NBAE-এর সম্পূর্ণ নাম কী?", opts: ["National Body of Adult Education", "National Board of Adult Education", "National Board of Area Education", "National Board of Adult of Educo"], ans: 1, exp: "ব্যাখ্যা: বয়স্ক শিক্ষার বিভিন্ন সরকারি ও বেসরকারি সংস্থার মধ্যে সমন্বয় সাধনের জন্য জাতীয় স্তরে National Board of Adult Education (NBAE) গঠনের কথা বলা হয়েছে।" },
-      { q: "১১. SAT-এর সম্পূর্ণ নাম কী?", opts: ["State Achievement Test", "Standardized Achievement Test", "Standard Achievement Test", "Standardized Achievement Text"], ans: 1, exp: "ব্যাখ্যা: বিভিন্ন জেলায় শিক্ষার্থীদের পারদর্শিতা বৈজ্ঞানিকভাবে মূল্যায়নের জন্য Standardized Achievement Test (SAT) বা আদর্শায়িত পারদর্শিতার অভীক্ষা ব্যবহারের কথা বলা হয়েছে।" },
-      { q: "১২. প্রাথমিক বিদ্যালয়গুলিতে শিক্ষা শেষে বিভিন্ন জেলায় কীসের মাধ্যমে শিক্ষার্থীদের মূল্যায়নের কথা বলা হয়েছে?", opts: ["আদর্শায়িত পারদর্শিতার অভীক্ষা", "পারদর্শিতার অভীক্ষা", "বার্ষিক পরীক্ষা", "ক্রমিক মূল্যায়ন"], ans: 0, exp: "ব্যাখ্যা: প্রাথমিক শিক্ষা সমাপ্তির পর শিক্ষার্থীদের গুণগত মেধা ও পারদর্শিতা সঠিকভাবে পরিমাপ করতে এই আদর্শায়িত পারদর্শিতার অভীক্ষা বা SAT-এর সুপারিশ করা হয়েছে।" },
-      { q: "১৩. মাধ্যমিক ও উচ্চমাধ্যমিক স্তরে কোন্ ধরনের পরীক্ষার ব্যবস্থার কথা কোঠারি কমিশনে বলা হয়?", opts: ["অভ্যন্তরীণ পরীক্ষা", "বহিঃপরীক্ষা", "বার্ষিক পরীক্ষা", "অর্ধবার্ষিক পরীক্ষা"], ans: 1, exp: "ব্যাখ্যা: কোঠারি কমিশনের মূল্যায়নের নিয়মানুযায়ী, মাধ্যমিক ও উচ্চমাধ্যমিক স্তরের শিক্ষা সমাপ্তির পর একটি সাধারণ বহিঃপরীক্ষা বা বোর্ড পরীক্ষার ব্যবস্থা করার কথা বলা হয়েছে।" },
-      { q: "১৪. কোঠারি কমিশনের সুপারিশ অনুযায়ী কতগুলি বিদ্যালয়ের জন্য একজন পরিদর্শক-পরামর্শদাতা নিয়োগ করতে হবে?", opts: ["5টি", "7টি", "9টি", "10টি"], ans: 3, exp: "ব্যাখ্যা: মাধ্যমিক বিদ্যালয়গুলিতে শিক্ষার্থীদের সঠিক নির্দেশনার কাজে তদারকি করতে প্রতি ১০টি বিদ্যালয়ের জন্য একজন পরিদর্শক-পরামর্শদাতা নিয়োগের কথা বলা হয়েছে।" },
-      { q: "১৫. নারীশিক্ষার প্রসারে জন্য কোঠারি কমিশন কী গঠনের সুপারিশ করেছেন?", opts: ["The National Committee on the Education of Women", "The National Common on the Education of Women", "The National Commenly on the Education of Women", "The National committee on the Educational of Woman"], ans: 0, exp: "ব্যাখ্যা: নারীশিক্ষার দ্রুত প্রসার ও উন্নয়নের জন্য বিশেষ কর্মসূচির রূপরেখা তৈরি করতে কোঠারি কমিশন 'The National Committee on the Education of Women' গঠনের ওপর গুরুত্ব আরোপ করেছেন।" }
+      { q: "১. দ্বিতীয় পর্যায়ে বিদ্যালয়গুচ্ছের কেন্দ্রে কোন বিদ্যালয় থাকবে?", opts: ["উচ্চমাধ্যমিক বিদ্যালয়", "নিম্ন প্রাথমিক বিদ্যালয়", "একটি মাধ্যমিক বিদ্যালয়", "উচ্চমাধ্যমিক বিদ্যালয়"], ans: 2, exp: "ব্যাখ্যা: দ্বিতীয় পর্যায়ের কেন্দ্রে একটি মাধ্যমিক বিদ্যালয় থাকবে।" },
+      { q: "২. প্রতিবেশী বিদ্যালয় প্রথা গঠনের কথা কোন্ কমিশনে বলা হয়েছে?", opts: ["মুদালিয়র কমিশন", "রাধাকৃষ্ণণ কমিশন", "কোঠারি কমিশন", "অশোক মিত্র কমিশন"], ans: 2, exp: "ব্যাখ্যা: কোঠারি কমিশন প্রতিবেশী বিদ্যালয় প্রথা গঠনের কথা বলেছেন।" },
+      { q: "৩. প্রতিবেশী বিদ্যালয় প্রথার উদ্দেশ্য কী?", opts: ["অনুদান প্রদান", "সকল শিশুকে বিদ্যালয়ে ভরতি", "সকলের শিক্ষায় অধিকার প্রদান", "আঞ্চলিক শিক্ষায় গুরুত্ব দান"], ans: 2, exp: "ব্যাখ্যা: সকলের শিক্ষায় সমান অধিকার নিশ্চিত করাই এর উদ্দেশ্য।" },
+      { q: "৪. SBTE-এর সম্পূর্ণ নাম কী?", opts: ["State Board of Teacher Education", "State Board of Teacher Educo", "State Board of Talent Education", "কোনোটিই নয়"], ans: 0, exp: "ব্যাখ্যা: রাজ্য স্তরে State Board of Teacher Education প্রতিষ্ঠার কথা বলা হয়েছে।" },
+      { q: "৫. শিক্ষক শিক্ষণ ব্যবস্থা তদারকি করার জন্য প্রতিটি রাজ্যে কী গঠন করার কথা বলা হয়েছে?", opts: ["শিক্ষক শিক্ষণ সংস্থা", "রাজ্য শিক্ষক শিক্ষণ পর্ষদ", "রাজ্য শিক্ষক শিক্ষণ কমিটি", "রাজ্য শিক্ষক সংগঠন"], ans: 1, exp: "ব্যাখ্যা: রাজ্য শিক্ষক শিক্ষণ পর্ষদ গঠনের প্রস্তাব দেওয়া হয়।" },
+      { q: "৬. কর্মরত শিক্ষকদের জ্ঞানের নবীকরণের জন্য কত বছর অন্তর প্রশিক্ষণের ব্যবস্থা করতে হবে?", opts: ["তিন বছর", "চার বছর", "পাঁচ বছর", "দশ বছর"], ans: 2, exp: "ব্যাখ্যা: প্রতি 5 বছর অন্তর প্রশিক্ষণের ব্যবস্থা করতে হবে।" },
+      { q: "৭. বয়স্ক নারীদের সাক্ষর করে তোলার জন্য কাদের নিয়োগ করতে হবে?", opts: ["গ্রামের শিক্ষক", "গ্রামের ভগিনী", "গ্রামের মানুষ", "কোনোটিই নয়"], ans: 1, exp: "ব্যাখ্যা: গ্রামের ভগিনী (Village Sister) নিয়োগের কথা বলা হয়েছে।" },
+      { q: "৮. কোঠারি কমিশন নিরক্ষরতা দূরীকরণের জন্য কোন্ কোন্ পদ্ধতির উল্লেখ করেছেন?", opts: ["নির্বাচনমূলক ও ব্যাপক পদ্ধতি", "নির্বাচনমূলক ও অনুকরণমূলক পদ্ধতি", "ব্যাপক ও সংকীর্ণ পদ্ধতি", "ব্যাপক ও পর্যবেক্ষণ পদ্ধতি"], ans: 0, exp: "ব্যাখ্যা: নির্বাচনমূলক ও ব্যাপক পদ্ধতি — এই দুটি পদ্ধতির উল্লেখ করা হয়েছে।" },
+      { q: "৯. বয়স্ক ব্যক্তিদের পাঠে আগ্রহ সৃষ্টি করতে গ্রন্থাগার বিষয়ক উপদেষ্টা কমিটি সারা দেশে কী তৈরির সুপারিশ করেন?", opts: ["Library", "Home Library", "Library Net Work", "কোনোটিই নয়"], ans: 2, exp: "ব্যাখ্যা: সারা দেশে Library Network তৈরির সুপারিশ করা হয়।" },
+      { q: "১০. NBAE-এর সম্পূর্ণ নাম কী?", opts: ["National Body of Adult Education", "National Board of Adult Education", "National Board of Area Education", "National Board of Adult of Educo"], ans: 1, exp: "ব্যাখ্যা: বয়স্ক শিক্ষার জন্য National Board of Adult Education (NBAE) গঠনের কথা বলা হয়েছে।" },
+      { q: "১১. SAT-এর সম্পূর্ণ নাম কী?", opts: ["State Achievement Test", "Standardized Achievement Test", "Standard Achievement Test", "Standardized Achievement Text"], ans: 1, exp: "ব্যাখ্যা: Standardized Achievement Test — আদর্শায়িত পারদর্শিতার অভীক্ষা।" },
+      { q: "১২. প্রাথমিক বিদ্যালয়গুলিতে শিক্ষা শেষে বিভিন্ন জেলায় কীসের মাধ্যমে শিক্ষার্থীদের মূল্যায়নের কথা বলা হয়েছে?", opts: ["আদর্শায়িত পারদর্শিতার অভীক্ষা", "পারদর্শিতার অভীক্ষা", "বার্ষিক পরীক্ষা", "ক্রমিক মূল্যায়ন"], ans: 0, exp: "ব্যাখ্যা: SAT বা আদর্শায়িত পারদর্শিতার অভীক্ষার মাধ্যমে মূল্যায়ন করা হবে।" },
+      { q: "১৩. মাধ্যমিক ও উচ্চমাধ্যমিক স্তরে কোন্ ধরনের পরীক্ষার ব্যবস্থার কথা কোঠারি কমিশনে বলা হয়?", opts: ["অভ্যন্তরীণ পরীক্ষা", "বহিঃপরীক্ষা", "বার্ষিক পরীক্ষা", "অর্ধবার্ষিক পরীক্ষা"], ans: 1, exp: "ব্যাখ্যা: মাধ্যমিক ও উচ্চমাধ্যমিক স্তরে বহিঃপরীক্ষা বা বোর্ড পরীক্ষার ব্যবস্থা করার কথা বলা হয়েছে।" },
+      { q: "১৪. কোঠারি কমিশনের সুপারিশ অনুযায়ী কতগুলি বিদ্যালয়ের জন্য একজন পরিদর্শক-পরামর্শদাতা নিয়োগ করতে হবে?", opts: ["5টি", "7টি", "9টি", "10টি"], ans: 3, exp: "ব্যাখ্যা: প্রতি 10টি বিদ্যালয়ের জন্য একজন পরিদর্শক-পরামর্শদাতা নিয়োগের কথা বলা হয়েছে।" },
+      { q: "১৫. নারীশিক্ষার প্রসারের জন্য কোঠারি কমিশন কী গঠনের সুপারিশ করেছেন?", opts: ["The National Committee on the Education of Women", "The National Common on the Education of Women", "The National Commenly on the Education of Women", "The National committee on the Educational of Woman"], ans: 0, exp: "ব্যাখ্যা: নারীশিক্ষার উন্নয়নে বিশেষ কমিটি গঠনের ওপর গুরুত্ব দেওয়া হয়েছে।" }
     ]
   }
 };
 
-// ================== GLOBAL VARIABLES ==================
-const LABELS = ['ক', 'খ', 'গ', 'ঘ'];
-const setKeys =;
-let currentSetId = null;
-let cur = 0, score = 0, wrong = 0, skip = 0, answered = false;
-let timerInterval, timeLeft = TIME_LIMIT;
-let userAnswers = [];
-let isLoggedIn = false;
-let currentUser = null;
-let pendingSetId = null;
+// ================== STATE VARIABLES ==================
+let currentUser = "";
+let activeSetId = null;
+let questions = [];
+let currentQIndex = 0;
+let score = 0;
+let wrongAnswers = 0;
+let isReviewMode = false;
+let timerInterval;
+let timeLeft = TIME_LIMIT;
+let userAnswers = {};
 
 // ================== LOCAL STORAGE LOGIC ==================
-function getAttempts(user, setId) {
-  let data = JSON.parse(localStorage.getItem("testBazarAttemptsEd3Ch1")) || {};
-  if (!data[user]) data[user] = {};
-  return data[user][setId] || 0;
-}
-function incrementAttempt(user, setId) {
-  let data = JSON.parse(localStorage.getItem("testBazarAttemptsEd3Ch1")) || {};
-  if (!data[user]) data[user] = {};
-  data[user][setId] = (data[user][setId] || 0) + 1;
-  localStorage.setItem("testBazarAttemptsEd3Ch1", JSON.stringify(data));
-  return data[user][setId];
+// This fulfills the requirement exactly
+function getGlobalUsers() {
+  const data = localStorage.getItem("testBazarGlobalUsers");
+  return data ? JSON.parse(data) : {};
 }
 
-// ================== HUB VIEW BUILDER ==================
-function buildHub() {
-  const grid = document.getElementById('setGrid');
-  grid.innerHTML = '';
+function getAttemptsData() {
+  const data = localStorage.getItem("testBazarAttemptsEd3Ch1_v2");
+  return data ? JSON.parse(data) : {};
+}
 
-  setKeys.forEach(id => {
-    const set = QUIZ_SETS[id];
-    const card = document.createElement('div');
-    card.className = 'set-card';
+function getAttemptCount(username, setId) {
+  const attempts = getAttemptsData();
+  const key = username + '|' + setId;
+  return attempts[key] || 0;
+}
 
-    let attemptHtml = '';
+function incrementAttempt(username, setId) {
+  const attempts = getAttemptsData();
+  const key = username + '|' + setId;
+  attempts[key] = (attempts[key] || 0) + 1;
+  localStorage.setItem("testBazarAttemptsEd3Ch1_v2", JSON.stringify(attempts));
+  return attempts[key];
+}
+
+// ================== INITIALIZATION ==================
+window.onload = () => {
+  renderHub();
+};
+
+function renderHub() {
+  const grid = document.getElementById("setGrid");
+  grid.innerHTML = "";
+
+  for(let id in ALL_SETS) {
+    const set = ALL_SETS[id];
+    const div = document.createElement("div");
+    div.className = "set-card";
+
+    let attemptCount = 0;
     let isLocked = false;
-    if (isLoggedIn && currentUser) {
-      let attempts = getAttempts(currentUser, id);
-      isLocked = attempts >= MAX_ATTEMPTS;
-      attemptHtml = `<div class="attempt-badge ${isLocked ? 'locked' : ''}">${isLocked ? '🔒 Locked' : attempts + '/' + MAX_ATTEMPTS}</div>`;
+
+    if (currentUser) {
+      attemptCount = getAttemptCount(currentUser, id);
+      isLocked = attemptCount >= MAX_ATTEMPTS;
+      if (isLocked) div.classList.add("locked");
     }
 
-    card.innerHTML = `
-      ${attemptHtml}
-      <div class="set-icon">${set.icon}</div>
-      <div class="set-name">${set.name.split(' - ')}</div>
-      <div class="set-topic">${set.name.split(' - ')}</div>
+    div.innerHTML = `
+      <div class="icon">${set.icon}</div>
+      <div class="set-num">${set.name.split(' - ')}</div>
+      <div class="set-title">${set.topic}</div>
       <div class="set-meta"><span>15 Qs</span><span>10 Mins</span></div>
+      ${currentUser ? `<div class="attempt-badge ${isLocked?'locked-badge':''}">${isLocked ? '🔒 Locked' : attemptCount + '/' + MAX_ATTEMPTS}</div>` : ''}
     `;
 
-    card.onclick = () => {
+    div.onclick = () => {
       if (isLocked) {
         alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
         return;
       }
       handleSetClick(id);
     };
-    grid.appendChild(card);
-  });
+    grid.appendChild(div);
+  }
 }
 
 function handleSetClick(setId) {
-  if (!isLoggedIn) {
-    pendingSetId = setId;
-    document.getElementById('loginSetName').textContent = `📚 ${QUIZ_SETS[setId].name}`;
-    document.getElementById('setLoginModal').classList.remove('hidden');
+  activeSetId = setId;
+  if (!currentUser) {
+    document.getElementById("loginSetName").innerText = `📚 ${ALL_SETS[setId].name}`;
+    document.getElementById("loginOverlay").classList.add("active");
+    document.getElementById("loginUsername").value = "";
+    document.getElementById("loginPassword").value = "";
+    document.getElementById("loginError").style.display = "none";
   } else {
     startQuiz(setId);
   }
 }
 
-// ================== LOGIN LOGIC ==================
-function verifySetLogin() {
-  const u = document.getElementById('username').value.trim();
-  const p = document.getElementById('password').value.trim();
+function doLogin() {
+  const u = document.getElementById("loginUsername").value.trim();
+  const p = document.getElementById("loginPassword").value.trim();
+  const err = document.getElementById("loginError");
 
-  if (u !== "" && p !== "") {
-    isLoggedIn = true;
-    currentUser = u;
-    document.getElementById('setLoginModal').classList.add('hidden');
-    document.getElementById('userDisplay').textContent = `👤 ${currentUser}`;
-    document.getElementById('hubUserInfo').textContent = `Logged in as: ${currentUser}`;
-    buildHub();
-    if (pendingSetId) {
-      startQuiz(pendingSetId);
-      pendingSetId = null;
+  const GLOBAL_USERS = getGlobalUsers();
+
+  if(!u || !p) {
+    err.innerText = "ইউজারনেম এবং পাসওয়ার্ড দিন!";
+    err.style.display = "block";
+    return;
+  }
+
+  // Verify with Global Index Database
+  if(GLOBAL_USERS[u] && GLOBAL_USERS[u] === p) {
+    let attempts = getAttemptCount(u, activeSetId);
+    if (attempts >= MAX_ATTEMPTS) {
+      err.innerText = `আপনি এই সেটে সর্বোচ্চ ${MAX_ATTEMPTS} বার পরীক্ষা দিয়েছেন!`;
+      err.style.display = "block";
+      return;
     }
+
+    currentUser = u;
+    document.getElementById("loginOverlay").classList.remove("active");
+    document.getElementById("userDisplay").innerHTML = `👤 ${u}`;
+    document.getElementById("userDisplay").classList.remove("hidden");
+
+    renderHub(); // Update hub to show attempt badges
+    startQuiz(activeSetId);
   } else {
-    document.getElementById('loginError').style.display = 'block';
+    err.innerText = "ইউজারনেম বা পাসওয়ার্ড ভুল! (Index থেকে চেক করুন)";
+    err.style.display = "block";
   }
 }
 
-function closeSetLogin() {
-  document.getElementById('setLoginModal').classList.add('hidden');
-  pendingSetId = null;
+function closeLogin() {
+  document.getElementById("loginOverlay").classList.remove("active");
+}
+
+function goToHub() {
+  document.getElementById("resultWrap").classList.remove("show");
+  document.getElementById("testArea").classList.add("hidden");
+  document.getElementById("hubPage").style.display = "block";
+  document.getElementById("timerBox").classList.add("hidden");
+  clearInterval(timerInterval);
+  renderHub();
 }
 
 // ================== QUIZ LOGIC ==================
 function startQuiz(setId) {
-  const attempts = getAttempts(currentUser, setId);
-  if (attempts >= MAX_ATTEMPTS) {
-    alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
-    buildHub();
-    return;
-  }
-
   incrementAttempt(currentUser, setId);
-  currentSetId = setId;
-  cur = 0; score = 0; wrong = 0; skip = 0; answered = false; userAnswers = [];
+
+  questions = ALL_SETS[setId].questions;
+  currentQIndex = 0;
+  score = 0;
+  wrongAnswers = 0;
+  userAnswers = {};
+  isReviewMode = false;
   timeLeft = TIME_LIMIT;
 
-  document.getElementById('hubView').classList.add('hidden');
-  document.getElementById('resultView').classList.add('hidden');
-  document.getElementById('quizView').classList.remove('hidden');
-  document.getElementById('topTimerBox').classList.remove('hidden');
-  document.getElementById('currentSetName').textContent = QUIZ_SETS[setId].name;
+  document.getElementById("hubPage").style.display = "none";
+  document.getElementById("resultWrap").classList.remove("show");
+  document.getElementById("testArea").classList.remove("hidden");
+  document.getElementById("timerBox").classList.remove("hidden");
+  document.getElementById("testSetLabel").innerText = ALL_SETS[setId].name;
+  document.getElementById("testTopic").innerText = ALL_SETS[setId].topic;
 
   startTimer();
   loadQuestion();
 }
 
-function startTimer() {
-  clearInterval(timerInterval);
-  document.getElementById('topTimerBox').classList.remove('danger');
-  updateTimerDisplay();
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    updateTimerDisplay();
-    if (timeLeft <= 60) document.getElementById('topTimerBox').classList.add('danger');
-    if (timeLeft <= 0) {
-      clearInterval(timerInterval);
-      alert('⏰ সময় শেষ!');
-      finishQuiz();
-    }
-  }, 1000);
-}
-
-function updateTimerDisplay() {
-  let m = Math.floor(timeLeft / 60);
-  let s = timeLeft % 60;
-  document.getElementById('timerDisplay').textContent = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
-}
-
 function loadQuestion() {
-  answered = false;
-  const set = QUIZ_SETS[currentSetId];
-  const q = set.questions[cur];
+  const qData = questions[currentQIndex];
+  document.getElementById("qNum").innerText = `প্রশ্ন ${currentQIndex + 1} / ${questions.length}`;
+  document.getElementById("qText").innerText = qData.q;
 
-  document.getElementById('qNum').textContent = `প্রশ্ন ${cur + 1} / ${set.questions.length}`;
-  document.getElementById('qText').textContent = q.q;
-  document.getElementById('progressFill').style.width = `${((cur + 1) / set.questions.length) * 100}%`;
-  document.getElementById('nextBtn').disabled = true;
-  document.getElementById('nextBtn').textContent = (cur === set.questions.length - 1) ? 'ফলাফল দেখো' : 'পরবর্তী →';
-  document.getElementById('expBox').style.display = 'none';
-  document.getElementById('scoreShow').textContent = `Score: ${score} | Wrong: ${wrong}`;
+  const progress = ((currentQIndex) / questions.length) * 100;
+  document.getElementById("progressFill").style.width = `${progress}%`;
+  document.getElementById("scoreShow").innerText = `সঠিক: ${score} | ভুল: ${wrongAnswers}`;
 
-  const optsBox = document.getElementById('optionsBox');
-  optsBox.innerHTML = '';
+  const optsBox = document.getElementById("qOpts");
+  optsBox.innerHTML = "";
+  document.getElementById("explanation").classList.remove("show");
+  document.getElementById("nextBtn").disabled = true;
+  document.getElementById("nextBtn").innerText = (currentQIndex === questions.length - 1) && !isReviewMode ? "টেস্ট জমা দিন" : "পরবর্তী →";
 
-  q.opts.forEach((optText, index) => {
-    const optDiv = document.createElement('div');
-    optDiv.className = 'opt';
-    optDiv.innerHTML = `<div class="opt-circle">${LABELS[index]}</div><div class="opt-text">${optText}</div>`;
-    optDiv.onclick = () => selectOption(index, optDiv);
-    optsBox.appendChild(optDiv);
+  qData.opts.forEach((optText, idx) => {
+    const btn = document.createElement("button");
+    btn.className = "opt";
+    btn.innerHTML = `<div class="opt-circle">${LABELS[idx]}</div> <div class="opt-text">${optText}</div>`;
+
+    if (isReviewMode) {
+      btn.classList.add("disabled");
+      if (idx === qData.ans) btn.classList.add("correct");
+      else if (userAnswers[currentQIndex] === idx) btn.classList.add("wrong");
+    } else {
+      btn.onclick = () => selectOption(btn, idx, qData.ans, qData.exp);
+    }
+    optsBox.appendChild(btn);
   });
+
+  if (isReviewMode) {
+    document.getElementById("explanationText").innerHTML = `<strong>ব্যাখ্যা:</strong> ${qData.exp.replace('ব্যাখ্যা: ', '')}`;
+    document.getElementById("explanation").classList.add("show");
+    document.getElementById("nextBtn").disabled = false;
+    if (currentQIndex === questions.length - 1) {
+      document.getElementById("nextBtn").innerText = "ফলাফলে ফিরুন";
+    }
+  }
 }
 
-function selectOption(selectedIndex, optElement) {
-  if (answered) return;
-  answered = true;
-  userAnswers[cur] = selectedIndex;
+function selectOption(btn, selectedIdx, correctIdx, exp) {
+  const allBtns = document.getElementById("qOpts").querySelectorAll(".opt");
+  allBtns.forEach(b => b.classList.add("disabled"));
 
-  const set = QUIZ_SETS[currentSetId];
-  const q = set.questions[cur];
-  const allOpts = document.getElementById('optionsBox').children;
+  userAnswers[currentQIndex] = selectedIdx; // Save user choice for review
 
-  for (let i = 0; i < allOpts.length; i++) {
-    allOpts[i].classList.add('disabled');
-    if (i === q.ans) allOpts[i].classList.add('opt-correct');
-  }
-
-  if (selectedIndex === q.ans) {
+  if (selectedIdx === correctIdx) {
+    btn.classList.add("correct");
     score++;
   } else {
-    wrong++;
-    optElement.classList.add('opt-wrong');
+    btn.classList.add("wrong");
+    allBtns[correctIdx].classList.add("correct");
+    wrongAnswers++;
   }
 
-  document.getElementById('scoreShow').textContent = `Score: ${score} | Wrong: ${wrong}`;
-  document.getElementById('expBox').innerHTML = q.exp;
-  document.getElementById('expBox').style.display = 'block';
-  document.getElementById('nextBtn').disabled = false;
+  document.getElementById("scoreShow").innerText = `সঠিক: ${score} | ভুল: ${wrongAnswers}`;
+  document.getElementById("explanationText").innerHTML = `<strong>ব্যাখ্যা:</strong> ${exp.replace('ব্যাখ্যা: ', '')}`;
+  document.getElementById("explanation").classList.add("show");
+  document.getElementById("nextBtn").disabled = false;
 }
 
-function nextQuestion() {
-  if (!answered) {
-    userAnswers[cur] = null;
-    skip++;
+function nextQ() {
+  if (isReviewMode && currentQIndex === questions.length - 1) {
+    document.getElementById("testArea").classList.add("hidden");
+    document.getElementById("resultWrap").classList.add("show");
+    return;
   }
-  cur++;
-  if (cur < QUIZ_SETS[currentSetId].questions.length) {
-    loadQuestion();
-  } else {
+
+  if (!isReviewMode && currentQIndex === questions.length - 1) {
     finishQuiz();
+    return;
   }
+
+  currentQIndex++;
+  loadQuestion();
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  const tBox = document.getElementById("timerBox");
+  tBox.classList.remove("danger");
+
+  timerInterval = setInterval(() => {
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      finishQuiz();
+      return;
+    }
+    timeLeft--;
+    const m = Math.floor(timeLeft / 60);
+    const s = timeLeft % 60;
+    document.getElementById("timerDisplay").innerText = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+    if (timeLeft < 60) tBox.classList.add("danger");
+  }, 1000);
 }
 
 function finishQuiz() {
   clearInterval(timerInterval);
-  document.getElementById('quizView').classList.add('hidden');
-  document.getElementById('topTimerBox').classList.add('hidden');
-  document.getElementById('resultView').classList.remove('hidden');
+  document.getElementById("testArea").classList.add("hidden");
+  document.getElementById("timerBox").classList.add("hidden");
+  document.getElementById("resultWrap").classList.add("show");
 
-  const total = QUIZ_SETS[currentSetId].questions.length;
-  const skipped = total - (score + wrong);
-  const pct = Math.round((score / total) * 100);
+  const total = questions.length;
+  const skipped = total - (score + wrongAnswers);
+  const percent = Math.round((score / total) * 100);
 
-  document.getElementById('finalScoreText').textContent = `${pct}%`;
-  document.getElementById('correctCount').textContent = score;
-  document.getElementById('wrongCount').textContent = wrong + skipped;
+  document.getElementById("finalScore").innerText = `${percent}%`;
+  document.getElementById("rbCorrect").innerText = score;
+  document.getElementById("rbWrong").innerText = wrongAnswers + skipped;
 
-  let msg = "চেষ্টা চালিয়ে যাও!";
-  if (pct >= 80) msg = "অসাধারণ পারফরম্যান্স! 🌟";
-  else if (pct >= 60) msg = "খুব ভালো! 👍";
-  document.getElementById('gradeText').textContent = msg;
+  const gradeEl = document.getElementById("resultGrade");
+  if (percent >= 80) { gradeEl.innerText = "🌟 অসাধারণ পারফরম্যান্স!"; gradeEl.style.color = "#1a7a4a"; document.getElementById("resultIcon").innerText = "🏆"; }
+  else if (percent >= 60) { gradeEl.innerText = "👍 খুব ভালো!"; gradeEl.style.color = "#2aad68"; document.getElementById("resultIcon").innerText = "⭐"; }
+  else { gradeEl.innerText = "💪 চেষ্টা চালিয়ে যাও!"; gradeEl.style.color = "#e8730a"; document.getElementById("resultIcon").innerText = "📚"; }
 
-  const remain = MAX_ATTEMPTS - getAttempts(currentUser, currentSetId);
-  document.getElementById('resultAttemptInfo').textContent = `👤 ${currentUser} — ${QUIZ_SETS[currentSetId].name.split(' - ')}: বাকি আছে ${remain} বার...`;
-
-  buildHub();
+  const remaining = MAX_ATTEMPTS - getAttemptCount(currentUser, activeSetId);
+  document.getElementById("attemptInfo").innerHTML = `👤 ${currentUser} — বাকি আছে <strong>${remaining}</strong> বার Test দেওয়ার সুযোগ।`;
 }
 
 function restartQuiz() {
-  startQuiz(currentSetId);
+  if (getAttemptCount(currentUser, activeSetId) >= MAX_ATTEMPTS) {
+    alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
+    return;
+  }
+  startQuiz(activeSetId);
 }
 
-function reviewQuiz() {
-  alert("Review feature is conceptual for this layout. (See logic implementation).");
+function showReview() {
+  isReviewMode = true;
+  currentQIndex = 0;
+  document.getElementById("resultWrap").classList.remove("show");
+  document.getElementById("testArea").classList.remove("hidden");
+  loadQuestion();
 }
-
-window.onload = () => {
-  buildHub();
-};
 </script>
 </body>
 </html>
+
 
 
