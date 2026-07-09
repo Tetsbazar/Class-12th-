@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Bazar — Education 3rd Sem | Ch 7</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ================= COLOR SCHEME & VARIABLES ================= */
+:root {
+  --primary: #1a7a4a;
+  --primary-hover: #2aad68;
+  --accent: #f9a825;
+  --bg-main: #f0faf4;
+  --bg-card: #ffffff;
+  --bg-correct: #e8f7ef;
+  --bg-wrong: #fdf0f0;
+  --text-main: #1c2e24;
+  --text-meta: #5a7a66;
+  --text-exp: #2c4035;
+  --alert-danger: #dc3545;
+  --alert-warning: #e8730a;
+  --border-color: #c5dccb;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: var(--bg-main); min-height: 100vh; color: var(--text-main); }
+.en-font { font-family: 'Syne', sans-serif; }
+
+/* Top Bar */
+.top-bar { background: var(--primary); padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.top-logo { font-size: 1.2rem; font-weight: 800; color: white; cursor: pointer; }
+.top-logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.2); padding: 0.4rem 1rem; border-radius: 8px; color: white; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.timer-box.danger { background: var(--alert-danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+.user-info { font-size: 0.85rem; font-weight: 700; color: white; background: rgba(0,0,0,0.15); padding: 4px 10px; border-radius: 20px;}
+
+.main { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
+
+/* Hub View */
+.hub-header { text-align: center; margin-bottom: 2rem; }
+.hub-header h1 { font-family: 'Tiro Bangla', serif; color: var(--primary); font-size: 1.6rem; margin-bottom: 0.5rem; line-height: 1.4; }
+.hub-header p { color: var(--text-meta); font-size: 0.95rem; font-family: 'Tiro Bangla', serif;}
+
+.set-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+.set-card { background: var(--bg-card); border: 2px solid var(--border-color); border-radius: 12px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s; position: relative; }
+.set-card:hover:not(.locked) { transform: translateY(-3px); border-color: var(--primary); box-shadow: 0 8px 15px rgba(26,122,74,0.1); }
+.set-card.locked { opacity: 0.6; cursor: not-allowed; border-color: var(--alert-danger); }
+.set-card .icon { font-size: 2.2rem; margin-bottom: 0.5rem; }
+.set-card .set-num { font-weight: 700; font-size: 1.1rem; color: var(--primary); }
+.set-card .set-title { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-main); margin: 0.3rem 0 0.8rem; line-height: 1.3; height: 35px; display: flex; align-items: center; justify-content: center;}
+.set-card .set-meta { display: flex; justify-content: center; gap: 1rem; font-size: 0.75rem; color: var(--text-meta); font-weight: bold; }
+.set-card .set-meta span { background: var(--bg-main); padding: 0.2rem 0.6rem; border-radius: 6px; }
+.attempt-badge { position: absolute; top: 10px; right: 10px; background: #ffeeba; color: #856404; font-size: 0.75rem; font-weight: bold; padding: 3px 8px; border-radius: 10px; }
+.attempt-badge.locked-badge { background: var(--alert-danger); color: white; }
+
+/* Quiz View */
+.quiz-info { background: white; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; border: 1px solid var(--border-color); display: flex; gap: 1rem; flex-wrap: wrap; }
+.info-item { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-meta); font-weight: 600;}
+.info-item strong { color: var(--primary); }
+.progress-wrap { background: var(--border-color); border-radius: 4px; height: 6px; margin-bottom: 1.2rem; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--primary); transition: width 0.3s ease; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.q-num { font-size: 0.85rem; font-weight: 700; color: var(--primary); margin-bottom: 0.8rem; }
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; color: var(--text-main); font-weight: 700; line-height: 1.6; margin-bottom: 1.2rem; }
+.opts { display: flex; flex-direction: column; gap: 0.6rem; }
+.opt { display: flex; align-items: center; gap: 12px; padding: 0.8rem 1rem; border: 1.5px solid var(--border-color); border-radius: 10px; background: transparent; cursor: pointer; text-align: left; transition: all 0.2s; width: 100%; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: 600; color: var(--text-main);}
+.opt:not(.disabled):hover { border-color: var(--primary); background: var(--bg-selected); }
+.opt-circle { width: 26px; height: 26px; min-width: 26px; border-radius: 50%; border: 1.5px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; font-family: 'Syne', sans-serif; background: white; }
+.opt.correct { border-color: var(--primary); background: var(--bg-correct); }
+.opt.correct .opt-circle { background: var(--primary); border-color: var(--primary); color: white; }
+.opt.wrong { border-color: var(--alert-danger); background: var(--bg-wrong); }
+.opt.wrong .opt-circle { background: var(--alert-danger); border-color: var(--alert-danger); color: white; }
+.opt.disabled { cursor: default; }
+
+.explanation { background: var(--bg-main); border-left: 4px solid var(--primary); border-radius: 0 8px 8px 0; padding: 1rem; margin-top: 1rem; display: none; }
+.explanation.show { display: block; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-exp); line-height: 1.6; }
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; }
+.score-show { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: var(--text-meta); font-weight: bold;}
+.next-btn { background: var(--primary); color: white; border: none; padding: 0.7rem 1.5rem; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: 0.2s; }
+.next-btn:disabled { background: var(--border-color); cursor: not-allowed; }
+
+/* Result View */
+.result-wrap { background: white; border-radius: 14px; padding: 2rem 1.5rem; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.1); max-width: 500px; margin: 0 auto; display: none; }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; line-height: 1;}
+.result-score { font-size: 3rem; font-weight: 800; color: var(--primary); line-height: 1;}
+.result-total { font-size: 1rem; color: var(--text-meta); font-weight: bold; margin-bottom: 1rem; }
+.result-grade { font-family: 'Tiro Bangla', serif; font-size: 1.2rem; font-weight: 700; color: var(--accent); margin-bottom: 1.5rem; }
+.result-bars { display: flex; justify-content: center; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 10px; padding: 0.8rem; min-width: 80px; }
+.rb-num { font-size: 1.5rem; font-weight: 800; line-height: 1; margin-bottom: 5px;}
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.8rem; color: var(--text-meta); font-weight: bold;}
+.attempt-info-box { background: #fff3cd; color: #856404; padding: 10px; border-radius: 8px; font-size: 0.9rem; font-weight: 700; margin-bottom: 1.5rem; font-family: 'Tiro Bangla', serif; border: 1px solid #ffeeba;}
+.action-btns { display: flex; flex-direction: column; gap: 10px; }
+.action-btns button { width: 100%; padding: 12px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; cursor: pointer; border: none; transition: 0.2s; }
+.btn-retry { background: #17a2b8; color: white; }
+.btn-review { background: #28a745; color: white; }
+.btn-home { background: var(--bg-main); color: var(--text-main); border: 1.5px solid var(--border-color) !important; }
+
+/* Login Modal */
+.login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(3px); }
+.login-overlay.active { display: flex; }
+.login-modal { background: white; padding: 2.5rem 2rem; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); text-align: center; }
+.login-modal h2 { font-family: 'Tiro Bangla', serif; color: var(--primary); font-size: 1.4rem; margin-bottom: 0.5rem; }
+.login-modal p { font-family: 'Tiro Bangla', serif; color: var(--text-meta); font-size: 0.9rem; margin-bottom: 1.5rem; }
+.login-set-name { background: var(--bg-main); color: var(--primary); padding: 10px; border-radius: 8px; font-weight: 700; font-family: 'Tiro Bangla', serif; margin-bottom: 1.5rem; font-size: 0.95rem; }
+.input-group { text-align: left; margin-bottom: 1.2rem; }
+.input-group label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 5px; font-family: 'Tiro Bangla', serif;}
+.input-group input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border-color); border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 0.95rem; outline: none; transition: 0.2s; }
+.input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,122,74,0.1); }
+.login-btn { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
+.login-btn:hover { background: var(--primary-hover); }
+.cancel-btn { width: 100%; background: transparent; color: var(--text-meta); border: none; padding: 10px; margin-top: 5px; font-family: 'Tiro Bangla', serif; font-weight: 700; cursor: pointer;}
+.error-msg { color: var(--alert-danger); font-size: 0.85rem; font-weight: 700; margin-top: 10px; font-family: 'Tiro Bangla', serif; display: none; }
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="top-logo" onclick="location.reload()">Test<span>Bazar</span></div>
+  <div class="timer-box en-font hidden" id="timerBox">⏱ <span id="timerDisplay">10:00</span></div>
+  <div class="user-info en-font hidden" id="userDisplay"></div>
+</header>
+
+<div class="main">
+
+  <!-- ================= LOGIN MODAL ================= -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-modal">
+      <h2>লগইন করুন</h2>
+      <p>Test শুরু করতে আপনার ইউজারনেম ও পাসওয়ার্ড দিন</p>
+      <div class="login-set-name" id="loginSetName">📚 Set 1</div>
+      <div class="input-group">
+        <label>ইউজারনেম</label>
+        <input type="text" id="loginUsername" placeholder="Username">
+      </div>
+      <div class="input-group">
+        <label>পাসওয়ার্ড</label>
+        <input type="password" id="loginPassword" placeholder="Password" onkeydown="if(event.key==='Enter') doLogin()">
+      </div>
+      <button class="login-btn" onclick="doLogin()">✅ লগইন করে Test শুরু করো</button>
+      <button class="cancel-btn" onclick="closeLogin()">বাতিল</button>
+      <div class="error-msg" id="loginError">❌ ভুল ইউজারনেম বা পাসওয়ার্ড! (Index থেকে চেক করুন)</div>
+    </div>
+  </div>
+
+  <!-- ================= HUB PAGE ================= -->
+  <div id="hubPage">
+    <div class="hub-header">
+      <h1>শিক্ষাবিজ্ঞান 3rd Sem Chapter 7:<br>অন্তর্ভুক্তিমূলক শিক্ষা ও অন্তর্ভুক্তিমূলক সমাজ গঠন</h1>
+      <p>মোট ১০টি সেট সম্বলিত কুইজ। Test শুরু করতে সেটে ক্লিক করুন।</p>
+    </div>
+    <div class="set-grid" id="setGrid"></div>
+    <div style="text-align: center; margin-top: 30px;">
+      <button onclick="window.history.back()" style="background: white; border: 1.5px solid var(--border-color); padding: 10px 20px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-weight: bold; cursor: pointer; color: var(--text-meta);">← Main Dashboard-এ ফিরুন</button>
+    </div>
+  </div>
+
+  <!-- ================= QUIZ AREA ================= -->
+  <div id="testArea" class="hidden">
+    <div class="quiz-info">
+      <div class="info-item">🎓 <strong>শিক্ষাবিজ্ঞান</strong> — 3rd Sem | <span id="testSetLabel">Set 1</span></div>
+      <div class="info-item">📝 <span id="testTopic">Topic Name</span></div>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+    <div class="q-card">
+      <div class="q-num en-font" id="qNum">প্রশ্ন ১ / ১৫</div>
+      <div class="q-text" id="qText">Question Text</div>
+      <div class="opts" id="qOpts"></div>
+      <div class="explanation" id="explanation"><p id="explanationText"></p></div>
+
+      <div class="nav-row">
+        <div class="score-show" id="scoreShow">সঠিক: ০ | ভুল: ০</div>
+        <button class="next-btn" id="nextBtn" onclick="nextQ()" disabled>পরবর্তী →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= RESULT AREA ================= -->
+  <div class="result-wrap" id="resultWrap">
+    <div class="result-icon" id="resultIcon">🏆</div>
+    <div class="result-score en-font" id="finalScore">100%</div>
+    <div class="result-total">স্কোর</div>
+    <div class="result-grade" id="resultGrade">অসাধারণ!</div>
+
+    <div class="result-bars">
+      <div class="result-bar">
+        <div class="rb-num en-font" id="rbCorrect" style="color:var(--primary)">15</div>
+        <div class="rb-label">সঠিক</div>
+      </div>
+      <div class="result-bar">
+        <div class="rb-num en-font" id="rbWrong" style="color:var(--alert-danger)">0</div>
+        <div class="rb-label">ভুল/স্কিপ</div>
+      </div>
+    </div>
+
+    <div class="attempt-info-box" id="attemptInfo"></div>
+
+    <div class="action-btns">
+      <button class="btn-retry" onclick="restartQuiz()">আবার চেষ্টা করো</button>
+      <button class="btn-review" onclick="showReview()">উত্তর দেখো</button>
+      <button class="btn-home" onclick="goToHub()">← Hub এ ফিরে যাও</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+//  Global Config & Database
+// ============================================================
+const MAX_ATTEMPTS = 10;
+const TIME_LIMIT = 10 * 60; // 10 Minutes
+const LABELS = ['ক', 'খ', 'গ', 'ঘ'];
+
+// Chapter 7: 10 Sets x 15 Questions = 150 Questions
+const ALL_SETS = {
+  1: {
+    name: 'Set 1', icon: '🤝', topic: 'অন্তর্ভুক্তিমূলক শিক্ষার ধারণা, বৈশিষ্ট্য এবং ক্রিয়াশীল দিক',
+    questions: [
+      {q: '১. বিভিন্নতরভাবে সক্ষম শিক্ষার্থীদের সাধারণ শিক্ষার্থীদের সঙ্গে একত্রে শিক্ষাদানের ব্যবস্থাকে কী বলে?', opts: ['বিশেষ শিক্ষা', 'সামাজিক শিক্ষা', 'অন্তর্ভুক্তিমূলক শিক্ষা', 'নৈতিক শিক্ষা'], ans: 2, exp: 'ব্যাখ্যা: বিভিন্নভাবে সক্ষম শিক্ষার্থীদের সাধারণ শিক্ষার্থীদের সঙ্গে শিক্ষাদানের মাধ্যমে শিক্ষার মূল স্রোতে ফিরিয়ে আনার শিক্ষাই হলো অন্তর্ভুক্তিমূলক শিক্ষা।'},
+      {q: '২. অন্তর্ভুক্তিমূলক শিক্ষার মূল উদ্দেশ্য কী?', opts: ['সাধারণ ও বিশেষ শিক্ষার মধ্যে ব্যবধান হ্রাস', 'সাধারণ ও বিশেষ শিক্ষার মধ্যে ব্যবধান বৃদ্ধি', 'সাধারণ ও বিশেষ শিক্ষাকে সমান করা', 'কোনোটাই নয়'], ans: 0, exp: 'ব্যাখ্যা: এই শিক্ষাব্যবস্থার অন্যতম প্রধান উদ্দেশ্যই হলো সাধারণ শিক্ষা ও বিশেষ শিক্ষার মধ্যে সমস্ত রকমের ব্যবধান ঘুচিয়ে দেওয়া।'},
+      {q: '৩. নীচের কোন্টি অন্তর্ভুক্তিমূলক শিক্ষার বৈশিষ্ট্য?', opts: ['নমনীয় পাঠ্যক্রম', 'সক্রিয় অংশগ্রহণ', 'পেশাগত দক্ষতার বিকাশ', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: নমনীয় পাঠ্যক্রম, পেশাগত দক্ষতার বিকাশ এবং শিক্ষার্থীদের সক্রিয় অংশগ্রহণ—এসবই অন্তর্ভুক্তিমূলক শিক্ষার বৈশিষ্ট্য।'},
+      {q: '৪. নীচের কোন্টি অন্তর্ভুক্তিমূলক শিক্ষার বৈশিষ্ট্য নয়?', opts: ['সামাজিক দক্ষতার বিকাশ', 'নমনীয় পাঠ্যক্রম', 'নেতিবাচক শিক্ষা', 'সক্রিয় অংশগ্রহণ'], ans: 2, exp: 'ব্যাখ্যা: অন্তর্ভুক্তিমূলক শিক্ষায় সর্বদা ইতিবাচক শিক্ষার পরিবেশ সৃষ্টি করা হয়, নেতিবাচক শিক্ষা এর বৈশিষ্ট্য নয়।'},
+      {q: '৫. সমাজের সব ধরনের শিক্ষার্থীর একই শিক্ষাপ্রতিষ্ঠানে শিক্ষালাভের ব্যবস্থা হওয়াকে কী বলে?', opts: ['পেশাগত শিক্ষা', 'সহেতিমূলক শিক্ষা', 'সামাজিক শিক্ষা', 'বিশেষ শিক্ষা'], ans: 1, exp: 'ব্যাখ্যা: সমাজের সব ধরনের শিক্ষার্থীর একই প্রতিষ্ঠানে শিক্ষালাভের ব্যবস্থা হওয়ায় সহেতিমূলক শিক্ষার বিকাশ ঘটে।'},
+      {q: '৬. নীচের কোন্টি অন্তর্ভুক্তিমূলক শিক্ষার নীতি?', opts: ['ব্যক্তিকেন্দ্রিকতা', 'গণতান্ত্রিক পরিবেশ গঠন', 'সমন্বয়', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: অন্তর্ভুক্তিমূলক শিক্ষায় ব্যক্তিকেন্দ্রিকতা, গণতান্ত্রিক পরিবেশ এবং সমন্বয়ের নীতিকে বিশেষ গুরুত্ব প্রদান করা হয়।'},
+      {q: '৭. নীচের কোন্টি অন্তর্ভুক্তিমূলক শিক্ষার ক্রিয়াশীল দিক?', opts: ['প্রয়োজনীয় পরিষেবা', 'সহায়ক পরিষেবা', 'অন্যান্য প্রাসঙ্গিক পরিষেবা', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: অন্তর্ভুক্তিমূলক শিক্ষা প্রধানত তিনটি দিকে ক্রিয়াশীল— প্রয়োজনীয়, সহায়ক এবং অন্যান্য প্রাসঙ্গিক পরিষেবা।'},
+      {q: '৮. অন্তর্ভুক্তিমূলক শিক্ষাকে কার্যকরী করে তুলতে প্রয়োজনীয় পরিষেবা প্রদানে গুরুত্বপূর্ণ ভূমিকা গ্রহণ করে নীচের কোন্টি?', opts: ['শিক্ষক', 'শিক্ষার্থী', 'অভিভাবক', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: শিক্ষাকে কার্যকরী করতে প্রয়োজনীয় পরিষেবা প্রদানে সাধারণ শিক্ষক, শিক্ষার্থী এবং অভিভাবক—সবাই গুরুত্বপূর্ণ ভূমিকা গ্রহণ করে।'},
+      {q: '৯. নীচের কোন্টি প্রয়োজনীয় পরিষেবার বিষয় নয়?', opts: ['শ্রেণিশৃঙ্খলা বজায় রাখা', 'সামাজিক শিক্ষা', 'শিক্ষণ পদ্ধতি', 'প্লাসকারিকুলাম'], ans: 1, exp: 'ব্যাখ্যা: শিক্ষণ পদ্ধতি নির্ধারণ, শ্রেণিশৃঙ্খলা বজায় রাখা এবং প্লাস কারিকুলাম হলো প্রয়োজনীয় পরিষেবা। সামাজিক শিক্ষা এর মধ্যে পড়ে না।'},
+      {q: '১০. অন্তর্ভুক্তিমূলক শিক্ষার অন্যান্য প্রাসঙ্গিক পরিষেবা নীচের কোন্টি?', opts: ['শিশুর স্বাস্থ্য বিবরণী', 'শিক্ষার ব্যয়ভার বহন', 'অভিভাবকদের পরামর্শ প্রদান', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: অন্যান্য প্রাসঙ্গিক পরিষেবার মধ্যে হাসপাতাল ও পুনর্বাসন কেন্দ্রের মতো সংস্থাগুলি স্বাস্থ্য বিবরণী, শিক্ষার ব্যয়ভার ও পরামর্শ প্রদান করে থাকে।'},
+      {q: '১১. অন্তর্ভুক্তিমূলক শিক্ষা কয় প্রকার?', opts: ['তিন', 'চার', 'দুই', 'পাঁচ'], ans: 2, exp: 'ব্যাখ্যা: শিক্ষাবিদগণ একে দুটি ভাগে ভাগ করেছেন— নিয়মিত বা আংশিক অন্তর্ভুক্তিমূলক শিক্ষা এবং সম্পূর্ণ অন্তর্ভুক্তিমূলক শিক্ষা।'},
+      {q: '১২. নিয়মিত বা আংশিক অন্তর্ভুক্তিমূলক শিক্ষা পদ্ধতিকে কোন্ পদ্ধতির প্রায় সমরূপ বলা হয়?', opts: ['বিশেষ শিক্ষার', 'সামাজিক শিক্ষার', 'একীভূতকরণ', 'ব্যতিক্রমী শিক্ষার'], ans: 2, exp: 'ব্যাখ্যা: নিয়মিত বা আংশিক অন্তর্ভুক্তিমূলক শিক্ষা পদ্ধতিকে একীভূতকরণ বা Integration পদ্ধতিরই প্রায় সমরূপ বলা হয়।'},
+      {q: '১৩. প্রতিবন্ধী শিশুদের স্বাভাবিক শিশুদের সঙ্গে দিনের বেশিরভাগ সময় শিক্ষাগ্রহণের পাশাপাশি স্বল্প সময়ের জন্য কোথায় শিক্ষাগ্রহণের জন্য যেতে হয়?', opts: ['বাড়িতে', 'হোমে', 'রিসোর্স কক্ষে', 'হাসপাতালে'], ans: 2, exp: 'ব্যাখ্যা: আংশিক অন্তর্ভুক্তিমূলক শিক্ষায় নির্দিষ্ট কিছু প্রতিবন্ধকতার কারণে স্বল্প সময়ের জন্য তাদের বিশেষ শিক্ষক দ্বারা রিসোর্স কক্ষে শিক্ষা নিতে হয়।'},
+      {q: '১৪. বিশেষ শিক্ষকের তত্ত্বাবধানে বিশেষ শ্রেণিকক্ষে বা রিসোর্সকক্ষে শিক্ষাগ্রহণ নীচের কোন্টির সঙ্গে সম্পর্কযুক্ত?', opts: ['বিশেষ শিক্ষা', 'নিয়মিত অন্তর্ভুক্তিমূলক শিক্ষা', 'সম্পূর্ণ অন্তর্ভুক্তিমূলক শিক্ষা', 'সামাজিক শিক্ষা'], ans: 1, exp: 'ব্যাখ্যা: সাধারণ শ্রেণিকক্ষের পাশাপাশি নির্দিষ্ট সময়ের জন্য রিসোর্স কক্ষে শিক্ষাদানকে নিয়মিত বা আংশিক অন্তর্ভুক্তিমূলক শিক্ষা বলে।'},
+      {q: '১৫. বিশেষ শ্রেণিকক্ষ বা রিসোর্সকক্ষ ছাড়াই শিক্ষাগ্রহণ নীচের কোন্টির সঙ্গে সম্পর্কযুক্ত?', opts: ['সম্পূর্ণ অন্তর্ভুক্তিমূলক শিক্ষা', 'নৈতিক শিক্ষা', 'সামাজিক শিক্ষা', 'নিয়মিত অন্তর্ভুক্তিমূলক শিক্ষা'], ans: 0, exp: 'ব্যাখ্যা: যখন কোনো অবস্থাতেই বিশেষ কোনো ব্যবস্থার প্রয়োজন হয় না এবং সাধারণ শিশুদের সঙ্গেই সম্পূর্ণ শিক্ষা সম্পন্ন হয় তাকে সম্পূর্ণ অন্তর্ভুক্তিমূলক শিক্ষা বলে।'}
+    ]
+  },
+  2: {
+    name: 'Set 2', icon: '🎯', topic: 'অন্তর্ভুক্তিমূলক শিক্ষার গুরুত্ব এবং বাধাসমূহ',
+    questions: [
+      {q: '১. অন্তর্ভুক্তিমূলক শিক্ষার গুরুত্ব নীচের কোন্টি?', opts: ['চাহিদা অনুযায়ী শিক্ষা', 'হীনম্মন্যতাবোধ দূর', 'সুস্থ জীবন গঠন', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: সব ধরনের শিশু সমান সুযোগ পায় বলে তাদের হীনম্মন্যতা দূর হয় এবং সুস্থ জীবন গঠনের পাশাপাশি চাহিদা অনুযায়ী শিক্ষা পায়।'},
+      {q: '২. নীচের কোন্টি অন্তর্ভুক্তিমূলক শিক্ষার গুরুত্ব নয়?', opts: ['সামাজিক অসাম্যতা আনা', 'সুস্থ জীবন গঠন', 'সৃজনধর্মী ক্ষমতার বিকাশ', 'অভিভাবকদের অপরাধবোধ দূর'], ans: 0, exp: 'ব্যাখ্যা: এই শিক্ষার কাজ হলো সামাজিক সমতা আনা, \'সামাজিক অসাম্যতা\' আনা এর উদ্দেশ্য নয়।'},
+      {q: '৩. অন্তর্ভুক্তিমূলক শিক্ষার মাধ্যমে কোন্ ধরনের সুযোগ প্রতিষ্ঠা হয়?', opts: ['সমসুযোগ', 'অসমসুযোগ', 'A ও B উভয়ই', 'কোনোটাই নয়'], ans: 0, exp: 'ব্যাখ্যা: অন্তর্ভুক্তিমূলক শিক্ষার মাধ্যমে সব ধরনের শিশুর জন্য শিক্ষায় সমসুযোগ প্রতিষ্ঠা করা সম্ভব হয়।'},
+      {q: '৪. অন্তর্ভুক্তিমূলক শিক্ষার মাধ্যমে বিভিন্নতরভাবে সক্ষম শিক্ষার্থীরা হয়ে ওঠে—', opts: ['আত্মনির্ভরশীল ও পরনির্ভর', 'আত্মনির্ভরশীল ও স্বাবলম্বী', 'আত্মকেন্দ্রিক ও স্বাবলম্বী', 'আত্মকেন্দ্রিক ও পরনির্ভর'], ans: 1, exp: 'ব্যাখ্যা: এই শিক্ষার মাধ্যমে বিভিন্নভাবে সক্ষম শিক্ষার্থীরা পেশাগত দক্ষতা অর্জন করে আত্মনির্ভরশীল ও স্বাবলম্বী হয়ে ওঠে।'},
+      {q: '৫. বিভিন্নতরভাবে সক্ষম শিশুরা ছবি আঁকতে পারে। এটি কোন্ ধরনের কার্যাবলি?', opts: ['সামাজিক', 'মানসিক', 'নৈতিক', 'সৃজনধর্মী'], ans: 3, exp: 'ব্যাখ্যা: অনেক প্রতিবন্ধী শিক্ষার্থী ছবি আঁকতে বা গান গাইতে পারে, অন্তর্ভুক্তিমূলক শিক্ষার মাধ্যমে তাদের এই সৃজনধর্মী ক্ষমতার বিকাশ ঘটে।'},
+      {q: '৬. নীচের কোন্টি অন্তর্ভুক্তিমূলক শিক্ষার বাধা?', opts: ['পরিষেবার অভাব', 'সামাজিক বাধা', 'অর্থনৈতিক বাধা', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: সামাজিক অবহেলা, দরিদ্রতা বা অর্থনৈতিক বাধা এবং পরিষেবার অভাব হলো অন্তর্ভুক্তিমূলক শিক্ষার প্রসারে প্রধান বাধা।'},
+      {q: '৭. নীচের কোন্টি অন্তর্ভুক্তিমূলক শিক্ষার বাধা নয়?', opts: ['শিশুদের আগ্রহের অভাব', 'প্রশিক্ষণ প্রাপ্ত শিক্ষক সরবরাহ', 'রিসোর্স কক্ষের অভাব', 'বৃত্তিমুখী শিক্ষার অভাব'], ans: 1, exp: 'ব্যাখ্যা: প্রশিক্ষণ প্রাপ্ত শিক্ষকের \'অভাব\' হলো বাধা, কিন্তু প্রশিক্ষণ প্রাপ্ত শিক্ষক \'সরবরাহ\' করা কোনো বাধা হতে পারে না।'},
+      {q: '৮. সাধারণ শিশুদের সঙ্গে প্রতিবন্ধী শিশুদের একই সঙ্গে শিক্ষালাভকে কোন্ ধরনের শিক্ষা বলা হয়?', opts: ['বিশেষ শিক্ষা', 'সমন্বিত শিক্ষা', 'অন্তর্ভুক্তিমূলক শিক্ষা', 'সকলের জন্য শিক্ষা'], ans: 2, exp: 'ব্যাখ্যা: সাধারণ শিশুদের সঙ্গে প্রতিবন্ধী শিশুদের একই সঙ্গে শিক্ষালাভের এই পদ্ধতিটিই হলো অন্তর্ভুক্তিমূলক শিক্ষা।'},
+      {q: '৯. অন্তর্ভুক্তিমূলক শিক্ষার প্রতিবন্ধকতা দূর করতে কাদের সহযোগিতা প্রয়োজন?', opts: ['শিক্ষক', 'অভিভাবক', 'স্বেচ্ছাসেবী সংস্থা', 'সবগুলি'], ans: 3, exp: 'ব্যাখ্যা: এই শিক্ষাব্যবস্থার সমস্যা দূর করতে শিক্ষক, অভিভাবক, স্বেচ্ছাসেবী সংস্থা ও সরকারের সমবেত প্রচেষ্টা একান্ত প্রয়োজন।'},
+      {q: '১০. অন্তর্ভুক্তিমূলক শিক্ষার প্রাতিষ্ঠানিকগত বাধা হল—', opts: ['মনস্তাত্ত্বিক বাধা', 'প্রাতিষ্ঠানিক পরিকাঠামোর অভাব', 'চেক আপ ক্যাম্পের অবহেলা', 'সামাজিক অবহেলা'], ans: 1, exp: 'ব্যাখ্যা: এই শিক্ষাব্যবস্থা পরিচালনার জন্য উপযুক্ত প্রাতিষ্ঠানিক পরিকাঠামো না থাকাই এর একটি অন্যতম প্রাতিষ্ঠানিক বাধা।'},
+      {q: '১১. অন্তর্ভুক্তিমূলক সমাজ গঠনে যে সকল সামাজিক সংস্থা সরাসরি দায়িত্ব পালন করে তাকে কী বলে?', opts: ['অনিয়ন্ত্রিত সংস্থা', 'নিয়ন্ত্রিত সংস্থা', 'প্রথাবহির্ভূত সংস্থা', 'কোনোটাই নয়'], ans: 1, exp: 'ব্যাখ্যা: যে সকল সংস্থা সরাসরি দায়িত্ব পালন করে তাদের নিয়ন্ত্রিত বা প্রত্যক্ষ সংস্থা (Formal Agencies) বলে।'},
+      {q: '১২. অন্তর্ভুক্তিমূলক সমাজ গঠনে নিয়ন্ত্রিত সংস্থা কোন্টি?', opts: ['পরিবার', 'ইলেকট্রনিক মাধ্যম', 'বিবিধ স্বেচ্ছাসেবী সংস্থা', 'রাষ্ট্র'], ans: 3, exp: 'ব্যাখ্যা: রাষ্ট্র, বিদ্যালয়, গ্রন্থাগার ইত্যাদি হলো সমাজ গঠনের নিয়ন্ত্রিত বা প্রত্যক্ষ সংস্থা।'},
+      {q: '১৩. অন্তর্ভুক্তিমূলক সমাজ গঠনে বিদ্যালয়ের ভূমিকা নীচের কোন্টি?', opts: ['রিসোর্স কক্ষের ব্যবস্থা', 'একীকরণ', 'পৃথক পাঠ্যক্রম ব্যবস্থা', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: বিদ্যালয়ের কার্যাবলির মধ্যে রিসোর্স কক্ষের ব্যবস্থা, পৃথক পাঠ্যক্রম এবং শিক্ষক-অভিভাবকের একীকরণ—সবই পড়ে।'},
+      {q: '১৪. নীচের কোন্টি অন্তর্ভুক্তিমূলক সমাজ গঠনে নিয়ন্ত্রিত সংস্থা নয়?', opts: ['বিদ্যালয়', 'ক্লাব', 'পরিবার', 'রাষ্ট্র'], ans: 2, exp: 'ব্যাখ্যা: পরিবার হলো অনিয়ন্ত্রিত বা পরোক্ষ সংস্থা, এটি সরাসরি দায়িত্ব পালন করে না।'},
+      {q: '১৫. বিভিন্নতরভাবে সক্ষম শিশুদের মাঝে মাঝে পরীক্ষা-নিরীক্ষার জন্য কীসের আয়োজন করা হয়?', opts: ['পরামর্শদান ক্যাম্প', 'চেক-আপ ক্যাম্প', 'নির্দেশনা ক্যাম্প', 'আর্থিক সাহায্য দান ক্যাম্প'], ans: 1, exp: 'ব্যাখ্যা: শিশুদের স্বাস্থ্য বা প্রতিবন্ধকতার মাঝে মাঝে পরীক্ষানিরীক্ষার জন্য বিদ্যালয়ে চেক-আপ ক্যাম্পের আয়োজন করা হয়।'}
+    ]
+  },
+  3: {
+    name: 'Set 3', icon: '🏛️', topic: 'রাষ্ট্রের ভূমিকা এবং আইনি প্রকল্পসমূহ',
+    questions: [
+      {q: '১. "Education of the citizens is the heart of the modern State"—কে বলেছেন?', opts: ['ল্যাস্কি', 'জন ডিউই', 'ফ্রয়েবেল', 'গান্ধিজি'], ans: 0, exp: 'ব্যাখ্যা: চিন্তাবিদ ল্যাস্কি (Laski) বলেছেন যে নাগরিকদের শিক্ষাই হলো আধুনিক রাষ্ট্রের হৃৎপিণ্ড।'},
+      {q: '২. ভারতীয় সংবিধানের কত নং ধারায় 14 বছর বয়স পর্যন্ত সকল শিশুকে অবৈতনিক, বাধ্যতামূলক ও সর্বজনীন শিক্ষার ব্যবস্থা করা রাষ্ট্রের দায়িত্ব?', opts: ['46 নং', '15 নং', '45 নং', '340 নং'], ans: 2, exp: 'ব্যাখ্যা: ভারতীয় সংবিধানের ৪৫ নং ধারায় শিশুদের জন্য অবৈতনিক এবং বাধ্যতামূলক সর্বজনীন শিক্ষার কথা বলা হয়েছে।'},
+      {q: '৩. "নাগরিকদের শিক্ষা হল আধুনিক রাষ্ট্রের হৃৎপিণ্ড"—কে বলেছেন?', opts: ['বিবেকানন্দ', 'ল্যাস্কি', 'জন ডিউই', 'গান্ধিজি'], ans: 1, exp: 'ব্যাখ্যা: এটি চিন্তাবিদ ল্যাস্কির বিখ্যাত উক্তি "Education of the citizens is the heart of the modern State"-এর বাংলা রূপ।'},
+      {q: '৪. ভারতীয় সংবিধানের 45 নং ধারায় কত বছর বয়স পর্যন্ত সকল শিশুকে অবৈতনিক, বাধ্যতামূলক ও সর্বজনীন শিক্ষার কথা বলা হয়েছে?', opts: ['10 বছর', '14 বছর', '12 বছর', '13 বছর'], ans: 1, exp: 'ব্যাখ্যা: সংবিধানের ৪৫ নং ধারায় ১৪ বছর বয়স পর্যন্ত সকল শিশুর জন্য শিক্ষার কথা বলা হয়েছে।'},
+      {q: '৫. IEDC-এর সম্পূর্ণ নাম কী?', opts: ['Integrated Educational for Disabled Children', 'Integrated Education of Disabled Children', 'Integrated Education for Disabled Children', 'Integrated Education for Disabled Child'], ans: 2, exp: 'ব্যাখ্যা: IEDC-এর পূর্ণরূপ হলো Integrated Education for Disabled Children।'},
+      {q: '৬. কত খ্রিস্টাব্দ পর্যন্ত IEDC প্রকল্পটি পরিচালনা করেছেন Ministry of Welfare দপ্তর?', opts: ['1974-1980', '1974-1985', '1974-1990', '1974-1982'], ans: 3, exp: 'ব্যাখ্যা: Ministry of Welfare বা কল্যাণ দপ্তর 1974 থেকে 1982 খ্রিস্টাব্দ পর্যন্ত IEDC প্রকল্পটি পরিচালনা করেছে।'},
+      {q: '৭. 1974-1982 খ্রিস্টাব্দ পর্যন্ত IEDC প্রকল্পটি কোন্ দপ্তর পরিচালনা করেছেন?', opts: ['Ministry of Education', 'Ministry of Finance', 'Ministry of Welfare', 'Ministry of Higher Education'], ans: 2, exp: 'ব্যাখ্যা: 1974-1982 খ্রিস্টাব্দ পর্যন্ত IEDC প্রকল্পটি পরিচালনা করেছে Ministry of Welfare (কল্যাণ) দপ্তর।'},
+      {q: '৮. পরবর্তীকালে IEDC-এর নাম পরিবর্তন হয়ে কী হয়?', opts: ['Integrated Education for Disabled', 'Integrated Educational for Disabled', 'Integrated Education of Disabled', 'Integrated Education for abled'], ans: 0, exp: 'ব্যাখ্যা: IEDC-র নাম পরিবর্তিত হয়ে Integrated Education for Disabled (IED) রাখা হয়।'},
+      {q: '৯. IED প্রকল্পের কাজ কোন্টি?', opts: ['প্রতিবন্ধকতা শনাক্তকরণ', 'বিদ্যালয় পরিকাঠামোর উন্নয়ন', 'সামাজিক বিচলন', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: প্রতিবন্ধকতা শনাক্তকরণ, সামাজিক বিচলন, এবং বিদ্যালয়ের পরিকাঠামোর উন্নয়ন ইত্যাদি বিষয় IED প্রকল্পের অন্তর্ভুক্ত করা হয়।'},
+      {q: '১০. IED প্রকল্পের সম্পূর্ণ নাম কী?', opts: ['Integrated Education to Disabled', 'Integrated Education for Disabled', 'Integrated Educational of abled', 'কোনোটাই নয়'], ans: 1, exp: 'ব্যাখ্যা: IED-এর সম্পূর্ণ নাম হলো Integrated Education for Disabled।'},
+      {q: '১১. PIED-এর সম্পূর্ণ নাম কী?', opts: ['Project of Integrated Education on Disabled', 'Project on Integrated Education and Disabled', 'Project on Integrated Education for Disabled', 'Project in Integrated Education for abled'], ans: 2, exp: 'ব্যাখ্যা: PIED-এর সম্পূর্ণ রূপ হলো Project on Integrated Education for Disabled।'},
+      {q: '১২. কোন্ সংস্থার যৌথ উদ্যোগে 1987 খ্রিস্টাব্দে PIED প্রকল্পটি চালু হয়?', opts: ['UGC & NCERT', 'CABE & UNICEF', 'UNICEF & NCERT', 'CABE & UGC'], ans: 2, exp: 'ব্যাখ্যা: 1987 খ্রিস্টাব্দে UNICEF এবং NCERT-এর যৌথ উদ্যোগে PIED প্রকল্পটি চালু হয়।'},
+      {q: '১৩. UNICEF এবং NCERT-এর যৌথ উদ্যোগে কত খ্রিস্টাব্দে PIED প্রকল্পটি চালু হয়?', opts: ['1990', '1995', '1982', '1987'], ans: 3, exp: 'ব্যাখ্যা: 1987 খ্রিস্টাব্দে শিক্ষক প্রশিক্ষণের উদ্দেশ্যে এই প্রকল্পটি গ্রহণ করা হয়েছিল।'},
+      {q: '১৪. অন্তর্ভুক্ত শিক্ষার জন্য PIED-এর মূল লক্ষ্য কী ছিল?', opts: ['বিদ্যালয় পরিকাঠামো তৈরি', 'অভিভাবকদের পরামর্শদান', 'শিক্ষক প্রশিক্ষণ', 'প্রতিবন্ধকতা শনাক্তকরণ'], ans: 2, exp: 'ব্যাখ্যা: PIED প্রকল্পের মূল লক্ষ্য ছিল অন্তর্ভুক্তিমূলক শিক্ষার জন্য শিক্ষক প্রশিক্ষণ কর্মসূচির আয়োজন করা।'},
+      {q: '১৫. PIED প্রকল্পটি প্রাথমিকভাবে দেশের কয়টি ব্লকে চালু হয়?', opts: ['29টি', '25টি', '10টি', '15টি'], ans: 2, exp: 'ব্যাখ্যা: এই প্রকল্পটি প্রাথমিকভাবে দেশের ১০টি ব্লকে চালু করা হয়েছিল।'}
+    ]
+  },
+  4: {
+    name: 'Set 4', icon: '📝', topic: 'রাষ্ট্রের অন্যান্য প্রকল্প এবং শিক্ষানীতিসমূহ',
+    questions: [
+      {q: '১. কত খ্রিস্টাব্দে PIED প্রকল্পটি রাজ্যে ছড়িয়ে পড়ে?', opts: ['2003', '2002', '2004', '2005'], ans: 1, exp: 'ব্যাখ্যা: প্রাথমিকভাবে ১০টি ব্লকে শুরু হলেও ২০০২ খ্রিস্টাব্দে PIED প্রকল্পটি ২৭টি রাজ্যে ছড়িয়ে পড়ে।'},
+      {q: '২. PIED 2002 খ্রিস্টাব্দে কয়টি রাজ্যে ছড়িয়ে পড়ে?', opts: ['25টি', '10টি', '27টি', '28টি'], ans: 2, exp: 'ব্যাখ্যা: ২০০২ খ্রিস্টাব্দে PIED প্রকল্পটি দেশের ২৭টি রাজ্যে প্রসারিত হয়।'},
+      {q: '৩. DPEP-এর সম্পূর্ণ নাম কী?', opts: ['District Primary Education Project', 'District Primary Education Programme', 'Distric Primary Education Programme', 'কোনোটাই নয়'], ans: 1, exp: 'ব্যাখ্যা: DPEP-এর সম্পূর্ণ নাম হলো জেলা প্রাথমিক শিক্ষা কর্মসূচি বা District Primary Education Programme।'},
+      {q: '৪. কত খ্রিস্টাব্দে DPEP প্রকল্পটি গৃহীত হয়?', opts: ['1955', '1986', '1990', '1995'], ans: 3, exp: 'ব্যাখ্যা: প্রাথমিক শিক্ষার সর্বজনীনতার উদ্দেশ্যে 1995 খ্রিস্টাব্দে DPEP প্রকল্পটি গৃহীত হয়।'},
+      {q: '৫. DPEP প্রকল্পে কেন্দ্রীয় সরকার ও রাজ্য সরকারের আর্থিক সাহায্যের শতকরা হার কত?', opts: ['80% & 20%', '85% & 15%', '75% & 25%', '60% & 40%'], ans: 1, exp: 'ব্যাখ্যা: এই প্রকল্পে কেন্দ্রীয় সরকার 85% এবং রাজ্য সরকার 15% আর্থিক অনুদান প্রদান করেছিল।'},
+      {q: '৬. DPEP প্রকল্পের মূল উদ্দেশ্য কী?', opts: ['প্রতিবন্ধী শিশুদের শিক্ষাদান', 'প্রাথমিক শিক্ষাদান', 'সকলের জন্য শিক্ষা', 'অন্তর্ভুক্তিমূলক শিক্ষা'], ans: 2, exp: 'ব্যাখ্যা: প্রতিবন্ধী শিশু সহ সকল শিশুর প্রাথমিক শিক্ষার সর্বজনীনতার উদ্দেশ্যে "সকলের জন্য শিক্ষা"-কে কার্যকরী করাই ছিল এই প্রকল্পের লক্ষ্য।'},
+      {q: '৭. কত খ্রিস্টাব্দে Janshala প্রকল্পটি গৃহীত হয়?', opts: ['1986', '1985', '1990', '1998'], ans: 3, exp: 'ব্যাখ্যা: ভারত সরকার ও কয়েকটি আন্তর্জাতিক সংস্থার যৌথ উদ্যোগে 1998 খ্রিস্টাব্দে জনশালা (Janshala) প্রকল্পটি গৃহীত হয়।'},
+      {q: '৮. কোন্ সংস্থার উদ্যোগে Janshala প্রকল্পটি গৃহীত হয়?', opts: ['UNESCO & UNICEF', 'UNDP & ILO', 'UNFPA', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: ভারত সরকারের পাশাপাশি UNESCO, UNICEF, UNDP, ILO এবং UNFPA-এর যৌথ উদ্যোগে এটি গঠিত হয়েছিল।'},
+      {q: '৯. কোন্ প্রকল্পের মাধ্যমে সর্বজনীন প্রাথমিক শিক্ষার মাধ্যমে অন্তর্ভুক্তিমূলক শিক্ষার প্রসার ঘটানো হয়?', opts: ['IEDC', 'PIED', 'Janshala', 'WHO'], ans: 2, exp: 'ব্যাখ্যা: জনশালা (Janshala) প্রকল্পের মূল লক্ষ্য ছিল সর্বজনীন প্রাথমিক শিক্ষার মাধ্যমে অন্তর্ভুক্তিমূলক শিক্ষার প্রসার ঘটানো।'},
+      {q: '১০. Janshala প্রকল্পে কয়টি রাজ্য ও গ্রামকে বেছে নেওয়া হয়েছিল?', opts: ['10টি এবং 120টি', '9টি এবং 120টি', '12টি এবং 100টি', '9টি এবং 95টি'], ans: 1, exp: 'ব্যাখ্যা: শিশু শ্রমিকের আধিক্য আছে এমন ৯টি রাজ্য এবং ১২০টি গ্রামকে এই প্রকল্পের জন্য বেছে নেওয়া হয়েছিল।'},
+      {q: '১১. SSA-এর সম্পূর্ণ নাম কোন্টি?', opts: ['Sarba Shiksha Abhiman', 'Sarba Shiksha Abhijan', 'Scheme of Shiksha Abhijan', 'Sarva Shiksha Abhiyan'], ans: 3, exp: 'ব্যাখ্যা: SSA-এর সম্পূর্ণ রূপ হলো সর্বশিক্ষা অভিযান বা Sarva Shiksha Abhiyan।'},
+      {q: '১২. সর্বশিক্ষা অভিযান প্রকল্পটি কত খ্রিস্টাব্দে গৃহীত হয়?', opts: ['2000', '2002', '2003', '2001'], ans: 3, exp: 'ব্যাখ্যা: সর্বশিক্ষা অভিযান (SSA) প্রকল্পটি 2001 খ্রিস্টাব্দে গৃহীত হয়েছিল।'},
+      {q: '১৩. সর্বশিক্ষা অভিযান প্রকল্পটি কত খ্রিস্টাব্দে চালু হয়?', opts: ['2003', '2000', '2002', '2001'], ans: 2, exp: 'ব্যাখ্যা: 2001 সালে গৃহীত হলেও প্রকল্পটি 2002 খ্রিস্টাব্দ থেকে কার্যকরী বা চালু হয়।'},
+      {q: '১৪. SSA প্রকল্পে একজন প্রতিবন্ধী শিশুকে শিক্ষাদানের জন্য বার্ষিক কত টাকা বরাদ্দ করা হয়েছিল?', opts: ['1000', '1200', '800', '500'], ans: 1, exp: 'ব্যাখ্যা: এই প্রকল্পে একজন অক্ষম বা প্রতিবন্ধী শিশুকে শিক্ষা প্রদানের জন্য বার্ষিক ১২০০ টাকা বরাদ্দ করা হয়েছিল।'},
+      {q: '১৫. অন্তর্ভুক্তিমূলক সমাজ গঠনে কোঠারি কমিশনের সুপারিশ কী ছিল?', opts: ['শিশুদের মধ্যে পারস্পরিক বোঝাপড়া', 'সহযোগিতাবোধ', 'সহমর্মিতাবোধ বৃদ্ধি', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: কোঠারি কমিশন বলেছিল অন্তর্ভুক্তিমূলক ব্যবস্থার মাধ্যমে সকল শিশুর মধ্যে বোঝাপড়া, সহযোগিতাবোধ এবং সহমর্মিতাবোধ বৃদ্ধি পাবে।'}
+    ]
+  },
+  5: {
+    name: 'Set 5', icon: '⚖️', topic: 'প্রতিবন্ধীদের জন্য রচিত আইন এবং অনিয়ন্ত্রিত সংস্থার ভূমিকা',
+    questions: [
+      {q: '১. 1986 খ্রিস্টাব্দের জাতীয় শিক্ষানীতিতে কোন্ বিষয়টি দূরীকরণের ওপর গুরুত্ব প্রদান করা হয়?', opts: ['আর্থিক সমস্যা', 'সামাজিক সমস্যা', 'অসাম্য', 'অবমূল্যায়ন'], ans: 2, exp: 'ব্যাখ্যা: 1986 খ্রিস্টাব্দের জাতীয় শিক্ষানীতিতে শিক্ষাক্ষেত্রে অসাম্য দূরীকরণ এবং সমসুযোগ নিশ্চিতকরণের ওপর গুরুত্ব প্রদান করা হয়েছিল।'},
+      {q: '২. 1986 খ্রিস্টাব্দের জাতীয় শিক্ষানীতিতে অন্তর্ভুক্তিমূলক শিক্ষা প্রসারে কোন্ বিষয়টির উপর গুরুত্ব প্রদান করা হয়েছে?', opts: ['আবাসিক বিদ্যালয় স্থাপন', 'বৃত্তিমুখী প্রশিক্ষণের ব্যবস্থা', 'শিক্ষক প্রশিক্ষণ', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: শিক্ষানীতিতে আবাসিক বিশেষ বিদ্যালয় স্থাপন, বৃত্তিমুখী প্রশিক্ষণ এবং শিক্ষক প্রশিক্ষণ ব্যবস্থাকে গড়ে তোলার ওপর গুরুত্ব দেওয়া হয়েছে।'},
+      {q: '৩. The Mental Health Act কত খ্রিস্টাব্দে হয়েছিল?', opts: ['1992', '1995', '1999', '1987'], ans: 3, exp: 'ব্যাখ্যা: প্রতিবন্ধীদের শিক্ষার প্রসারে রচিত \'The Mental Health Act\' আইনটি 1987 খ্রিস্টাব্দে পাস হয়।'},
+      {q: '৪. The Rehabilitation Council of India (RCI) Act কত সালে পাস হয়?', opts: ['1986', '1992', '1995', '1999'], ans: 1, exp: 'ব্যাখ্যা: প্রতিবন্ধীদের বিশেষ শিক্ষা ও পুনর্বাসনের জন্য 1992 খ্রিস্টাব্দে RCI Act বা Rehabilitation Council of India আইন পাস হয়।'},
+      {q: '৫. Persons with Disabilities (PWD) Act কত খ্রিস্টাব্দে পাস হয়?', opts: ['1987', '1992', '1995', '1999'], ans: 2, exp: 'ব্যাখ্যা: প্রতিবন্ধী ব্যক্তিদের অধিকার সুনিশ্চিত করতে 1995 খ্রিস্টাব্দে Persons with Disabilities (PWD) Act পাস করা হয়েছিল।'},
+      {q: '৬. National Trust Act কত সালে পাস হয়?', opts: ['1986', '1992', '1995', '1999'], ans: 3, exp: 'ব্যাখ্যা: অটিজম, সেরিব্রাল পালসি ও মানসিক প্রতিবন্ধীদের কল্যাণে 1999 সালে National Trust Act পাস হয়।'},
+      {q: '৭. RPWD, Act-এর সম্পূর্ণ নাম কী?', opts: ['The Rights of Persons with Disable Act', 'The Rights on Persons with Disabilities Act', 'The Rights of Persons with Disabilities Act', 'The Rights for Persons with Disabilities Act'], ans: 2, exp: 'ব্যাখ্যা: RPWD-এর সম্পূর্ণ নাম হলো The Rights of Persons with Disabilities Act।'},
+      {q: '৮. RPWD, Act কত খ্রিস্টাব্দে পাস হয়েছিল?', opts: ['1987', '1995', '1992', '2016'], ans: 3, exp: 'ব্যাখ্যা: প্রতিবন্ধীদের অধিকার রক্ষার জন্য 2016 খ্রিস্টাব্দে RPWD আইনটি পাস হয়।'},
+      {q: '৯. অন্তর্ভুক্তিমূলক সমাজ গঠনে পরোক্ষ সংস্থা কোন্টি?', opts: ['পরিবার', 'গণমাধ্যম', 'বিবিধ স্বেচ্ছাসেবী সংস্থা', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: পরিবার, গণমাধ্যম (সংবাদপত্র, দূরদর্শন), এবং স্বেচ্ছাসেবী সংস্থা—সবাই পরোক্ষভাবে অন্তর্ভুক্তিমূলক সমাজ গঠনে কাজ করে।'},
+      {q: '১০. যে সকল সামাজিক প্রতিষ্ঠান অন্তর্ভুক্তিমূলক সমাজ গঠনে সরাসরি দায়িত্ব পালন করে না তাকে কোন্ ধরনের সংস্থা বলা হয়?', opts: ['নিয়ন্ত্রিত সংস্থা', 'অনিয়ন্ত্রিত সংস্থা', 'বিধিমুক্ত সংস্থা', 'কোনোটাই নয়'], ans: 1, exp: 'ব্যাখ্যা: যারা শিক্ষার উদ্দেশ্য পূরণে সরাসরি দায়িত্ব পালন করে না কিন্তু পরোক্ষভাবে সাহায্য করে, তাদের অনিয়ন্ত্রিত বা পরোক্ষ সংস্থা বলে।'},
+      {q: '১১. অন্তর্ভুক্তিমূলক সমাজ গঠনে পরিবারের ভূমিকা কোন্টি?', opts: ['বিদ্যালয়ের সঙ্গে যোগাযোগ', 'অসীম ধৈর্য রাখা', 'প্রতিবন্ধকতার মাত্রা নির্ধারণ', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: শিশুর প্রতিবন্ধকতা চিহ্নিতকরণ, মাত্রা নির্ধারণ, অসীম ধৈর্য রাখা এবং বিদ্যালয়ের সঙ্গে যোগাযোগ রাখা—এসবই পরিবারের ভূমিকা।'},
+      {q: '১২. নীচের কোন্টি গণমাধ্যম?', opts: ['সংবাদপত্র', 'চলচ্চিত্র', 'টেলিভিশন', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: সংবাদপত্র, টেলিভিশন (দূরদর্শন), চলচ্চিত্র, বেতার ইত্যাদি হলো শক্তিশালী গণমাধ্যম।'},
+      {q: '১৩. অন্তর্ভুক্তিমূলক সমাজ গঠনে সংবাদপত্রের ভূমিকা কোন্টি?', opts: ['মানুষের বঞ্চনা ও অবিচারের কথা তুলে ধরা', 'মানুষের মতামত প্রকাশ', 'মানুষের সমস্যার প্রতি দৃষ্টি আকর্ষণ করা', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: সংবাদপত্র সমাজের বিভিন্ন শ্রেণির প্রতি অবিচার, সমস্যার কথা তুলে ধরে এবং চিঠিপত্রের মাধ্যমে মত প্রকাশের সুযোগ করে দিয়ে জনমত গঠন করে।'},
+      {q: '১৪. প্রতিবন্ধীদের অধিকার সুনিশ্চিত করতে 2016 খ্রিস্টাব্দে কোন্ আইনটি পাস হয়?', opts: ['PWD Act', 'The Rights of Persons with Disabilities Act (RPWD)', 'RCI Act', 'Mental Health Act'], ans: 1, exp: 'ব্যাখ্যা: 2016 খ্রিস্টাব্দে The Rights of Persons with Disabilities Act বা RPWD আইনটি পাস হয়।'},
+      {q: '১৫. অন্তর্ভুক্তিমূলক সমাজ গঠনে বিদ্যালয় কী ধরনের সংস্থা?', opts: ['নিয়ন্ত্রিত সংস্থা', 'অনিয়ন্ত্রিত সংস্থা', 'পরোক্ষ সংস্থা', 'কোনোটিই নয়'], ans: 0, exp: 'ব্যাখ্যা: বিদ্যালয় সরাসরি শিক্ষার উদ্দেশ্য পূরণে কাজ করে, তাই এটি নিয়ন্ত্রিত বা প্রত্যক্ষ সংস্থা।'}
+    ]
+  },
+  6: {
+    name: 'Set 6', icon: '🌍', topic: 'আন্তর্জাতিক ও জাতীয় সংস্থা (NGO) সম্পর্কিত',
+    questions: [
+      {q: '১. 1839 খ্রিস্টাব্দে সর্বপ্রথম কোন্ ধরনের সংস্থা গঠিত হয়েছিল?', opts: ['সরকারি শিক্ষা সংস্থা', 'আন্তর্জাতিক NGO', 'জাতীয় মানবাধিকার কমিশন', 'বয়স্ক শিক্ষা কেন্দ্র'], ans: 1, exp: 'ব্যাখ্যা: পাঠ্যবইয়ের তথ্য অনুযায়ী, 1839 খ্রিস্টাব্দে সর্বপ্রথম আন্তর্জাতিক NGO বা বেসরকারি সংস্থা গঠিত হয়।'},
+      {q: '২. ভারতে কত খ্রিস্টাব্দে প্রথম NGO বা বেসরকারি সংস্থা প্রতিষ্ঠা করা হয়?', opts: ['1910', '1917', '1925', '1946'], ans: 1, exp: 'ব্যাখ্যা: ভারতে 1917 খ্রিস্টাব্দে প্রথম NGO প্রতিষ্ঠা করা হয়েছিল।'},
+      {q: '৩. ভারতে প্রথম NGO বা বেসরকারি সংস্থা কে প্রতিষ্ঠা করেছিলেন?', opts: ['রবীন্দ্রনাথ ঠাকুর', 'স্বামী বিবেকানন্দ', 'গগনেন্দ্রনাথ ঠাকুর', 'রাজা রামমোহন রায়'], ans: 2, exp: 'ব্যাখ্যা: ভারতে 1917 খ্রিস্টাব্দে গগনেন্দ্রনাথ ঠাকুর সর্বপ্রথম NGO প্রতিষ্ঠা করেছিলেন।'},
+      {q: '৪. সমাজে কুসংস্কার দূরীকরণ এবং বিজ্ঞানমনস্কতা বৃদ্ধিতে কাজ করে নীচের কোন্ স্বেচ্ছাসেবী সংস্থা?', opts: ['লায়ন্স ক্লাব', 'রামকৃষ্ণ মিশন', 'বিজ্ঞান মঞ্চ', 'ভারত সেবাশ্রম'], ans: 2, exp: 'ব্যাখ্যা: প্রতিবন্ধী ও পশ্চাৎপদ সমাজের স্বার্থে কুসংস্কার দূরীকরণ ও বিজ্ঞানমনস্কতা বৃদ্ধিতে \'বিজ্ঞান মঞ্চ\' নামক সংস্থাটি কাজ করে।'},
+      {q: '৫. রামকৃষ্ণ মিশন কী ধরনের সংস্থা?', opts: ['সরকারি', 'বেসরকারি/স্বেচ্ছাসেবী', 'আন্তর্জাতিক', 'বাণিজ্যিক'], ans: 1, exp: 'ব্যাখ্যা: রামকৃষ্ণ মিশন ভারতের একটি অন্যতম প্রধান বেসরকারি বা স্বেচ্ছাসেবী (NGO) সংস্থা যা সমাজ উন্নয়নে কাজ করে।'},
+      {q: '৬. অন্তর্ভুক্তিমূলক শিক্ষায় NGO-র একটি প্রধান কাজ কী?', opts: ['বিদ্যালয় নির্মাণ', 'প্রতিবন্ধী শিশুদের চিহ্নিতকরণ ও সাহায্য', 'শুধু অর্থদান', 'কোনোটিই নয়'], ans: 1, exp: 'ব্যাখ্যা: স্বেচ্ছাসেবী সংস্থাগুলি প্রতিবন্ধী শিশুদের চিহ্নিতকরণ, প্রশিক্ষণ ও পুনর্বাসনের ব্যবস্থা করে অন্তর্ভুক্তিমূলক শিক্ষায় সাহায্য করে।'},
+      {q: '৭. আন্তর্জাতিক স্তরে কর্মরত একটি স্বেচ্ছাসেবী সংস্থার উদাহরণ হলো—', opts: ['VSO', 'ADD', 'SCUK', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: VSO, ADD, SCUK (Save the Children, UK) প্রভৃতি হলো আন্তর্জাতিক স্তরে কর্মরত স্বেচ্ছাসেবী সংস্থা।'},
+      {q: '৮. VSO কোন্ স্তরের স্বেচ্ছাসেবী সংস্থা?', opts: ['রাজ্য স্তরের', 'জাতীয় স্তরের', 'আন্তর্জাতিক স্তরের', 'স্থানীয় স্তরের'], ans: 2, exp: 'ব্যাখ্যা: Voluntary Service Overseas (VSO) হলো একটি আন্তর্জাতিক স্তরের NGO যা অন্তর্ভুক্তিমূলক শিক্ষার প্রসারে কাজ করে।'},
+      {q: '৯. নীচের কোনটি আন্তর্জাতিক স্তরের NGO নয়?', opts: ['SCUK', 'ADD', 'SIDH', 'NAB'], ans: 3, exp: 'ব্যাখ্যা: National Association for the Blinds (NAB) হলো একটি জাতীয় স্তরের সংস্থা, এটি আন্তর্জাতিক সংস্থা নয়।'},
+      {q: '১০. SCUK-এর সম্পূর্ণ নাম কী?', opts: ['Social Children, UK', 'Save the children, UK', 'Save the Child, UK', 'Serve the children, UK'], ans: 1, exp: 'ব্যাখ্যা: SCUK-এর সম্পূর্ণ নাম হলো Save the children, UK, যা আন্তর্জাতিক স্তরে কাজ করে।'},
+      {q: '১১. SIDH-এর সম্পূর্ণ নাম কী?', opts: ['Society for the Integrated Development of Himalayas', 'Social Integrated Development of Himalayas', 'Society of the Internal Development of Himalayas', 'Scheme for the Integrated Development of Himalayas'], ans: 0, exp: 'ব্যাখ্যা: ভারতবর্ষে কর্মরত এই আন্তর্জাতিক সংস্থাটির নাম হলো Society for the Integrated Development of Himalayas।'},
+      {q: '১২. নীচের কোন্টি ভারতের একটি জাতীয় স্তরের স্বেচ্ছাসেবী সংস্থা?', opts: ['VSO', 'Spastics Society of India (SSI)', 'UNICEF', 'SCUK'], ans: 1, exp: 'ব্যাখ্যা: Spastics Society of India (SSI) হলো ভারতের জাতীয় ও স্থানীয় স্তরের একটি অন্যতম NGO।'},
+      {q: '১৩. NAB-এর সম্পূর্ণ নাম কী?', opts: ['National Association for the Blinds', 'National Agency for Blinds', 'National Association for Boys', 'National Academy for the Blinds'], ans: 0, exp: 'ব্যাখ্যা: দৃষ্টিহীনদের উন্নয়নে কর্মরত জাতীয় সংস্থা NAB-এর সম্পূর্ণ রূপ হলো National Association for the Blinds।'},
+      {q: '১৪. SSI-এর সম্পূর্ণ নাম কী?', opts: ['Spastics Society of India', 'Social Society of India', 'Standard Society of India', 'Special Society of India'], ans: 0, exp: 'ব্যাখ্যা: শারীরিক ও স্নায়বিক প্রতিবন্ধীদের কল্যাণে কাজ করা ভারতের একটি সংস্থা হলো Spastics Society of India।'},
+      {q: '১৫. কত খ্রিস্টাব্দ থেকে প্রতিবছর বিশ্ব প্রতিবন্ধী দিবস পালিত হয়ে আসছে?', opts: ['1986', '1990', '1992', '1995'], ans: 2, exp: 'ব্যাখ্যা: 1992 খ্রিস্টাব্দের 3 ডিসেম্বর থেকে সারা বিশ্বে প্রতিবছর বিশ্ব প্রতিবন্ধী দিবস পালিত হয়ে আসছে।'}
+    ]
+  },
+  7: {
+    name: 'Set 7', icon: '📡', topic: 'গণমাধ্যম ও অনিয়ন্ত্রিত সংস্থার ভূমিকা',
+    questions: [
+      {q: '১. যে সকল সংস্থা শিক্ষার উদ্দেশ্য পূরণে সরাসরি দায়িত্ব পালন না করে পরোক্ষভাবে সাহায্য করে, তাদের কী বলা হয়?', opts: ['নিয়ন্ত্রিত সংস্থা', 'অনিয়ন্ত্রিত সংস্থা', 'বিশেষ সংস্থা', 'প্রথাগত সংস্থা'], ans: 1, exp: 'ব্যাখ্যা: পরিবার, গণমাধ্যম বা স্বেচ্ছাসেবী সংস্থার মতো প্রতিষ্ঠানগুলিকে অনিয়ন্ত্রিত বা পরোক্ষ সংস্থা বলা হয়।'},
+      {q: '২. শিশুর প্রতিবন্ধকতা চিহ্নিতকরণের প্রথম দায়িত্ব কাদের?', opts: ['শিক্ষকের', 'চিকিৎসকের', 'পিতামাতার', 'গণমাধ্যমের'], ans: 2, exp: 'ব্যাখ্যা: শিশুর কোনো অস্বাভাবিকতা দেখা গেলে পিতামাতার প্রথম কাজ হলো তাকে চিকিৎসকের কাছে নিয়ে গিয়ে প্রতিবন্ধকতা চিহ্নিত করা।'},
+      {q: '৩. চিকিৎসকের পরামর্শ অনুযায়ী শিশুর প্রতিবন্ধকতার মাত্রা (মৃদু, মধ্যম বা গুরুতর) নির্ধারণ করার পর পরিবারের প্রধান কাজ কী?', opts: ['ঘরে বসিয়ে রাখা', 'সেই অনুযায়ী শিক্ষা কর্মসূচি গ্রহণ করা', 'আবাসিক হোমে পাঠানো', 'শাস্তি দেওয়া'], ans: 1, exp: 'ব্যাখ্যা: শিশুর প্রতিবন্ধকতার মাত্রা নির্ধারণের পর পিতামাতাকে সেই অনুযায়ী উপযুক্ত শিক্ষা কর্মসূচি গ্রহণ করতে হয়।'},
+      {q: '৪. প্রতিবন্ধী শিশুর হীনম্মন্যতা দূর করতে পরিবারের উচিত—', opts: ['অবহেলা করা', 'উৎসাহ ও ভালোবাসা দেওয়া', 'লুকিয়ে রাখা', 'বকাঝকা করা'], ans: 1, exp: 'ব্যাখ্যা: পরিবারের স্নেহ, ভালোবাসা ও উৎসাহ একটি প্রতিবন্ধী শিশুর হীনম্মন্যতা দূর করে তাকে আত্মবিশ্বাসী করে তোলে।'},
+      {q: '৫. গণমাধ্যম অন্তর্ভুক্তিমূলক শিক্ষায় কী ভূমিকা পালন করে?', opts: ['জনসচেতনতা বৃদ্ধি', 'কুসংস্কার ছড়ানো', 'শিশুদের ভয় দেখানো', 'কোনোটিই নয়'], ans: 0, exp: 'ব্যাখ্যা: দূরদর্শন, রেডিও ও সংবাদপত্রের মতো গণমাধ্যমগুলি প্রতিবন্ধী অধিকার সম্পর্কে জনসচেতনতা বৃদ্ধিতে অপরিহার্য ভূমিকা নেয়।'},
+      {q: '৬. দূরদর্শন বা টেলিভিশনে শিক্ষামূলক সম্প্রচারের মাধ্যমে প্রতিবন্ধী শিশুরা—', opts: ['আনন্দ পায়', 'ঘরে বসেই অনেক কিছু শিখতে পারে', 'A ও B উভয়ই', 'সময় নষ্ট করে'], ans: 2, exp: 'ব্যাখ্যা: টেলিভিশন একটি দৃশ্য-শ্রাব্য মাধ্যম যা প্রতিবন্ধী শিশুদের আনন্দ দেওয়ার পাশাপাশি ঘরে বসেই অনেক কিছু শিখতে সাহায্য করে।'},
+      {q: '৭. বেতার বা রেডিও অন্তর্ভুক্তিমূলক শিক্ষায় কাদের জন্য বেশি উপযোগী?', opts: ['দৃষ্টি প্রতিবন্ধীদের জন্য', 'শ্রবণ প্রতিবন্ধীদের জন্য', 'অস্থি প্রতিবন্ধীদের জন্য', 'মানসিক প্রতিবন্ধীদের জন্য'], ans: 0, exp: 'ব্যাখ্যা: রেডিও একটি শ্রুতি মাধ্যম, তাই দৃষ্টি প্রতিবন্ধী শিশুরা এর মাধ্যমে সহজে শিক্ষামূলক অনুষ্ঠান শুনে জ্ঞান অর্জন করতে পারে।'},
+      {q: '৮. ইলেকট্রনিক মাধ্যমের সাহায্যে শিক্ষার্থীরা সহজেই কী ধরনের শিক্ষা লাভ করতে পারে?', opts: ['কেবল প্রথাগত শিক্ষা', 'দূরাগত ও মুক্ত শিক্ষা', 'কেবল বিশেষ শিক্ষা', 'প্রাচীন শিক্ষা'], ans: 1, exp: 'ব্যাখ্যা: ইলেকট্রনিক মাধ্যমের (যেমন স্মার্টফোন/ইন্টারনেট) সাহায্যে শিক্ষার্থীরা সহজে দূরাগত ও মুক্ত শিক্ষা লাভ করতে পারে।'},
+      {q: '৯. কম সময়ে ও কম খরচে তথ্য আদানপ্রদানের জন্য কোন্ মাধ্যমটি সবচেয়ে বেশি উপযোগী?', opts: ['ইলেকট্রনিক মাধ্যম', 'সংবাদপত্র', 'ডাকযোগ', 'বেতার'], ans: 0, exp: 'ব্যাখ্যা: ইলেকট্রনিক মাধ্যমের সাহায্যে মানুষ অত্যন্ত কম সময়ে ও কম খরচে নিজেদের সমস্যার কথা আদানপ্রদান করতে পারে।'},
+      {q: '১০. অন্তর্ভুক্তিমূলক সমাজ গঠনে ক্লাব বা স্থানীয় সংঘের ভূমিকা হলো—', opts: ['সামাজিকীকরণ', 'খেলাধুলার সুযোগ', 'সাংস্কৃতিক বিকাশ', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: স্থানীয় ক্লাব বা সংঘ শিশুদের খেলাধুলা, সাংস্কৃতিক অনুষ্ঠান এবং সামাজিকীকরণের মাধ্যমে অন্তর্ভুক্তিমূলক সমাজ গঠনে সাহায্য করে।'},
+      {q: '১১. স্বেচ্ছাসেবী সংস্থা বা NGO-গুলি মূলত কীসের ওপর ভিত্তি করে কাজ করে?', opts: ['লাভের আশায়', 'সেবামূলক মনোভাবের ওপর', 'সরকারি নির্দেশে', 'কোনোটিই নয়'], ans: 1, exp: 'ব্যাখ্যা: স্বেচ্ছাসেবী সংস্থাগুলি কোনো সরকারি নিয়ন্ত্রণ ছাড়া সম্পূর্ণ মানবসেবামূলক মনোভাবের ওপর ভিত্তি করে কাজ করে।'},
+      {q: '১২. প্রতিবন্ধীদের অধিকার সম্পর্কে সমাজকে সচেতন করার ক্ষেত্রে সবচেয়ে শক্তিশালী মাধ্যম কোনটি?', opts: ['পরিবার', 'গণমাধ্যম', 'পুলিশ', 'ধর্মীয় প্রতিষ্ঠান'], ans: 1, exp: 'ব্যাখ্যা: সংবাদপত্র, দূরদর্শন, রেডিও প্রভৃতি গণমাধ্যম আধুনিক সমাজে সবচেয়ে শক্তিশালী মাধ্যম হিসেবে কাজ করে।'},
+      {q: '১৩. সংবাদপত্র পাঠের মাধ্যমে সাধারণ মানুষ কী সম্পর্কে জানতে পারে?', opts: ['সরকারি প্রকল্প', 'প্রতিবন্ধীদের অধিকার', 'সমাজের বিভিন্ন সমস্যা', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: সংবাদপত্র সামাজিক সমস্যা, সরকারি পদক্ষেপ এবং প্রতিবন্ধীদের অধিকার সম্পর্কে সাধারণ মানুষকে ওয়াকিবহাল করে।'},
+      {q: '১৪. NGO কথাটির পূর্ণ রূপ কী?', opts: ['National Governed Organization', 'Non-Governmental Organization', 'Normal General Organization', 'Non-Governmental Office'], ans: 1, exp: 'ব্যাখ্যা: NGO বা Non-Governmental Organization হলো অলাভজনক ও সরকারি নিয়ন্ত্রণহীন স্বেচ্ছাসেবী সংস্থা।'},
+      {q: '১৫. অন্তর্ভুক্তিমূলক সমাজ গঠনে আবাসিক বিদ্যালয় প্রতিষ্ঠা করার পেছনে কাদের ভূমিকা সর্বাধিক?', opts: ['চিকিৎসকের', 'পরিবারের', 'বেসরকারি সংস্থাগুলির (NGO)', 'সংবাদপত্রের'], ans: 2, exp: 'ব্যাখ্যা: বিভিন্ন বেসরকারি বা স্বেচ্ছাসেবী সংস্থা প্রতিবন্ধীদের কল্যাণে আবাসিক বিদ্যালয় প্রতিষ্ঠার কাজ করে থাকে।'}
+    ]
+  },
+  8: {
+    name: 'Set 8', icon: '🧠', topic: 'ধারণাগত ও তাত্ত্বিক প্রশ্ন',
+    questions: [
+      {q: '১. অন্তর্ভুক্তিকরণ (Inclusion) কথাটির আক্ষরিক অর্থ কী?', opts: ['কেবল সেরাদের নিয়ে কাজ করা', 'সকলকে একত্রে নিয়ে কাজ করা', 'প্রতিবন্ধীদের আলাদা করা', 'সমাজের একটি বিশেষ শ্রেণিকে গুরুত্ব দেওয়া'], ans: 1, exp: 'ব্যাখ্যা: অন্তর্ভুক্তিকরণ কথাটির অর্থ হলো সমাজের সকল জনগণকে একত্রে নিয়ে কাজ করা, যার দ্বারা সকলেই উপকৃত হতে পারে।'},
+      {q: '২. শিক্ষাক্ষেত্রে বঞ্চিতদের নিয়ে UNESCO দ্বারা আয়োজিত \'সালামানকা সম্মেলন\' (Salamanca Conference) কত সালে অনুষ্ঠিত হয়?', opts: ['1986', '1990', '1994', '2000'], ans: 2, exp: 'ব্যাখ্যা: অন্তর্ভুক্তিমূলক শিক্ষাব্যবস্থা নিয়ে UNESCO দ্বারা আয়োজিত অন্যতম আন্তর্জাতিক সম্মেলন \'সালামানকা সম্মেলন\' 1994 সালে অনুষ্ঠিত হয়।'},
+      {q: '৩. ইতালীয় চিকিৎসক মারিয়া মন্তেসরি সাধারণ শ্রেণিকক্ষে কাদের অন্তর্ভুক্তির ওপর জোর দিয়েছিলেন?', opts: ['বয়স্কদের', 'শিশুশ্রমিকদের', 'প্রতিবন্ধী শিশুদের', 'কেবল মেধাবী ছাত্রদের'], ans: 2, exp: 'ব্যাখ্যা: মারিয়া মন্তেসরি সাধারণ শিক্ষার শ্রেণিকক্ষে প্রতিবন্ধী শিশুদের অন্তর্ভুক্তির ওপর জোর দিয়েছিলেন, তাই তাঁকে এর জনক বলা হয়।'},
+      {q: '৪. "অন্তর্ভুক্তিমূলক শিক্ষা হলো শিশুদের শিক্ষায় সমান সুযোগ প্রদান ও শিক্ষায় পূর্ণাঙ্গ অংশগ্রহণের আদর্শ পরিবেশ রচনা করা"— এই সংজ্ঞাটি কাদের?', opts: ['M. F. Giangreco', 'Advani and Chadha', 'UNESCO', 'Laski'], ans: 1, exp: 'ব্যাখ্যা: শিক্ষাবিদ Advani and Chadha অন্তর্ভুক্তিমূলক শিক্ষার এই সংজ্ঞাটি প্রদান করেছেন।'},
+      {q: '৫. অন্তর্ভুক্তিমূলক শিক্ষার মূল উদ্দেশ্য সাধারণ শিক্ষা ও বিশেষ শিক্ষার মধ্যে কী করা?', opts: ['ব্যবধান আরও বৃদ্ধি করা', 'ব্যবধান সম্পূর্ণ ঘোচানো', 'পার্থক্য বজায় রাখা', 'কোনো সম্পর্ক না রাখা'], ans: 1, exp: 'ব্যাখ্যা: এই শিক্ষাব্যবস্থার মাধ্যমে সাধারণ শিক্ষা ও বিশেষ শিক্ষার মধ্যে সমস্ত রকমের ব্যবধান ঘোচানোর চেষ্টা করা হয়।'},
+      {q: '৬. অন্তর্ভুক্তিমূলক শিক্ষায় সব ধরনের শিক্ষার্থীর সহায়ক হওয়ার জন্য কোন্ বিষয়টিকে নমনীয় রাখা হয়?', opts: ['বিদ্যালয়ের ভবন', 'পাঠ্যক্রম', 'শিক্ষকের বয়স', 'পরীক্ষার সময়'], ans: 1, exp: 'ব্যাখ্যা: এই শিক্ষার বৈশিষ্ট্যই হলো নমনীয় পাঠ্যক্রম, যা শিক্ষার্থীর চাহিদা ও প্রবণতা অনুযায়ী রচনা করা হয়।'},
+      {q: '৭. অন্তর্ভুক্তিমূলক শিক্ষায় জ্ঞানমূলক বিকাশের পাশাপাশি শিক্ষার্থীর অন্যান্য সকল দিকের বিকাশের ওপর গুরুত্ব প্রদান করাকে কোন্ নীতি বলা হয়?', opts: ['ব্যক্তিকেন্দ্রিকতার নীতি', 'নিয়ন্ত্রিত স্বাধীনতার নীতি', 'সামগ্রিক বিকাশের নীতি', 'সমন্বয়ের নীতি'], ans: 2, exp: 'ব্যাখ্যা: শিক্ষার্থীর কেবল তাত্ত্বিক নয়, বরং জ্ঞানমূলক ও অন্যান্য সব দিকের উন্নয়ন ঘটানোই হলো সামগ্রিক বিকাশের নীতি।'},
+      {q: '৮. শিক্ষার্থীদের মানসিকভাবে চাপমুক্ত ও বন্ধুবৎসল পরিবেশে শিক্ষাদান করার নীতিকে কী বলে?', opts: ['সমন্বয়ের নীতি', 'সহযোগী সেবার নীতি', 'নিয়ন্ত্রিত স্বাধীনতার নীতি', 'গণতান্ত্রিক পরিবেশ গঠনের নীতি'], ans: 2, exp: 'ব্যাখ্যা: চাপমুক্ত ও ভারসাম্যযুক্ত পরিবেশে শিক্ষাদান করতে নিয়ন্ত্রিত স্বাধীনতার নীতি গ্রহণ করা হয়।'},
+      {q: '৯. অন্তর্ভুক্তিমূলক শিক্ষাকে কার্যকরী করতে বিশেষ পরিবহন ও চিকিৎসার বন্দোবস্ত রাখাকে কোন্ নীতি বলা হয়?', opts: ['সমন্বয়ের নীতি', 'সহযোগী সেবার নীতি', 'ব্যক্তিকেন্দ্রিকতার নীতি', 'সামগ্রিক বিকাশের নীতি'], ans: 1, exp: 'ব্যাখ্যা: বিশেষ পরিবহন, চিকিৎসা ও পরামর্শদানের সঠিক বন্দোবস্ত রাখাই হলো সহযোগী সেবার নীতি।'},
+      {q: '১০. \'প্লাস কারিকুলাম\' (Plus Curriculum) কর্মসূচিটি অন্তর্ভুক্তিমূলক শিক্ষার কোন্ পরিষেবার অন্তর্গত?', opts: ['প্রয়োজনীয় পরিষেবা', 'সহায়ক পরিষেবা', 'অন্যান্য প্রাসঙ্গিক পরিষেবা', 'চিকিৎসা পরিষেবা'], ans: 0, exp: 'ব্যাখ্যা: সাধারণ শিক্ষক দ্বারা সহ-পাঠ্যক্রমিক ও ‘প্লাস কারিকুলাম’ পরিচালনা করা প্রয়োজনীয় পরিষেবার অন্তর্গত।'},
+      {q: '১১. প্রতিবন্ধী শিশুদের স্বাস্থ্য বিবরণী প্রকাশ করা কোন্ পরিষেবার কাজ?', opts: ['প্রয়োজনীয় পরিষেবা', 'সহায়ক পরিষেবা', 'অন্যান্য প্রাসঙ্গিক পরিষেবা (Peripheral Services)', 'শিক্ষণ পরিষেবা'], ans: 2, exp: 'ব্যাখ্যা: হাসপাতাল বা পুনর্বাসন কেন্দ্রের মতো সংস্থা কর্তৃক স্বাস্থ্য বিবরণী দেওয়া অন্যান্য প্রাসঙ্গিক পরিষেবার কাজ।'},
+      {q: '১২. যে শিক্ষাব্যবস্থায় প্রতিবন্ধী শিশুদের সাধারণ শ্রেণিকক্ষের পাশাপাশি দিনের কিছু সময়ের জন্য রিসোর্স কক্ষে যেতে হয় তাকে কী শিক্ষা বলে?', opts: ['সম্পূর্ণ অন্তর্ভুক্তিমূলক শিক্ষা', 'আংশিক বা নিয়মিত অন্তর্ভুক্তিমূলক শিক্ষা', 'বিশেষ শিক্ষা', 'প্রথাগত শিক্ষা'], ans: 1, exp: 'ব্যাখ্যা: যখন নির্দিষ্ট প্রতিবন্ধকতার জন্য স্বল্প সময়ের জন্য বিশেষ শিক্ষকের তত্ত্বাবধানে রিসোর্স কক্ষে যেতে হয়, তখন তাকে আংশিক অন্তর্ভুক্তিমূলক শিক্ষা বলে।'},
+      {q: '১৩. যখন প্রতিবন্ধী শিশুদের জন্য আলাদা কোনো বিশেষ ব্যবস্থার (যেমন রিসোর্স রুম) প্রয়োজন হয় না, তখন তাকে কী বলে?', opts: ['আংশিক অন্তর্ভুক্তিমূলক শিক্ষা', 'সম্পূর্ণ অন্তর্ভুক্তিমূলক শিক্ষা', 'সমন্বিত শিক্ষা', 'বিশেষ শিক্ষা'], ans: 1, exp: 'ব্যাখ্যা: যখন কোনো বিশেষ ব্যবস্থার প্রয়োজন হয় না এবং স্বাভাবিক শিশুদের সাথেই সম্পূর্ণ শিক্ষা চলে, তখন তাকে সম্পূর্ণ অন্তর্ভুক্তিমূলক শিক্ষা বলে।'},
+      {q: '১৪. অন্তর্ভুক্তিমূলক শিক্ষায় বিভিন্নভাবে সক্ষম শিশুরা একত্রে পড়াশোনা করলে তাদের মনের কোন্ বোধ দূর হয়?', opts: ['আত্মবিশ্বাস', 'হীনম্মন্যতাবোধ', 'সামাজিকতাবোধ', 'নৈতিকবোধ'], ans: 1, exp: 'ব্যাখ্যা: সাধারণ শিক্ষার্থীর সাথে পড়লে তাদের নিজেকে আলাদা ভাবার প্রবণতা বা হীনম্মন্যতাবোধ দূর হয়।'},
+      {q: '১৫. প্রতিবন্ধী শিশুরা অন্তর্ভুক্তিমূলক শিক্ষায় ছবি আঁকা বা হাতের কাজের সুযোগ পেলে তাদের কোন্ ক্ষমতার বিকাশ ঘটে?', opts: ['সৃজনধর্মী ক্ষমতার', 'বাচনিক ক্ষমতার', 'পেশাগত ক্ষমতার', 'শারীরিক ক্ষমতার'], ans: 0, exp: 'ব্যাখ্যা: ছবি আঁকা, গান গাওয়া বা হাতের কাজ করার মাধ্যমে শিশুদের ভেতরের সৃজনধর্মী ক্ষমতার বিকাশ ঘটে।'}
+    ]
+  },
+  9: {
+    name: 'Set 9', icon: '🏛️', topic: 'আইন, প্রকল্প এবং শিক্ষানীতি সম্পর্কিত',
+    questions: [
+      {q: '১. প্রতিবন্ধী শিশুদের সাধারণ শিশুদের সাথে পড়লে হাসির পাত্র হওয়ার যে ভয় থাকে, তা অন্তর্ভুক্তিমূলক শিক্ষার কী ধরনের বাধা?', opts: ['সামাজিক বাধা', 'মনস্তাত্ত্বিক বাধা', 'অর্থনৈতিক বাধা', 'প্রাতিষ্ঠানিক বাধা'], ans: 1, exp: 'ব্যাখ্যা: মেনে নিতে না পারা বা হাসির পাত্র হওয়ার ভয় শিশুদের মনে নেতিবাচক প্রভাব ফেলে, যা একটি মনস্তাত্ত্বিক বাধা।'},
+      {q: '২. প্রতিবন্ধী শিক্ষার্থীদের উপযুক্ত শিক্ষাদানের জন্য পরিবার ও সমাজ যখন সঠিক পদক্ষেপ নেয় না, তখন তাকে কী বাধা বলা হয়?', opts: ['মনস্তাত্ত্বিক বাধা', 'পরিষেবার অভাব', 'নৈতিক বাধা', 'অর্থনৈতিক বাধা'], ans: 2, exp: 'ব্যাখ্যা: পরিবার ও সমাজের এই দায়িত্ব এড়ানো বা নীতিহীনতা অন্তর্ভুক্তিমূলক শিক্ষার প্রসারে একটি নৈতিক বাধা।'},
+      {q: '৩. অন্তর্ভুক্তিমূলক সমাজ গঠনে কাজ করা \'নিয়ন্ত্রিত বা প্রত্যক্ষ সংস্থা\' (Formal Agency) কোনটি?', opts: ['পরিবার', 'বিদ্যালয়', 'গণমাধ্যম', 'ক্লাব'], ans: 1, exp: 'ব্যাখ্যা: শিক্ষাপ্রতিষ্ঠান বা বিদ্যালয় সমাজ গঠনের সরাসরি দায়িত্ব পালন করে, তাই এটি নিয়ন্ত্রিত সংস্থা।'},
+      {q: '৪. বিদ্যালয়ে প্রতিবন্ধী শিক্ষার্থীদের শিক্ষালাভ সহজ করার জন্য কোন্ ধরনের বিশেষ কক্ষ তৈরি করা হয়?', opts: ['স্টাফ রুম', 'রিসোর্স কক্ষ', 'অডিটোরিয়াম', 'ল্যাবরেটরি'], ans: 1, exp: 'ব্যাখ্যা: সাধারণ শ্রেণিকক্ষের পাশাপাশি প্রতিবন্ধী শিশুদের বিশেষ শিক্ষার জন্য রিসোর্স কক্ষের (Resource Room) ব্যবস্থা করা হয়।'},
+      {q: '৫. শিক্ষাক্ষেত্রে শিক্ষক, অভিভাবক এবং সামাজিক গোষ্ঠীর মধ্যে আলোচনা করে সমবেতভাবে শিক্ষা পরিচালনা করাকে কী বলা হয়?', opts: ['সমন্বয়ন', 'একীকরণ (Integration)', 'পৃথকীকরণ', 'বিকেন্দ্রীকরণ'], ans: 1, exp: 'ব্যাখ্যা: অন্তর্ভুক্তিমূলক সমাজ গঠনে এই তিন পক্ষের সমবেত প্রচেষ্টাকে একীকরণ বলা হয়।'},
+      {q: '৬. অন্তর্ভুক্তিমূলক শিক্ষার প্রসারে সাধারণ বিদ্যালয়ের শিক্ষকদের স্বল্প সময়ের জন্য কী দেওয়া হয়?', opts: ['বিশেষ শিক্ষার প্রশিক্ষণ', 'দীর্ঘমেয়াদি ছুটি', 'আলাদা পাঠ্যক্রম', 'আর্থিক পুরস্কার'], ans: 0, exp: 'ব্যাখ্যা: যাতে তাঁরা প্রতিবন্ধী শিশুদের সাথে সচেতনভাবে কাজ করতে পারেন, তার জন্য সাধারণ শিক্ষকদের বিশেষ শিক্ষার প্রশিক্ষণ দেওয়া হয়।'},
+      {q: '৭. ভারতীয় সংবিধানের ৪৫ নং ধারায় কত বছর বয়স পর্যন্ত শিশুদের সর্বজনীন ও অবৈতনিক শিক্ষার নির্দেশ দেওয়া হয়েছে?', opts: ['১০ বছর', '১২ বছর', '১৪ বছর', '১৬ বছর'], ans: 2, exp: 'ব্যাখ্যা: সংবিধানের ৪৫ নং ধারায় ১৪ বছর বয়স পর্যন্ত সকল শিশুর বাধ্যতামূলক শিক্ষার কথা বলা হয়েছে।'},
+      {q: '৮. IEDC প্রকল্পটির পরিচালনা প্রথম দিকে (1974-1982) কোন্ দপ্তরের অধীনে ছিল?', opts: ['Ministry of Education', 'Ministry of Welfare', 'Ministry of Finance', 'Ministry of Health'], ans: 1, exp: 'ব্যাখ্যা: 1974 থেকে 1982 খ্রিস্টাব্দ পর্যন্ত Ministry of Welfare বা কল্যাণ দপ্তর এই প্রকল্পটি পরিচালনা করেছে।'},
+      {q: '৯. IEDC প্রকল্পটির নাম পরিবর্তন করে পরবর্তীকালে কী রাখা হয়?', opts: ['DPEP', 'PIED', 'IED', 'SSA'], ans: 2, exp: 'ব্যাখ্যা: IEDC প্রকল্পটির নাম পরবর্তীকালে পরিবর্তন করে Integrated Education for Disabled (IED) রাখা হয়।'},
+      {q: '১০. 1987 খ্রিস্টাব্দে UNICEF ও NCERT-এর যৌথ উদ্যোগে কোন্ প্রকল্পটি চালু হয়?', opts: ['IEDC', 'PIED', 'DPEP', 'Janshala'], ans: 1, exp: 'ব্যাখ্যা: 1987 খ্রিস্টাব্দে এই দুই সংস্থার উদ্যোগে PIED (Project on Integrated Education for Disabled) প্রকল্পটি চালু হয়।'},
+      {q: '১১. PIED প্রকল্পটির মূল লক্ষ্য কী ছিল?', opts: ['শিক্ষোপকরণ বিতরণ', 'বিদ্যালয় ভবন নির্মাণ', 'শিক্ষক প্রশিক্ষণ কর্মসূচি', 'আর্থিক সাহায্য প্রদান'], ans: 2, exp: 'ব্যাখ্যা: অন্তর্ভুক্তিমূলক শিক্ষার জন্য শিক্ষক প্রশিক্ষণ কর্মসূচির আয়োজন করাই ছিল PIED প্রকল্পের মূল লক্ষ্য।'},
+      {q: '১২. PIED প্রকল্পটি 2002 খ্রিস্টাব্দে দেশের কয়টি রাজ্যে প্রসারিত হয়েছিল?', opts: ['১০টি', '২০টি', '২৫টি', '২৭টি'], ans: 3, exp: 'ব্যাখ্যা: প্রকল্পটি প্রাথমিকভাবে ১০টি ব্লকে শুরু হলেও 2002 খ্রিস্টাব্দে এটি ২৭টি রাজ্যে ছড়িয়ে পড়ে।'},
+      {q: '১৩. \'সকলের জন্য শিক্ষা\'— এই লক্ষ্য পূরণে 1995 খ্রিস্টাব্দে কোন্ প্রাথমিক শিক্ষা কর্মসূচিটি গৃহীত হয়?', opts: ['DPEP', 'PIED', 'IEDC', 'SSA'], ans: 0, exp: 'ব্যাখ্যা: 1995 খ্রিস্টাব্দে প্রাথমিক শিক্ষার সর্বজনীনতার উদ্দেশ্যে District Primary Education Programme (DPEP) গৃহীত হয়।'},
+      {q: '১৪. DPEP প্রকল্পে রাজ্য সরকার কত শতাংশ আর্থিক অনুদান প্রদান করত?', opts: ['15%', '25%', '50%', '85%'], ans: 0, exp: 'ব্যাখ্যা: DPEP প্রকল্পে কেন্দ্রীয় সরকার 85% এবং রাজ্য সরকার 15% আর্থিক অনুদান প্রদান করত।'},
+      {q: '১৫. শিশু শ্রমিকের আধিক্য এবং নিম্ন নারী সাক্ষরতা আছে এমন অঞ্চলগুলিতে অন্তর্ভুক্তিমূলক শিক্ষার প্রসারে কোন্ প্রকল্প গৃহীত হয়েছিল?', opts: ['SSA', 'Janshala', 'DPEP', 'IEDC'], ans: 1, exp: 'ব্যাখ্যা: 1998 খ্রিস্টাব্দে ভারত সরকার ও অন্যান্য আন্তর্জাতিক সংস্থার উদ্যোগে এই অঞ্চলগুলির জন্য \'জনশালা\' (Janshala) প্রকল্প গৃহীত হয়।'}
+    ]
+  },
+  10: {
+    name: 'Set 10', icon: '⚖️', topic: 'নীতি, আইন ও বিবিধ প্রশ্নোত্তর',
+    questions: [
+      {q: '১. সর্বশিক্ষা অভিযান (SSA) প্রকল্পটি কত খ্রিস্টাব্দ থেকে কার্যকরী হয়?', opts: ['2000', '2001', '2002', '2005'], ans: 2, exp: 'ব্যাখ্যা: সর্বশিক্ষা অভিযান প্রকল্পটি 2001 সালে গৃহীত হলেও 2002 খ্রিস্টাব্দ থেকে এটি কার্যকরী হয়。'},
+      {q: '২. সর্বশিক্ষা অভিযান (SSA) প্রকল্পে একজন প্রতিবন্ধী শিশুর শিক্ষার জন্য বার্ষিক কত টাকা বরাদ্দ করা হয়েছিল?', opts: ['৫০০ টাকা', '১০০০ টাকা', '১২০০ টাকা', '১৫০০ টাকা'], ans: 2, exp: 'ব্যাখ্যা: এই প্রকল্পে প্রতিটি অক্ষম বা প্রতিবন্ধী শিশুর জন্য বার্ষিক ১২০০ টাকা বরাদ্দ করার কথা বলা হয়েছিল।'},
+      {q: '৩. কোঠারি কমিশন (1964-66) প্রতিবন্ধীদের শিক্ষাকে কোন্ শিক্ষার সাথে যুক্ত করার সুপারিশ করেছিল?', opts: ['বিশেষ শিক্ষার সাথে', 'সাধারণ শিক্ষাব্যবস্থার সাথে', 'বৃত্তিমূলক শিক্ষার সাথে', 'কেবল আবাসিক শিক্ষার সাথে'], ans: 1, exp: 'ব্যাখ্যা: কোঠারি কমিশন প্রতিবন্ধীদের শিক্ষাকে সাধারণ শিক্ষাব্যবস্থার সঙ্গে যুক্ত করার সুপারিশ করেছিলেন।'},
+      {q: '৪. 1986 খ্রিস্টাব্দের জাতীয় শিক্ষানীতি প্রতিবন্ধী শিশুদের শিক্ষার জন্য জেলা স্তরে কী স্থাপনের সুপারিশ করেছিল?', opts: ['আবাসিক বিশেষ বিদ্যালয়', 'সাধারণ কলেজ', 'কারিগরি প্রতিষ্ঠান', 'মুক্ত বিশ্ববিদ্যালয়'], ans: 0, exp: 'ব্যাখ্যা: শিক্ষানীতি (1986) অনুযায়ী প্রতিবন্ধী শিশুদের জন্য প্রতিটি জেলা সদরে আবাসিক বিশেষ বিদ্যালয় স্থাপন করতে বলা হয়।'},
+      {q: '৫. 1986-এর শিক্ষানীতি অনুসারে অন্তর্ভুক্তিমূলক শিক্ষায় কোন্ ধরনের প্রশিক্ষণের ওপর জোর দেওয়া হয়েছিল?', opts: ['সামরিক প্রশিক্ষণ', 'বৃত্তিমুখী প্রশিক্ষণ', 'আইন প্রশিক্ষণ', 'ধর্মীয় প্রশিক্ষণ'], ans: 1, exp: 'ব্যাখ্যা: শিক্ষার্থীদের স্বনির্ভর করতে বৃত্তিমুখী প্রশিক্ষণ এবং শিক্ষকদের উন্নত প্রশিক্ষণের ব্যবস্থা করার কথা এই শিক্ষানীতিতে বলা হয়。'},
+      {q: '৬. অন্তর্ভুক্তিমূলক শিক্ষায় শিক্ষকের সবচেয়ে গুরুত্বপূর্ণ গুণ কোনটি?', opts: ['কঠোরতা', 'সহানুভূতি ও ধৈর্য', 'পাণ্ডিত্য', 'অনমনীয়তা'], ans: 1, exp: 'ব্যাখ্যা: প্রতিবন্ধী শিশুদের সাথে কাজ করার জন্য শিক্ষকের অসীম ধৈর্য, সহানুভূতি ও ভালোবাসাপূর্ণ মনোভাব সবচেয়ে বেশি জরুরি।'},
+      {q: '৭. বিশেষ শিক্ষায় (Special Education) সাধারণত কাদের শিক্ষা দেওয়া হয়?', opts: ['কেবল সাধারণ শিশুদের', 'কেবল প্রতিবন্ধী শিশুদের', 'উভয়কে', 'কোনোটিই নয়'], ans: 1, exp: 'ব্যাখ্যা: বিশেষ শিক্ষায় কেবলমাত্র প্রতিবন্ধী বা বিশেষ চাহিদাসম্পন্ন শিশুদের আলাদাভাবে শিক্ষাদান করা হয়।'},
+      {q: '৮. সমন্বিত শিক্ষায় (Integrated Education) প্রতিবন্ধী শিশুরা কোথায় পড়াশোনা করে?', opts: ['বিশেষ বিদ্যালয়ে', 'সাধারণ বিদ্যালয়ে', 'বাড়িতে', 'হাসপাতালে'], ans: 1, exp: 'ব্যাখ্যা: সমন্বিত শিক্ষায় প্রতিবন্ধী শিশুরা সাধারণ বিদ্যালয়ে সাধারণ শিশুদের সাথেই পড়াশোনা করে, তবে তাদের জন্য বিশেষ সহায়তা থাকে।'},
+      {q: '৯. অন্তর্ভুক্তিমূলক সমাজ বলতে বোঝায়—', opts: ['যেখানে সবার সমান অধিকার', 'যেখানে বৈষম্য নেই', 'যেখানে সবাই মিলেমিশে থাকে', 'সব ক-টি'], ans: 3, exp: 'ব্যাখ্যা: জাতি, ধর্ম, বর্ণ ও সক্ষমতা নির্বিশেষে সকলে যেখানে সমান অধিকার নিয়ে মিলেমিশে থাকে, তাকেই অন্তর্ভুক্তিমূলক সমাজ বলে।'},
+      {q: '১০. "Education of the citizens is the heart of the modern State" —এই উক্তিটি কার?', opts: ['জন ডিউই', 'বিবেকানন্দ', 'ল্যাস্কি', 'রবীন্দ্রনাথ ঠাকুর'], ans: 2, exp: 'ব্যাখ্যা: চিন্তাবিদ ল্যাস্কি আধুনিক রাষ্ট্রের ভূমিকা বোঝাতে এই বিখ্যাত উক্তিটি করেছিলেন।'},
+      {q: '১১. অন্তর্ভুক্তিমূলক শিক্ষায় \'সহায়ক পরিষেবা\' (Support Services) কারা প্রদান করেন?', opts: ['চিকিৎসকরা', 'প্রশিক্ষণপ্রাপ্ত বিশেষ শিক্ষকরা', 'সাধারণ ছাত্ররা', 'অভিভাবকরা'], ans: 1, exp: 'ব্যাখ্যা: উপযুক্ত প্রশিক্ষণপ্রাপ্ত বিশেষ শিক্ষকরা প্রয়োজনীয় উপাদান এবং পরামর্শ দিয়ে সহায়ক পরিষেবা প্রদান করেন।'},
+      {q: '১২. যে শিক্ষায় জাতি, ধর্ম, সংস্কৃতি, অর্থ এবং প্রতিবন্ধিতার কোনো ভেদ না করে সকল স্তরের শিক্ষার্থীদের সমান সুযোগ দেওয়া হয়, তাকে কী বলে?', opts: ['পেশাগত শিক্ষা', 'অন্তর্ভুক্তিমূলক শিক্ষা', 'প্রথাগত শিক্ষা', 'দূরশিক্ষা'], ans: 1, exp: 'ব্যাখ্যা: বৈচিত্র্যকে স্বীকৃতি দিয়ে সকল শ্রেণির মানুষকে শিক্ষার মূল স্রোতে নিয়ে আসাই হলো অন্তর্ভুক্তিমূলক শিক্ষা।'},
+      {q: '১৩. অন্তর্ভুক্তিমূলক সমাজ গঠনের প্রধান শর্ত কী?', opts: ['বৈষম্যহীন ও বিভাজনমুক্ত অখণ্ড সমাজ গড়ে তোলা', 'কেবলমাত্র ধনী সম্প্রদায়ের উন্নয়ন', 'সমাজে বৈষম্য তৈরি করা', 'শিক্ষাপ্রতিষ্ঠান বন্ধ করা'], ans: 0, exp: 'ব্যাখ্যা: অন্তর্ভুক্তিমূলক সমাজ গঠনের প্রধান শর্তই হলো বৈষম্যহীন, বিভাজনমুক্ত এক অখণ্ড সমাজ গড়ে তোলা, যেখানে কাউকে সমাজ থেকে বাইরে ঠেলে দেওয়া হবে না।'},
+      {q: '১৪. "জ্ঞানমূলক বিকাশ" কথাটির প্রকৃত অর্থ কী?', opts: ['শিশুর শারীরিক বৃদ্ধি', 'শিশুর চিন্তা ও যুক্তি ক্ষমতার বিকাশ', 'শিশুর খেলাধুলার বিকাশ', 'শিশুর পেশাগত উন্নতি'], ans: 1, exp: 'ব্যাখ্যা: পাঠ্যবইয়ের পরিভাষিক শব্দ (Terms to Know) অনুযায়ী, জ্ঞানমূলক বিকাশ বলতে শিশুর চিন্তা ও যুক্তি ক্ষমতার বিকাশকে বোঝায়।'},
+      {q: '১৫. "Education for All" বা "সকলের জন্য শিক্ষা" বলতে কাদের শিক্ষাকে বোঝানো হয়েছে?', opts: ['কেবল শিশুদের', 'শিশু, যুবক, প্রাপ্তবয়স্ক, নারী—সকলকে', 'কেবল প্রতিবন্ধীদের', 'কেবল বয়স্কদের'], ans: 1, exp: 'ব্যাখ্যা: জাতি-ধর্ম-বর্ণ-বয়স নির্বিশেষে সমাজের সকল স্তরের মানুষের শিক্ষাই হলো Education for All।'}
+    ]
+  }
+};
+
+// ================== STATE VARIABLES ==================
+let currentUser = "";
+let activeSetId = null;
+let questions = [];
+let currentQIndex = 0;
+let score = 0;
+let wrongAnswers = 0;
+let isReviewMode = false;
+let timerInterval;
+let timeLeft = TIME_LIMIT;
+let userAnswers = {};
+
+// ================== LOCAL STORAGE LOGIC ==================
+function getGlobalUsers() {
+  const data = localStorage.getItem("testBazarGlobalUsers");
+  return data ? JSON.parse(data) : {};
+}
+
+function getAttemptsData() {
+  const data = localStorage.getItem("testBazarAttemptsEdCh7");
+  return data ? JSON.parse(data) : {};
+}
+
+function getAttemptCount(username, setId) {
+  const attempts = getAttemptsData();
+  const key = username + '|' + setId;
+  return attempts[key] || 0;
+}
+
+function incrementAttempt(username, setId) {
+  const attempts = getAttemptsData();
+  const key = username + '|' + setId;
+  attempts[key] = (attempts[key] || 0) + 1;
+  localStorage.setItem("testBazarAttemptsEdCh7", JSON.stringify(attempts));
+  return attempts[key];
+}
+
+// ================== INITIALIZATION ==================
+window.onload = () => {
+  renderHub();
+};
+
+function renderHub() {
+  const grid = document.getElementById("setGrid");
+  grid.innerHTML = "";
+
+  for(let id in ALL_SETS) {
+    const set = ALL_SETS[id];
+    const div = document.createElement("div");
+    div.className = "set-card";
+
+    let attemptCount = 0;
+    let isLocked = false;
+
+    if (currentUser) {
+      attemptCount = getAttemptCount(currentUser, id);
+      isLocked = attemptCount >= MAX_ATTEMPTS;
+      if (isLocked) div.classList.add("locked");
+    }
+
+    div.innerHTML = `
+      <div class="icon">${set.icon}</div>
+      <div class="set-num">${set.name.split(' - ')}</div>
+      <div class="set-title">${set.topic}</div>
+      <div class="set-meta"><span>${set.questions.length} Qs</span><span>10 Mins</span></div>
+      ${currentUser ? `<div class="attempt-badge ${isLocked?'locked-badge':''}">${isLocked ? '🔒 Locked' : attemptCount + '/' + MAX_ATTEMPTS}</div>` : ''}
+    `;
+
+    div.onclick = () => {
+      if (isLocked) {
+        alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
+        return;
+      }
+      handleSetClick(id);
+    };
+    grid.appendChild(div);
+  }
+}
+
+function handleSetClick(setId) {
+  activeSetId = setId;
+  if (!currentUser) {
+    document.getElementById("loginSetName").innerText = `📚 ${ALL_SETS[setId].name}`;
+    document.getElementById("loginOverlay").classList.add("active");
+    document.getElementById("loginUsername").value = "";
+    document.getElementById("loginPassword").value = "";
+    document.getElementById("loginError").style.display = "none";
+  } else {
+    startQuiz(setId);
+  }
+}
+
+function doLogin() {
+  const u = document.getElementById("loginUsername").value.trim();
+  const p = document.getElementById("loginPassword").value.trim();
+  const err = document.getElementById("loginError");
+
+  const GLOBAL_USERS = getGlobalUsers();
+
+  if(!u || !p) {
+    err.innerText = "ইউজারনেম এবং পাসওয়ার্ড দিন!";
+    err.style.display = "block";
+    return;
+  }
+
+  if(GLOBAL_USERS[u] && GLOBAL_USERS[u] === p) {
+    let attempts = getAttemptCount(u, activeSetId);
+    if (attempts >= MAX_ATTEMPTS) {
+      err.innerText = `আপনি এই সেটে সর্বোচ্চ ${MAX_ATTEMPTS} বার পরীক্ষা দিয়েছেন!`;
+      err.style.display = "block";
+      return;
+    }
+
+    currentUser = u;
+    document.getElementById("loginOverlay").classList.remove("active");
+    document.getElementById("userDisplay").innerHTML = `👤 ${u}`;
+    document.getElementById("userDisplay").classList.remove("hidden");
+
+    renderHub();
+    startQuiz(activeSetId);
+  } else {
+    err.innerText = "ইউজারনেম বা পাসওয়ার্ড ভুল! (Index থেকে চেক করুন)";
+    err.style.display = "block";
+  }
+}
+
+function closeLogin() {
+  document.getElementById("loginOverlay").classList.remove("active");
+}
+
+function goToHub() {
+  document.getElementById("resultWrap").classList.remove("show");
+  document.getElementById("testArea").classList.add("hidden");
+  document.getElementById("hubPage").style.display = "block";
+  document.getElementById("timerBox").classList.add("hidden");
+  clearInterval(timerInterval);
+  renderHub();
+}
+
+// ================== QUIZ LOGIC ==================
+function startQuiz(setId) {
+  incrementAttempt(currentUser, setId);
+
+  questions = ALL_SETS[setId].questions;
+  currentQIndex = 0;
+  score = 0;
+  wrongAnswers = 0;
+  userAnswers = {};
+  isReviewMode = false;
+  timeLeft = TIME_LIMIT;
+
+  document.getElementById("hubPage").style.display = "none";
+  document.getElementById("resultWrap").classList.remove("show");
+  document.getElementById("testArea").classList.remove("hidden");
+  document.getElementById("timerBox").classList.remove("hidden");
+  document.getElementById("testSetLabel").innerText = ALL_SETS[setId].name;
+  document.getElementById("testTopic").innerText = ALL_SETS[setId].topic;
+
+  startTimer();
+  loadQuestion();
+}
+
+function loadQuestion() {
+  const qData = questions[currentQIndex];
+  document.getElementById("qNum").innerText = `প্রশ্ন ${currentQIndex + 1} / ${questions.length}`;
+  document.getElementById("qText").innerText = qData.q;
+
+  const progress = ((currentQIndex) / questions.length) * 100;
+  document.getElementById("progressFill").style.width = `${progress}%`;
+  document.getElementById("scoreShow").innerText = `সঠিক: ${score} | ভুল: ${wrongAnswers}`;
+
+  const optsBox = document.getElementById("qOpts");
+  optsBox.innerHTML = "";
+  document.getElementById("explanation").classList.remove("show");
+  document.getElementById("nextBtn").disabled = true;
+  document.getElementById("nextBtn").innerText = (currentQIndex === questions.length - 1) && !isReviewMode ? "টেস্ট জমা দিন" : "পরবর্তী →";
+
+  qData.opts.forEach((optText, idx) => {
+    const btn = document.createElement("button");
+    btn.className = "opt";
+    btn.innerHTML = `<div class="opt-circle">${LABELS[idx]}</div> <div class="opt-text">${optText}</div>`;
+
+    if (isReviewMode) {
+      btn.classList.add("disabled");
+      if (idx === qData.ans) btn.classList.add("correct");
+      else if (userAnswers[currentQIndex] === idx) btn.classList.add("wrong");
+    } else {
+      btn.onclick = () => selectOption(btn, idx, qData.ans, qData.exp);
+    }
+    optsBox.appendChild(btn);
+  });
+
+  if (isReviewMode) {
+    document.getElementById("explanationText").innerHTML = `<strong>ব্যাখ্যা:</strong> ${qData.exp.replace('ব্যাখ্যা: ', '')}`;
+    document.getElementById("explanation").classList.add("show");
+    document.getElementById("nextBtn").disabled = false;
+    if (currentQIndex === questions.length - 1) {
+      document.getElementById("nextBtn").innerText = "ফলাফলে ফিরুন";
+    }
+  }
+}
+
+function selectOption(btn, selectedIdx, correctIdx, exp) {
+  const allBtns = document.getElementById("qOpts").querySelectorAll(".opt");
+  allBtns.forEach(b => b.classList.add("disabled"));
+
+  userAnswers[currentQIndex] = selectedIdx;
+
+  if (selectedIdx === correctIdx) {
+    btn.classList.add("correct");
+    score++;
+  } else {
+    btn.classList.add("wrong");
+    allBtns[correctIdx].classList.add("correct");
+    wrongAnswers++;
+  }
+
+  document.getElementById("scoreShow").innerText = `সঠিক: ${score} | ভুল: ${wrongAnswers}`;
+  document.getElementById("explanationText").innerHTML = `<strong>ব্যাখ্যা:</strong> ${exp.replace('ব্যাখ্যা: ', '')}`;
+  document.getElementById("explanation").classList.add("show");
+  document.getElementById("nextBtn").disabled = false;
+}
+
+function nextQ() {
+  if (isReviewMode && currentQIndex === questions.length - 1) {
+    document.getElementById("testArea").classList.add("hidden");
+    document.getElementById("resultWrap").classList.add("show");
+    return;
+  }
+
+  if (!isReviewMode && currentQIndex === questions.length - 1) {
+    finishQuiz();
+    return;
+  }
+
+  currentQIndex++;
+  loadQuestion();
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  const tBox = document.getElementById("timerBox");
+  tBox.classList.remove("danger");
+
+  timerInterval = setInterval(() => {
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      finishQuiz();
+      return;
+    }
+    timeLeft--;
+    const m = Math.floor(timeLeft / 60);
+    const s = timeLeft % 60;
+    document.getElementById("timerDisplay").innerText = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+    if (timeLeft < 60) tBox.classList.add("danger");
+  }, 1000);
+}
+
+function finishQuiz() {
+  clearInterval(timerInterval);
+  document.getElementById("testArea").classList.add("hidden");
+  document.getElementById("timerBox").classList.add("hidden");
+  document.getElementById("resultWrap").classList.add("show");
+
+  const total = questions.length;
+  const skipped = total - (score + wrongAnswers);
+  const percent = Math.round((score / total) * 100);
+
+  document.getElementById("finalScore").innerText = `${percent}%`;
+  document.getElementById("rbCorrect").innerText = score;
+  document.getElementById("rbWrong").innerText = wrongAnswers + skipped;
+
+  const gradeEl = document.getElementById("resultGrade");
+  if (percent >= 80) { gradeEl.innerText = "🌟 অসাধারণ পারফরম্যান্স!"; gradeEl.style.color = "#1a7a4a"; document.getElementById("resultIcon").innerText = "🏆"; }
+  else if (percent >= 60) { gradeEl.innerText = "👍 খুব ভালো!"; gradeEl.style.color = "#2aad68"; document.getElementById("resultIcon").innerText = "⭐"; }
+  else { gradeEl.innerText = "💪 চেষ্টা চালিয়ে যাও!"; gradeEl.style.color = "#e8730a"; document.getElementById("resultIcon").innerText = "📚"; }
+
+  const remaining = MAX_ATTEMPTS - getAttemptCount(currentUser, activeSetId);
+  document.getElementById("attemptInfo").innerHTML = `👤 ${currentUser} — বাকি আছে <strong>${remaining}</strong> বার Test দেওয়ার সুযোগ।`;
+}
+
+function restartQuiz() {
+  if (getAttemptCount(currentUser, activeSetId) >= MAX_ATTEMPTS) {
+    alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
+    return;
+  }
+  startQuiz(activeSetId);
+}
+
+function showReview() {
+  isReviewMode = true;
+  currentQIndex = 0;
+  document.getElementById("resultWrap").classList.remove("show");
+  document.getElementById("testArea").classList.remove("hidden");
+  loadQuestion();
+}
+</script>
+</body>
+</html>
+
