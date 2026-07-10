@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Bazar — Indian Geography | Unit 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ================== CSS STYLES ================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: #f0faf4; min-height: 100vh; color: #1c2e24; }
+.en-font { font-family: 'Syne', sans-serif; }
+
+.top-bar { background: #1a7a4a; padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.top-logo { font-size: 1.2rem; font-weight: 800; color: white; cursor: pointer; }
+.top-logo span { color: #f9a825; }
+.timer-box { background: rgba(255,255,255,0.2); padding: 0.3rem 0.8rem; border-radius: 6px; color: white; font-weight: 700; font-size: 0.95rem; }
+.timer-box.danger { background: #dc3545; animation: pulse 1s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+.main { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
+
+/* HUB PAGE */
+.hub-header { text-align: center; margin-bottom: 2rem; }
+.hub-header h1 { font-family: 'Tiro Bangla', serif; color: #1a7a4a; font-size: 1.6rem; margin-bottom: 0.5rem; line-height: 1.4; }
+.hub-header p { color: #5a7a66; font-size: 0.95rem; font-family: 'Tiro Bangla', serif; font-weight: bold; }
+.set-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+.set-card { background: white; border: 2px solid #c5dccb; border-radius: 12px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s; }
+.set-card:hover { transform: translateY(-3px); border-color: #1a7a4a; box-shadow: 0 6px 20px rgba(26,122,74,0.12); }
+.set-card .icon { font-size: 2.2rem; margin-bottom: 0.3rem; }
+.set-card .set-num { font-weight: 700; font-size: 1.1rem; color: #1a7a4a; }
+.set-card .set-title { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: #5a7a66; margin: 0.2rem 0 0.5rem; }
+.set-card .set-meta { display: flex; gap: 1rem; font-size: 0.75rem; color: #5a7a66; justify-content: center; font-weight: bold;}
+.set-card .set-meta span { background: #f0faf4; padding: 0.2rem 0.6rem; border-radius: 4px; }
+.attempt-badge { font-size: 0.8rem; color: #dc3545; font-weight: 700; margin-top: 0.6rem; font-family: 'Tiro Bangla', serif; }
+
+/* QUIZ AREA */
+.quiz-info { background: white; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; border: 1px solid #c5dccb; display: flex; gap: 1rem; flex-wrap: wrap; }
+.info-item { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #5a7a66; font-weight: 600; }
+.info-item strong { color: #1a7a4a; }
+
+.progress-wrap { background: #c5dccb; border-radius: 4px; height: 6px; margin-bottom: 1.2rem; overflow: hidden; }
+.progress-fill { height: 100%; background: #1a7a4a; border-radius: 4px; transition: width 0.3s; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.q-num { font-size: 0.9rem; font-weight: 700; color: #1a7a4a; margin-bottom: 0.8rem; }
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; color: #1c2e24; font-weight: 700; line-height: 1.6; margin-bottom: 1.2rem; }
+
+.opts { display: flex; flex-direction: column; gap: 0.6rem; }
+.opt { display: flex; align-items: flex-start; gap: 12px; padding: 0.8rem 1rem; border: 1.5px solid #c5dccb; border-radius: 10px; background: transparent; cursor: pointer; text-align: left; transition: all 0.2s; width: 100%; }
+.opt:hover:not(.disabled) { border-color: #1a7a4a; background: #f0faf4; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #c5dccb; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #5a7a66; flex-shrink: 0; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1c2e24; line-height: 1.6; font-weight: 600; padding-top: 2px; }
+
+.opt.correct { border-color: #1a7a4a; background: #e8f7ef; }
+.opt.correct .opt-circle { background: #1a7a4a; border-color: #1a7a4a; color: white; }
+.opt.wrong { border-color: #dc3545; background: #fdf0f0; }
+.opt.wrong .opt-circle { background: #dc3545; border-color: #dc3545; color: white; }
+.opt.disabled { cursor: default; }
+
+.explanation { background: #f0faf4; border-left: 4px solid #1a7a4a; border-radius: 0 8px 8px 0; padding: 1rem; margin-top: 1rem; display: none; }
+.explanation.show { display: block; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #2c4035; line-height: 1.7; }
+
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
+.score-show { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: #5a7a66; font-weight: bold; }
+.next-btn { background: #1a7a4a; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+.next-btn:hover:not(:disabled) { background: #2aad68; }
+.next-btn:disabled { background: #c5dccb; cursor: not-allowed; }
+
+/* RESULT AREA */
+.result-wrap { background: white; border-radius: 14px; padding: 2rem; text-align: center; border: 1px solid #c5dccb; display: none; max-width: 600px; margin: 0 auto; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; line-height: 1; }
+.result-score { font-size: 3.5rem; font-weight: 800; color: #1a7a4a; line-height: 1; margin-bottom: 5px; }
+.result-total { font-size: 1rem; color: #5a7a66; margin-bottom: 0.5rem; font-family: 'Tiro Bangla', serif; font-weight: bold;}
+.result-grade { font-size: 1.2rem; font-weight: 700; color: #1c2e24; margin-bottom: 1.5rem; font-family: 'Tiro Bangla', serif; color: #e8730a; }
+
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: #f0faf4; border-radius: 10px; padding: 1rem; text-align: center; border: 1px solid #c5dccb; }
+.rb-num { font-size: 1.8rem; font-weight: 800; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: #5a7a66; margin-top: 0.2rem; font-weight: bold;}
+
+.attempt-info { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #1a7a4a; font-weight: bold; margin-bottom: 1.5rem; background: #e8f7ef; padding: 10px; border-radius: 8px; }
+
+/* ACTION BUTTONS */
+.result-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+.result-actions button { width: 100%; padding: 14px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 800; cursor: pointer; border: none; transition: 0.2s; }
+.btn-retry { background: #17a2b8; color: white; }
+.btn-retry:hover { background: #138496; }
+.btn-review { background: #28a745; color: white; }
+.btn-review:hover { background: #218838; }
+.btn-home { background: transparent; color: #5a7a66; border: 2px solid #c5dccb !important; }
+.btn-home:hover { background: #f0faf4; }
+
+/* LOGIN MODAL */
+.login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px); }
+.login-overlay.active { display: flex; }
+.login-modal { background: white; padding: 2rem; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+.login-modal h2 { font-family: 'Tiro Bangla', serif; color: #1a7a4a; font-size: 1.4rem; margin-bottom: 0.5rem; text-align: center; }
+.login-modal p { font-family: 'Tiro Bangla', serif; color: #5a7a66; font-size: 0.9rem; margin-bottom: 1.5rem; text-align: center; }
+.input-group { margin-bottom: 1.2rem; }
+.input-group label { display: block; font-size: 0.85rem; font-weight: 700; color: #1c2e24; margin-bottom: 5px; font-family: 'Tiro Bangla', serif; }
+.input-group input { width: 100%; padding: 12px; border: 1.5px solid #c5dccb; border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 0.95rem; outline: none; transition: 0.2s; }
+.input-group input:focus { border-color: #1a7a4a; box-shadow: 0 0 0 3px rgba(26,122,74,0.1); }
+.login-btn { width: 100%; background: #1a7a4a; color: white; border: none; padding: 12px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: 0.2s; margin-bottom: 8px; }
+.cancel-btn { width: 100%; background: transparent; color: #5a7a66; border: 1.5px solid #c5dccb; padding: 10px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; cursor: pointer; }
+.error-msg { color: #dc3545; font-size: 0.85rem; font-weight: 700; margin-top: 10px; font-family: 'Tiro Bangla', serif; display: none; text-align: center; }
+.set-name-display { background: #f0faf4; border-radius: 8px; padding: 0.6rem; text-align: center; margin-bottom: 1rem; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1a7a4a; font-weight: 700; }
+
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-logo" onclick="goToHub()">Test<span>Bazar</span></div>
+  <div class="timer-box hidden" id="timerBox">⏱ <span id="timerDisplay">10:00</span></div>
+</div>
+
+<div class="main">
+
+  <!-- ===== LOGIN OVERLAY ===== -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-modal">
+      <h2>🔐 লগইন করুন</h2>
+      <p>Test শুরু করতে আপনার ইউজারনেম ও পাসওয়ার্ড দিন</p>
+      <div class="set-name-display" id="loginSetName">📚 Set 1</div>
+
+      <div class="input-group">
+        <label>ইউজারনেম</label>
+        <input type="text" id="loginUsername" placeholder="আপনার ইউজারনেম লিখুন">
+      </div>
+      <div class="input-group">
+        <label>পাসওয়ার্ড</label>
+        <input type="password" id="loginPassword" placeholder="আপনার পাসওয়ার্ড লিখুন" onkeydown="if(event.key==='Enter') doLogin()">
+      </div>
+
+      <button class="login-btn" onclick="doLogin()">✅ লগইন করে Test শুরু করো</button>
+      <button class="cancel-btn" onclick="closeLogin()">বাতিল</button>
+      <div class="error-msg" id="loginError">❌ ভুল ইউজারনেম বা পাসওয়ার্ড।</div>
+    </div>
+  </div>
+
+  <!-- ===== HUB PAGE ===== -->
+  <div id="hubPage">
+    <div class="hub-header">
+      <h1>ভারতের ভূগোল<br>Unit 1: ভারতের জনসংখ্যা</h1>
+      <p>নিচের সেটগুলো থেকে বেছে নিন। প্রতিটি সেটে ১৫টি করে প্রশ্ন রয়েছে।</p>
+      <div id="hubUserInfo" style="font-family:'Tiro Bangla',serif;font-size:1rem;color:#1a7a4a;margin-top:0.8rem;font-weight:bold;"></div>
+    </div>
+    <div class="set-grid" id="setGrid"></div>
+  </div>
+
+  <!-- ===== TEST AREA ===== -->
+  <div id="testArea" class="hidden">
+    <div class="quiz-info">
+      <div class="info-item">🎓 <strong id="testSetName">ভূগোল</strong> — 3rd Sem | ভারতের ভূগোল | <span id="testSetLabel">Set 1</span></div>
+      <div class="info-item">📝 <span id="testTopic">Topic</span></div>
+    </div>
+
+    <div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+    <div class="q-card" id="qCard">
+      <div class="q-num" id="qNum">প্রশ্ন ১ / ১৫</div>
+      <div class="q-text" id="qText"></div>
+      <div class="opts" id="qOpts"></div>
+      <div class="explanation" id="explanation"><p id="explanationText"></p></div>
+
+      <div class="nav-row">
+        <div class="score-show" id="scoreShow">সঠিক: ০ | ভুল: ০</div>
+        <button class="next-btn" id="nextBtn" onclick="nextQ()" disabled>পরবর্তী →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RESULT AREA ===== -->
+  <div class="result-wrap" id="resultWrap">
+    <div class="result-icon" id="resultIcon">🏆</div>
+    <div class="result-score en-font" id="finalScore">100%</div>
+    <div class="result-total">স্কোর</div>
+    <div class="result-grade" id="resultGrade">অসাধারণ!</div>
+
+    <div class="result-bars">
+      <div class="result-bar">
+        <div class="rb-num en-font" id="rbCorrect" style="color:#1a7a4a">0</div>
+        <div class="rb-label">সঠিক</div>
+      </div>
+      <div class="result-bar">
+        <div class="rb-num en-font" id="rbWrong" style="color:#dc3545">0</div>
+        <div class="rb-label">ভুল/স্কিপ</div>
+      </div>
+    </div>
+
+    <div class="attempt-info" id="attemptInfo">👤 user — Set 1: বাকি আছে 9 বার Test দেওয়ার সুযোগ</div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="result-actions">
+      <button class="btn-retry" onclick="restartQuiz()">🔄 আবার চেষ্টা করো</button>
+      <button class="btn-review" onclick="showReview()">👀 উত্তর দেখো</button>
+      <button class="btn-home" onclick="goToHub()">🏠 ← Hub এ ফিরে যাও</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// গ্লোবাল ভেরিয়েবল
+// ============================================================
+const MAX_ATTEMPTS = 10;
+const TIME_LIMIT = 10 * 60; // 10 Minutes
+const LABELS = ['ক', 'খ', 'গ', 'ঘ'];
+const STORAGE_KEY = "testBazarAttempts_Geo_India_Unit1_4Sets";
+
+let currentUser = "";
+let currentSetId = 1;
+let pendingSetId = null;
+let cur = 0, score = 0, wrong = 0, answered = false;
+let timerInterval, timeLeft = TIME_LIMIT;
+let userAnswers = [];
+let isReviewMode = false;
+let TOTAL_QS = 0;
+
+// ============================================================
+// ভারতের ভূগোল - Unit 1: ভারতের জনসংখ্যা (৪টি সেটের প্রশ্নাবলি)
+// ============================================================
+const allSets = {
+  1: {
+    name: 'Set 1', icon: '🗺️', topic: 'ভারতের জনসংখ্যা বণ্টন ও জনঘনত্ব',
+    questions: [
+      { q: "১. নগরায়ণের ফলে কোনো অঞ্চলের জনঘনত্বের কী পরিবর্তন ঘটে?", opts: ["জনঘনত্ব হ্রাস পায়", "জনঘনত্ব ক্রমশ বাড়ে", "জনঘনত্ব একই থাকে", "কোনো প্রভাব পড়ে না"], ans: 1, exp: "নগরায়ণ ঘটলে জীবনধারণের সুযোগসুবিধার কারণে জনঘনত্ব ক্রমশ বৃদ্ধি পায়।" },
+      { q: "২. ভারতের কোন শহরগুলিতে জনঘনত্ব প্রতি বর্গকিলোমিটারে ৬,০০০ জনের বেশি?", opts: ["লখনউ, কানপুর, আগ্রা", "মুম্বাই, দিল্লি, কলকাতা, চেন্নাই, হায়দ্রাবাদ", "পুনে, নাগপুর, সোলাপুর", "শিলিগুড়ি, দার্জিলিং, গ্যাংটক"], ans: 1, exp: "নগর বা শহরে কাজের সুযোগ ও উন্নত পরিকাঠামোর কারণে জনঘনত্ব অনেক বেশি হয়। ভারতের মুম্বাই, দিল্লি, কলকাতা, চেন্নাই, হায়দ্রাবাদ প্রভৃতি নগরে জনঘনত্ব প্রতি বর্গকিমিতে ৬,০০০ জনের বেশি।" },
+      { q: "৩. পশ্চিমবঙ্গের শান্তিনিকেতনে কী কারণে জনবসতি ও জনঘনত্ব বৃদ্ধি পেয়েছে?", opts: ["খনিজ সম্পদের প্রাচুর্য", "শিক্ষাকেন্দ্রের উপস্থিতি", "প্রশাসনিক নিরাপত্তা", "কৃষিকাজের সুবিধা"], ans: 1, exp: "দেশবিদেশ থেকে শিক্ষা অর্জনের জন্য বিখ্যাত শিক্ষাকেন্দ্রগুলিতে লোকজন এসে বসবাস করে। তাই শান্তিনিকেতনে শিক্ষায়তনকে কেন্দ্র করে প্রচুর জনবসতি গড়ে উঠেছে।" },
+      { q: "৪. ভারতের পুরী, হরিদ্বার ও বারাণসীতে জনবসতি গড়ে ওঠার প্রধান কারণ কী?", opts: ["পর্যটন ও ধর্মীয় স্থান", "শিল্পাঞ্চল", "বন্দর এলাকা", "খনিজ উত্তোলন"], ans: 0, exp: "ভারতের বিভিন্ন ধর্মীয় স্থানকে কেন্দ্র করে জনবসতি গড়ে ওঠে। এই কারণে পুরী, হরিদ্বার, বারাণসী, তিরুপতি, কাশী, মথুরা প্রভৃতি স্থানকে কেন্দ্র করে ঘন জনবসতি গড়ে উঠেছে।" },
+      { q: "৫. ১৯৪৭ সালের দেশভাগের পর ভারতের কোন রাজ্যগুলিতে জনসংখ্যা অস্বাভাবিকভাবে বাড়ে?", opts: ["কেরালা ও তামিলনাড়ু", "মধ্যপ্রদেশ ও মহারাষ্ট্র", "পাঞ্জাব, পশ্চিমবঙ্গ, অসম, ত্রিপুরা", "গুজরাত ও রাজস্থান"], ans: 2, exp: "১৯৪৭ সালের ১৫ আগস্ট দেশভাগের সময় ও পরবর্তীকালে তৎকালীন পূর্ব ও পশ্চিম পাকিস্তান থেকে দলে দলে বহু শরণার্থী ভারতে প্রবেশ করায় পাঞ্জাব, পশ্চিমবঙ্গ, অসম, ত্রিপুরা রাজ্যে অন্যান্য রাজ্যের তুলনায় জনসংখ্যা বহুগুণে বাড়ে।" },
+      { q: "৬. ভারতের ভূপ্রকৃতি জনসংখ্যার বণ্টনের ওপর কীরূপ প্রভাব ফেলে?", opts: ["দুর্গমের কারণে সিকিমে জনবসতি অত্যন্ত কম হয়", "সমভূমিতে মানুষ বাস করতে পারে না", "পর্বতে সবচেয়ে বেশি মানুষ বাস করে", "ভূপ্রকৃতি কোনো প্রভাব ফেলে না"], ans: 0, exp: "দুর্গম পার্বত্য অঞ্চল হওয়ায় সিকিমে বসতি খুবই কম। অন্যদিকে, সমভূমিতে জনবসতি বেশি দেখা যায়, কারণ ভারতের ভূপ্রকৃতি জনসংখ্যার বণ্টনে সরাসরি সহায়তা করে।" },
+      { q: "৭. গড় জনঘনত্বের তারতম্য অনুসারে ভারতকে কয়টি অঞ্চলে ভাগ করা যায়?", opts: ["৩টি", "৪টি", "৫টি", "৭টি"], ans: 2, exp: "গড় জনঘনত্বের তারতম্য অনুসারে ভারতকে পাঁচটি অঞ্চলে ভাগ করা যায়— অত্যধিক, অধিক, মধ্যম, স্বল্প এবং অতি-স্বল্প জনঘনত্ব অঞ্চল।" },
+      { q: "৮. ভারতের 'অত্যধিক জনঘনত্ব অঞ্চল'-এ প্রতি বর্গকিলোমিটারে কতজন বাস করে?", opts: ["৪০০ জনের বেশি", "৬০০ জনের বেশি", "৮০০ জনের বেশি", "১০০০ জনের বেশি"], ans: 2, exp: "অত্যধিক জনঘনত্ব অঞ্চলের (যেমন- পশ্চিমবঙ্গ, বিহার, কেরালা, উত্তরপ্রদেশ) জনঘনত্ব প্রতি বর্গকিমিতে ৮০০ জনের বেশি হয়।" },
+      { q: "৯. ২০১১ সালের আদমশুমারি অনুযায়ী ভারতের সর্বাধিক জনঘনত্বযুক্ত রাজ্য কোনটি?", opts: ["পশ্চিমবঙ্গ", "কেরালা", "উত্তরপ্রদেশ", "বিহার"], ans: 3, exp: "২০১১ সালের জনগণনার পরিসংখ্যান অনুযায়ী ভারতের সর্বাধিক জনঘনত্বযুক্ত রাজ্য হলো বিহার এবং এর পরেই রয়েছে পশ্চিমবঙ্গ।" },
+      { q: "১০. ২০১১ সালের জনগণনা অনুসারে ভারতের সর্বাধিক জনবহুল রাজ্য কোনটি?", opts: ["সিকিম", "বিহার", "উত্তরপ্রদেশ", "মহারাষ্ট্র"], ans: 2, exp: "২০১১ সালের আদমশুমারি অনুযায়ী, ভারতের সর্বাধিক জনবহুল (সবচেয়ে বেশি জনসংখ্যার) রাজ্যটি হলো উত্তরপ্রদেশ।" },
+      { q: "১১. ভারতের সর্বাধিক জনবহুল শহর বা মহানগর কোনটি?", opts: ["হায়দরাবাদ", "কলকাতা", "চেন্নাই", "মুম্বাই"], ans: 3, exp: "ভারতের মেগাসিটিগুলির মধ্যে জনসংখ্যার বিচারে সর্বাধিক জনবহুল শহরটি হলো মুম্বাই।" },
+      { q: "১২. ২০১১ সালের আদমশুমারি অনুযায়ী ভারতের চারটি সর্বাধিক জনবহুল রাজ্য কী কী?", opts: ["উত্তরপ্রদেশ, মধ্যপ্রদেশ, বিহার, গুজরাট", "উত্তরপ্রদেশ, মহারাষ্ট্র, বিহার, পশ্চিমবঙ্গ", "উত্তরপ্রদেশ, কর্ণাটক, বিহার, গুজরাট", "কর্ণাটক, মহারাষ্ট্র, বিহার, পশ্চিমবঙ্গ"], ans: 1, exp: "ভারতের জনসংখ্যার বিরাট অংশ এই চারটি রাজ্যে বাস করে। ক্রমান্বয়ে এই চারটি সর্বাধিক জনবহুল রাজ্য হলো— উত্তরপ্রদেশ, মহারাষ্ট্র, বিহার এবং পশ্চিমবঙ্গ।" },
+      { q: "১৩. কেরল রাজ্যে অত্যধিক জনঘনত্ব দেখা যাওয়ার অন্যতম কারণ কী?", opts: ["শিল্পায়ন", "খনিজ উত্তোলন", "উপকূলবর্তী পলি অঞ্চলে উন্নত কৃষিকাজ", "পর্যটন"], ans: 2, exp: "কেরলের উপকূলবর্তী পলি অঞ্চলে অত্যন্ত উর্বর মাটির কারণে কৃষিকাজ খুব ভালো হয়, যার ফলে সেখানে অত্যধিক জনঘনত্ব দেখা যায়।" },
+      { q: "১৪. রাজস্থানে জনঘনত্ব অত্যন্ত কম হওয়ার প্রধান কারণ কোনটি?", opts: ["প্রচুর বনভূমি", "প্রতিকূল পরিবেশ বা চরম জলবায়ু", "জমির অভাব", "শিল্প কারখানার অভাব"], ans: 1, exp: "রাজস্থানের থর মরুভূমি অঞ্চলে চরম জলবায়ু ও জলের অভাবজনিত প্রতিকূল পরিবেশের কারণে জনঘনত্ব অত্যন্ত কম হয়।" },
+      { q: "১৫. ভারতের জনগণনা আয়োগের সংজ্ঞা অনুযায়ী, কোনো এলাকার ন্যূনতম জনসংখ্যা কত হলে তা শহর হিসেবে গণ্য হবে?", opts: ["১,০০০ জন", "৫,০০০ জন", "১০,০০০ জন", "১,০০,০০০ জন"], ans: 1, exp: "ভারতের জনগণনা দফতরের সংজ্ঞা অনুযায়ী কোনো অঞ্চলকে শহর হিসেবে স্বীকৃতি পেতে গেলে সেখানকার ন্যূনতম জনসংখ্যা হতে হবে ৫,০০০ জন।" }
+    ]
+  },
+  2: {
+    name: 'Set 2', icon: '📊', topic: 'জনসংখ্যার গঠন (ধর্ম, লিঙ্গ, বয়স ও গ্রাম-শহর)',
+    questions: [
+      { q: "১. ২০১১ সালের জনগণনা অনুযায়ী ভারতে হিন্দু ধর্মাবলম্বী মানুষের শতকরা পরিমাণ কত?", opts: ["৭২.৫০%", "৭৯.৮০%", "৮৫.২০%", "৯৪.০৩%"], ans: 1, exp: "২০১১ সালের মোট ১২১ কোটি জনসংখ্যার মধ্যে হিন্দু ধর্মাবলম্বী মানুষের শতকরা পরিমাণ হলো ৭৯.৮০% (৯৬.৬২ কোটি)।" },
+      { q: "২. ২০১১ সালের জনগণনা অনুযায়ী ভারতে ইসলাম ধর্মের মানুষের শতকরা হার কত?", opts: ["১০.১৫%", "১৪.২৩%", "১৮.৫০%", "২০.০০%"], ans: 1, exp: "ভারতবর্ষে ইসলাম ধর্মের মানুষের শতকরা পরিমাণ হলো ১৪.২৩%, যা সংখ্যায় প্রায় ১৭.২২ কোটি।" },
+      { q: "৩. ধর্মের ভিত্তিতে ভারতের জনসংখ্যার গঠনের ঊর্ধ্বক্রমটি (কম থেকে বেশি) কী?", opts: ["খ্রিস্টান -> শিখ -> ইসলাম -> হিন্দু", "শিখ -> খ্রিস্টান -> ইসলাম -> হিন্দু", "হিন্দু -> ইসলাম -> শিখ -> খ্রিস্টান", "ইসলাম -> হিন্দু -> খ্রিস্টান -> শিখ"], ans: 1, exp: "ভারতে জনসংখ্যার পরিমাণের ভিত্তিতে সবচেয়ে বেশি হিন্দু, তারপর ইসলাম, তারপর খ্রিস্টান ও সবশেষে শিখ। তাই ঊর্ধ্বক্রমে (ছোটো থেকে বড়ো) সাজালে হবে: শিখ, খ্রিস্টান, ইসলাম, হিন্দু।" },
+      { q: "৪. ভারতের মোট জনসংখ্যার কত শতাংশ পুরুষ এবং কত শতাংশ নারী?", opts: ["৫০% পুরুষ এবং ৫০% নারী", "৫১.৪৭% পুরুষ এবং ৪৮.৫৩% নারী", "৪৮.৫৩% পুরুষ এবং ৫১.৪৭% নারী", "৫২% পুরুষ এবং ৪৮% নারী"], ans: 1, exp: "পরিসংখ্যান অনুযায়ী, ভারতের মোট জনসংখ্যার ৫১.৪৭ শতাংশ হলো পুরুষ এবং ৪৮.৫৩ শতাংশ হলো নারী।" },
+      { q: "৫. ভারতে লিঙ্গ অনুপাত (Sex Ratio) কীভাবে নির্ণয় করা হয়?", opts: ["প্রতি ১০০ জন পুরুষের সাপেক্ষে নারীর সংখ্যা", "প্রতি ১০০০ জন নারীর সাপেক্ষে পুরুষের সংখ্যা", "প্রতি ১০০০ জন পুরুষের সাপেক্ষে নারীর সংখ্যা", "মোট জনসংখ্যা ও নারীর অনুপাত"], ans: 2, exp: "ভারতবর্ষে নারী-পুরুষের অনুপাত এক এক রাজ্যে এক এক রকম। সাধারণত প্রতি হাজার (১০০০) জন পুরুষের সাপেক্ষে নারীর সংখ্যা হিসাব করে লিঙ্গ অনুপাত নির্ণয় করা হয়।" },
+      { q: "৬. ভারতের জনসংখ্যার কত শতাংশ মানুষ গ্রামে বসবাস করে?", opts: ["৫০.০০%", "৫৫.৫০%", "৬০.১৫%", "৬৮.৮৪%"], ans: 3, exp: "গ্রাম ও শহরের ভিত্তিতে জনসংখ্যার গঠন বিশ্লেষণ করলে দেখা যায়, ভারতবর্ষে গ্রামে বসবাসকারী মানুষের সংখ্যা মোট জনসংখ্যার ৬৮.৮৪ শতাংশ।" },
+      { q: "৭. ২০১১ সালের তথ্য অনুযায়ী ভারতের কোন রাজ্যে গ্রামীণ জনসংখ্যা শতকরা হিসেবে সবচেয়ে বেশি?", opts: ["বিহার", "হিমাচল প্রদেশ", "পশ্চিমবঙ্গ", "অসম"], ans: 1, exp: "২০১১ সালের তথ্য অনুযায়ী হিমাচল প্রদেশে গ্রামীণ জনসংখ্যার হার সবচেয়ে বেশি, যা প্রায় ৮৯.৯৭%।" },
+      { q: "৮. গ্রামীণ জনসংখ্যার শতকরা হারের নিরিখে ভারতের দ্বিতীয় রাজ্য কোনটি?", opts: ["হিমাচল প্রদেশ", "উত্তরপ্রদেশ", "বিহার", "ওড়িশা"], ans: 2, exp: "গ্রামীণ জনসংখ্যার হারে হিমাচল প্রদেশের পরেই দ্বিতীয় স্থানে রয়েছে বিহার, যেখানে গ্রামীণ জনসংখ্যা ৮৮.৭১%।" },
+      { q: "৯. ভারতের কোন রাজ্যে গ্রামীণ জনসংখ্যার শতকরা হার সবচেয়ে কম?", opts: ["কেরল", "গোয়া", "মহারাষ্ট্র", "মিজোরাম"], ans: 1, exp: "রাজ্যগুলির মধ্যে গ্রামীণ জনসংখ্যার হার সবচেয়ে কম হলো গোয়া রাজ্যে (৩৭.৮৩%), কারণ সেখানে নগরায়ণের মাত্রা অনেক বেশি।" },
+      { q: "১০. কেন্দ্রশাসিত অঞ্চলগুলির মধ্যে কোনটির গ্রামীণ জনসংখ্যা সবচেয়ে কম?", opts: ["চণ্ডীগড়", "লাক্ষাদ্বীপ", "পুদুচেরি", "দিল্লি"], ans: 3, exp: "জাতীয় রাজধানী অঞ্চল হিসেবে দিল্লির গ্রামীণ জনসংখ্যা সবচেয়ে কম, যা মাত্র ২.৫%।" },
+      { q: "১১. গ্রামীণ জনসংখ্যার শতকরা হারের ভিত্তিতে রাজ্যগুলির ঊর্ধ্বক্রমটি (কম থেকে বেশি) কী?", opts: ["হিমাচল প্রদেশ -> বিহার -> পশ্চিমবঙ্গ -> গোয়া", "গোয়া -> পশ্চিমবঙ্গ -> বিহার -> হিমাচল প্রদেশ", "পশ্চিমবঙ্গ -> গোয়া -> বিহার -> হিমাচল প্রদেশ", "গোয়া -> বিহার -> হিমাচল প্রদেশ -> পশ্চিমবঙ্গ"], ans: 1, exp: "সবচেয়ে কম গ্রামীণ জনসংখ্যা গোয়ায়, তারপর পশ্চিমবঙ্গ, এরপর বিহার এবং সবচেয়ে বেশি হিমাচল প্রদেশে। তাই ঊর্ধ্বক্রমটি হবে: গোয়া -> পশ্চিমবঙ্গ -> বিহার -> হিমাচল প্রদেশ।" },
+      { q: "১২. ভারতের মোট জনসংখ্যার কত শতাংশ ০-১৪ বছর বয়স শ্রেণির অন্তর্গত?", opts: ["২০.৫০%", "২৫.২০%", "৩০.৭৬%", "৪০.০০%"], ans: 2, exp: "ভারতের বয়স কাঠামো অনুযায়ী, ০-১৪ বছর বয়স শ্রেণির (শিশু ও কিশোর) জনসংখ্যার হার হলো ৩০.৭৬%।" },
+      { q: "১৩. ভারতের জনসংখ্যার কত শতাংশ কর্মক্ষম বা ১৫-৬০ বছর বয়স শ্রেণির অন্তর্গত?", opts: ["৫০.০০%", "৬০.২৯%", "৬৫.১৫%", "৭০.০০%"], ans: 1, exp: "ভারতের বয়সভিত্তিক জনসংখ্যার সারণি অনুযায়ী, ১৫-৬০ বছর বয়সি কর্মক্ষম বা পরিণত জনসংখ্যার শতকরা পরিমাণ হলো ৬০.২৯%।" },
+      { q: "১৪. ভারতে ৬০ বছরের বেশি বয়সি বা বৃদ্ধ নির্ভরশীল জনসংখ্যার শতকরা হার কত?", opts: ["৫.২০%", "৬.৫০%", "৮.৯৪%", "১২.০০%"], ans: 2, exp: "পরিসংখ্যান অনুসারে, ভারতে ৬০ বছর বা তার বেশি বয়সি (60+) বৃদ্ধ-বৃদ্ধার সংখ্যা মোট জনসংখ্যার ৮.৯৪%।" },
+      { q: "১৫. ভারতের লিঙ্গানুপাত সম্পর্কে কোনটি সঠিক?", opts: ["নারী-পুরুষের অনুপাত ভারতে সমস্ত রাজ্যে সমান", "ভারতের গড় নারী-পুরুষ অনুপাত প্রায় আদর্শের কাছাকাছি", "ভারতে নারীর সংখ্যা পুরুষের তুলনায় অনেক বেশি", "ভারতে লিঙ্গানুপাত কেবল শহরের জন্য মাপা হয়"], ans: 1, exp: "ভারতের মোট জনসংখ্যার ৫১.৪৭% পুরুষ ও ৪৮.৫৩% নারী হওয়ায় বলা যায় যে, ভারতের গড় নারী-পুরুষ অনুপাত মোটামুটি আদর্শের কাছাকাছি।" }
+    ]
+  },
+  3: {
+    name: 'Set 3', icon: '📚', topic: 'জাতিগত বিন্যাস, সাক্ষরতা ও জনমিতির অন্যান্য সূচক',
+    questions: [
+      { q: "১. ভারতের প্রধান জাতিগোষ্ঠী কোনটি এবং তাদের শতকরা হার কত?", opts: ["দ্রাবিড় জাতি (২০%)", "ইন্দো-ইউরোপীয় জাতি (৭০.১৬%)", "মঙ্গোলয়েড জাতি (৫%)", "অস্ট্রিক জাতি (৩%)"], ans: 1, exp: "জাতিগত গঠনের দিক দিয়ে ভারতের প্রধান জাতিগোষ্ঠী হলো ইন্দো-ইউরোপীয় জাতি, যা মোট জনসংখ্যার ৭০.১৬ শতাংশ গঠন করে।" },
+      { q: "২. ইন্দো-ইউরোপীয় জাতিগোষ্ঠীর মধ্যে কোন সম্প্রদায়ের মানুষের সংখ্যা ভারতে সর্বাধিক?", opts: ["মারাঠি", "গুজরাতি", "বাঙালি", "ইন্দো-আর্য সম্প্রদায়"], ans: 3, exp: "ইন্দো-ইউরোপীয় জাতিগোষ্ঠীর মধ্যে ইন্দো-আর্য সম্প্রদায়ের মানুষের সংখ্যাই সর্বাধিক, যা মোট জনসংখ্যার প্রায় ৭০.১২%।" },
+      { q: "৩. ইন্দো-আর্য সম্প্রদায়ের মধ্যে কোন ভাষাভাষী মানুষের শতকরা হার সবচেয়ে বেশি?", opts: ["হিন্দুস্থানি", "বাঙালি", "মারাঠি", "পাঞ্জাবি"], ans: 0, exp: "ইন্দো-আর্য সম্প্রদায়ের মধ্যে হিন্দুস্থানি ভাষাভাষী মানুষের শতকরা হার সবচেয়ে বেশি (৩৮.৩৭%)। এরপরই রয়েছে বাঙালি (৭.৯۱%)।" },
+      { q: "৪. ভারতের জনসংখ্যার কত শতাংশ মানুষ মারাঠি ভাষার অন্তর্ভুক্ত?", opts: ["৪.৪৯%", "৬.৪৪%", "৬.৯২%", "৭.৯১%"], ans: 2, exp: "পরিসংখ্যান অনুযায়ী, ইন্দো-আর্য সম্প্রদায়ের মধ্যে মারাঠি ভাষাভাষী মানুষের শতকরা পরিমাণ হলো ৬.৯২%।" },
+      { q: "৫. ভারতের গড় সাক্ষরতার (Literacy) হার কত শতাংশ?", opts: ["৬৫.৪৬%", "৭০.০৫%", "৭৪.০৪%", "৮০.২০%"], ans: 2, exp: "২০১১ সালের জনগণনার চূড়ান্ত পরিসংখ্যান অনুযায়ী ভারতের গড় সাক্ষরতার হার হলো ৭৪.০৪%।" },
+      { q: "৬. ভারতে নারী সাক্ষরতার হার কত শতাংশ?", opts: ["৬০.০০%", "৬৫.৪৬%", "৭০.০৪%", "৭৫.২০%"], ans: 1, exp: "ভারতের সামগ্রিক নারী সাক্ষরতার হার হলো ৬৫.৪৬%।" },
+      { q: "৭. ভারতের সর্বাধিক সাক্ষর রাজ্য কোনটি?", opts: ["মিজোরাম", "গোয়া", "কেরল", "ত্রিপুরা"], ans: 2, exp: "পুরুষ ও মহিলা উভয় ক্ষেত্রেই ভারতের সর্বাধিক সাক্ষর রাজ্য হলো কেরল, যেখানে গড় সাক্ষরতার হার ৯৩.৯১%।" },
+      { q: "৮. কেরল রাজ্যে সর্বাধিক সাক্ষরতা দেখা যাওয়ার প্রধান কারণ কী?", opts: ["সেখানে শুধুমাত্র পুরুষদের পড়ানো হয়", "নারী ও পুরুষ উভয়েরই সাক্ষরতার হার সেখানে সবচেয়ে বেশি", "সেখানে অনেক বিদেশি বসবাস করে", "জনসংখ্যা খুব কম"], ans: 1, exp: "কেরলে পুরুষ সাক্ষরতা (৯৬.০২%) এবং নারী সাক্ষরতা (৯১.৯৮%) উভয়ই ভারতের অন্যান্য রাজ্যের তুলনায় সবচেয়ে বেশি হওয়ায় এটি সর্বাধিক সাক্ষর রাজ্য।" },
+      { q: "৯. ভারতের সর্বনিম্ন সাক্ষর রাজ্য কোনটি?", opts: ["রাজস্থান", "উত্তরপ্রদেশ", "ঝাড়খণ্ড", "বিহার"], ans: 3, exp: "ভারতের সব রাজ্যের মধ্যে সর্বনিম্ন সাক্ষরতার হার দেখা যায় বিহার রাজ্যে (৬৩.৮২%)।" },
+      { q: "১০. পশ্চিমবঙ্গের সাক্ষরতার হার কত শতাংশ?", opts: ["৫০.৫০%", "৭৪.০৪%", "৭৭.০৮%", "৮০.২০%"], ans: 2, exp: "ভারতের গড় সাক্ষরতার (৭৪.০৪%) তুলনায় পশ্চিমবঙ্গের সাক্ষরতার হার সামান্য বেশি, যা হলো ৭৭.০৮%।" },
+      { q: "১১. ভারতে স্থূল জন্মহার (Crude Birth Rate) প্রতি হাজারে কত?", opts: ["১৫.৫", "১৮.০", "২১.৮", "২৫.৪"], ans: 2, exp: "ভারতের জনমিতিক পরিসংখ্যান অনুযায়ী, দেশের স্থূল বা গড় জন্মহার হলো প্রতি হাজারে ২১.৮ জন।" },
+      { q: "১২. ভারতে মোট প্রজনন হার (Total Fertility Rate) কত?", opts: ["১.৮", "২.১", "২.৫", "৩.০"], ans: 1, exp: "ভারতের বর্তমান মোট প্রজনন হার বা TFR হলো ২.১, যা স্থিতিশীল জনসংখ্যা বৃদ্ধির নির্দেশক।" },
+      { q: "১৩. ভারতে জন্মকালীন গড় প্রত্যাশিত আয়ু (Life Expectancy) কত বছর?", opts: ["৬০.৫ বছর", "৬৫.৮ বছর", "৬৭.৫ বছর", "৬৯.৩ বছর"], ans: 2, exp: "ভারতে মানুষের জন্মকালীন গড় প্রত্যাশিত আয়ু হলো ৬৭.৫ বছর (পুরুষদের ৬৫.৮ বছর এবং মহিলাদের ৬৯.৩ বছর)।" },
+      { q: "১৪. ভারতে গড় মৃত্যুহার প্রতি হাজারে কত জন?", opts: ["৫.৫ জন", "৭.১ জন", "৯.০ জন", "১০.৫ জন"], ans: 1, exp: "চিকিৎসা বিজ্ঞানের উন্নতির ফলে বর্তমানে ভারতে গড় মৃত্যুহার হ্রাস পেয়ে প্রতি হাজারে ৭.১ জনে দাঁড়িয়েছে।" },
+      { q: "১৫. ভারতের সংবিধানে কতগুলি ভাষাকে স্বীকৃতি দেওয়া হয়েছে এবং সরকারি ভাষা কী কী?", opts: ["২০টি ভাষা, সরকারি ভাষা শুধুমাত্র হিন্দি", "২২টি ভাষা, সরকারি ভাষা হিন্দি ও ইংরেজি", "২২টি ভাষা, সরকারি ভাষা হিন্দি ও বাংলা", "২৮টি ভাষা, সরকারি ভাষা ইংরেজি"], ans: 1, exp: "ভারতে মোট ১৭৯টি ভাষা ও ৫৪৪টি উপভাষা নির্ধারিত হলেও ভারতের সংবিধানে ২২টি ভাষাকে স্বীকৃতি দেওয়া হয়েছে। এর মধ্যে হিন্দি ও ইংরেজি হলো ভারতের ২টি সরকারি ভাষা।" }
+    ]
+  },
+  4: {
+    name: 'Set 4', icon: '📝', topic: 'ভারতের জনসংখ্যার বিবিধ সূচক',
+    questions: [
+      { q: "১. ভারতের জনসংখ্যার বৃদ্ধি ও পুনর্বণ্টন কীভাবে রাজনৈতিক পরিস্থিতির সঙ্গে সম্পর্কিত ছিল?", opts: ["ব্রিটিশদের আগমনের ফলে জনসংখ্যা বাড়ে", "১৯৪৭ সালে দেশভাগের পর পূর্ব ও পশ্চিম পাকিস্তান থেকে দলে দলে শরণার্থী ভারতে আসায় জনসংখ্যা বহুগুণ বাড়ে", "সরকার পরিবর্তনের ফলে জনসংখ্যা কমে যায়", "কোনো সম্পর্ক ছিল না"], ans: 1, exp: "জনসংখ্যার বণ্টন রাজনৈতিক পরিস্থিতির পরিবর্তনের সঙ্গে সম্পর্কিত। ১৯৪৭ সালের ১৫ আগস্ট দেশভাগের সময় ও পরবর্তীকালে তৎকালীন পাকিস্তান থেকে দলে দলে শরণার্থী ভারতে আসায় পাঞ্জাব, পশ্চিমবঙ্গ, অসম ও ত্রিপুরা রাজ্যে জনসংখ্যা বহুগুণে বাড়ে।" },
+      { q: "২. ১৯১১ থেকে ১৯২১ সালে ভারতের জনসংখ্যা বৃদ্ধির গতিপ্রকৃতি কেমন ছিল?", opts: ["জনসংখ্যার ধনাত্মক বৃদ্ধি", "জনসংখ্যার অপরিবর্তন", "জনসংখ্যার ঋণাত্মক বৃদ্ধি", "জনসংখ্যার আকস্মিক বৃদ্ধি"], ans: 2, exp: "১৯১১ থেকে ১৯২১ পর্যন্ত সময়ে প্রাকৃতিক বিপর্যয়, মহামারি এবং প্রথম বিশ্বযুদ্ধের কারণে ভারতের জনসংখ্যা বৃদ্ধি ছিল ঋণাত্মক প্রকৃতির।" },
+      { q: "৩. ২০১১ সালের জনগণনা অনুযায়ী, ভারতের কোন রাজ্যে পুরুষ ও নারী সাক্ষরতার হার উভয়ই সর্বাধিক?", opts: ["গোয়া", "মিজোরাম", "কেরল", "ত্রিপুরা"], ans: 2, exp: "ভারতে সবচেয়ে বেশি সাক্ষর রাজ্য হলো কেরল। এখানে পুরুষ (৯৬.০২%) এবং নারী (৯১.৯৮%) উভয়েরই সাক্ষরতার হার দেশের মধ্যে সর্বাধিক।" },
+      { q: "৪. ভারতের কোন কেন্দ্রশাসিত অঞ্চলে নারী-পুরুষের লিঙ্গ অনুপাত (Sex Ratio) সর্বাধিক?", opts: ["দিল্লি", "লাক্ষাদ্বীপ", "চণ্ডীগড়", "পুদুচেরি"], ans: 3, exp: "কেন্দ্রশাসিত অঞ্চলগুলির মধ্যে পুদুচেরিতে নারী-পুরুষের অনুপাত সর্বাধিক, যেখানে প্রতি ১০০০ জন পুরুষে নারীর সংখ্যা ১০৩৭ জন।" },
+      { q: "৫. ভারতের মোট জনসংখ্যার কত শতাংশ মানুষ গ্রামে বসবাস করে?", opts: ["৬৮.৮৪%", "৫০.০০%", "৭২.২০%", "৬০.১৫%"], ans: 0, exp: "গ্রাম ও শহরের ভিত্তিতে জনসংখ্যার গঠন বিশ্লেষণ করলে দেখা যায়, ভারতবর্ষের মোট জনসংখ্যার ৬৮.৮৪ শতাংশ মানুষ গ্রামে বসবাস করে।" },
+      { q: "৬. ২০১১ সালের জনগণনা অনুসারে ভারতের সর্বনিম্ন জনঘনত্বযুক্ত রাজ্য কোনটি?", opts: ["মিজোরাম", "অরুণাচল প্রদেশ", "সিকিম", "জম্মু ও কাশ্মীর"], ans: 1, exp: "২০১১ সালের আদমশুমারি অনুযায়ী ভারতের সবচেয়ে কম জনঘনত্বপূর্ণ রাজ্য হলো অরুণাচল প্রদেশ, যেখানে প্রতি বর্গকিলোমিটারে মাত্র ১৭ জন মানুষ বাস করে।" },
+      { q: "৭. ভারতের জনঘনত্বের আঞ্চলিক বিভাগ অনুযায়ী, তামিলনাড়ু রাজ্য কোন অঞ্চলের অন্তর্গত?", opts: ["অত্যধিক জনঘনত্ব অঞ্চল", "অধিক জনঘনত্ব অঞ্চল", "মধ্যম জনঘনত্ব অঞ্চল", "স্বল্প জনঘনত্ব অঞ্চল"], ans: 1, exp: "তামিলনাড়ু, ঝাড়খণ্ড, পাঞ্জাব, হরিয়ানা প্রভৃতি রাজ্যগুলি ভারতের 'অধিক জনঘনত্ব অঞ্চল'-এর অন্তর্গত, যেখানে জনঘনত্ব প্রতি বর্গকিমিতে ৪০১ থেকে ৮০০ জন।" },
+      { q: "৮. ভারতের বয়সভিত্তিক জনসংখ্যার কাঠামো অনুযায়ী, কর্মক্ষম বা পরিণত (১৫-৬০ বছর) জনসংখ্যার শতকরা হার কত?", opts: ["৩০.৭৬%", "৬০.২৯%", "৫০.৯%", "৭০.১৫%"], ans: 1, exp: "ভারতের জনসংখ্যার বয়স কাঠামোর পরিসংখ্যান অনুযায়ী, ১৫-৬০ বছর বয়সি কর্মক্ষম বা পরিণত মানুষের সংখ্যা মোট জনসংখ্যার প্রায় ৬০.২৯ শতাংশ।" },
+      { q: "৯. ভারতের সংবিধানে অষ্টম তফসিলে (Eighth Schedule) বর্তমানে কতগুলি ভাষাকে স্বীকৃতি দেওয়া হয়েছে?", opts: ["১৫ টি", "১৮ টি", "২০ টি", "২২ টি"], ans: 3, exp: "ভারতে অসংখ্য ভাষা থাকলেও, ভারতীয় সংবিধানে বর্তমানে অষ্টম তফসিলে ২২টি ভাষাকে সরকারিভাবে স্বীকৃতি দেওয়া হয়েছে।" },
+      { q: "১০. জাতিগত গঠনের দিক দিয়ে ভারতের প্রধান জাতিগোষ্ঠী কোনটি?", opts: ["দ্রাবিড়ীয় গোষ্ঠী", "ইন্দো-ইউরোপীয় জাতি", "অস্ট্রো-এশিয়া গোষ্ঠী", "মঙ্গোলয়েড"], ans: 1, exp: "জাতিগত ভিত্তিতে ভারতের প্রধান জাতিগোষ্ঠী হলো ইন্দো-ইউরোপীয় জাতি, যা দেশের মোট জনসংখ্যার প্রায় ৭০.১৬ শতাংশ গঠন করে।" },
+      { q: "১১. ২০১১ সালের জনগণনা অনুসারে, ভারতের কেন্দ্রশাসিত অঞ্চলগুলির মধ্যে সর্বাধিক সাক্ষরতা কোথায় দেখা যায়?", opts: ["লাক্ষাদ্বীপ", "দিল্লি", "চণ্ডীগড়", "পুদুচেরি"], ans: 0, exp: "কেন্দ্রশাসিত অঞ্চলগুলির মধ্যে লাক্ষাদ্বীপ সর্বাধিক সাক্ষর, যেখানে গড় সাক্ষরতার হার প্রায় ৯২.২৮%।" },
+      { q: "১২. ভারতের কোন অঞ্চলে অতি-স্বল্প জনঘনত্ব (১০০ জনের কম/বর্গকিমি) দেখা যায়?", opts: ["আন্দামান ও নিকোবর দ্বীপপুঞ্জ", "দিল্লি", "কেরালা", "পাঞ্জাব"], ans: 0, exp: "অরুণাচল প্রদেশ, মিজোরাম, সিকিম এবং কেন্দ্রশাসিত অঞ্চল আন্দামান ও নিকোবর দ্বীপপুঞ্জ ভারতের অতি-স্বল্প জনঘনত্বযুক্ত অঞ্চলের অন্তর্গত, যেখানে প্রতি বর্গকিমিতে ১০০ জনেরও কম লোক বাস করে।" },
+      { q: "১৩. ভারতে সামগ্রিক নারী সাক্ষরতার হার কত শতাংশ?", opts: ["৭৪.০৪%", "৬৫.৪৬%", "৮২.১৪%", "৫০.২০%"], ans: 1, exp: "২০১১ সালের জনগণনা অনুযায়ী, ভারতের গড় সাক্ষরতার হার ৭৪.০৩%, যার মধ্যে পুরুষ সাক্ষরতার হার ৮২.১৪% এবং নারী সাক্ষরতার হার ৬৫.৪৬%।" },
+      { q: "১৪. ভারতের কোন রাজ্যে গ্রামীণ জনসংখ্যার হার সবচেয়ে কম?", opts: ["হিমাচল প্রদেশ", "বিহার", "গোয়া", "মহারাষ্ট্র"], ans: 2, exp: "ভারতের রাজ্যগুলির মধ্যে গোয়া রাজ্যে গ্রামীণ জনসংখ্যার হার সবচেয়ে কম, যা মাত্র ৩৭.৮৩%।" },
+      { q: "১৫. ভারতের বয়স কাঠামো অনুযায়ী, গড় নির্ভরশীলতা অনুপাত (Dependency Ratio) কত?", opts: ["৪০.৫%", "৫০.৯%", "৬০.২%", "৭০.০%"], ans: 1, exp: "ভারতে ০-১৪ বছর বয়সি এবং ৬০ বছরের অধিক বয়সি মানুষেরা ১৫-৬০ বছরের কর্মক্ষম মানুষের ওপর নির্ভরশীল। হিসাব অনুযায়ী, ভারতবর্ষে গড় নির্ভরশীলতা অনুপাত প্রায় ৫০.৯%।" }
+    ]
+  }
+};
+
+// ============================================================
+// মূল লজিক (লগইন, টাইমার, কুইজ পরিচালনা এবং রেজাল্ট)
+// ============================================================
+
+function initHub() {
+  const grid = document.getElementById('setGrid');
+  grid.innerHTML = '';
+
+  Object.keys(allSets).forEach(setId => {
+    const set = allSets[setId];
+    const card = document.createElement('div');
+    card.className = 'set-card';
+
+    let attemptCount = 0;
+    if (currentUser) {
+      let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+      attemptCount = (data[currentUser] && data[currentUser][setId]) || 0;
+    }
+
+    card.innerHTML = `
+      <div class="icon">${set.icon}</div>
+      <div class="set-num">${set.name}</div>
+      <div class="set-title">${set.topic}</div>
+      <div class="set-meta"><span>${set.questions.length} প্রশ্ন</span><span>১০ মিনিট</span></div>
+      ${currentUser ? `<div class="attempt-badge">${attemptCount}/${MAX_ATTEMPTS} Attempts</div>` : ''}
+    `;
+
+    card.onclick = () => {
+      if (currentUser) {
+        if (attemptCount >= MAX_ATTEMPTS) {
+          alert(`⚠️ আপনি ${set.name} এর সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
+          return;
+        }
+        startQuiz(setId);
+      } else {
+        openLogin(setId);
+      }
+    };
+    grid.appendChild(card);
+  });
+}
+
+function openLogin(setId) {
+  pendingSetId = setId;
+  document.getElementById('loginSetName').innerText = `📚 ${allSets[setId].name}`;
+  document.getElementById('loginOverlay').classList.add('active');
+  document.getElementById('loginUsername').value = '';
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginError').style.display = 'none';
+}
+
+function closeLogin() {
+  document.getElementById('loginOverlay').classList.remove('active');
+}
+
+function doLogin() {
+  const u = document.getElementById('loginUsername').value.trim();
+  const p = document.getElementById('loginPassword').value.trim();
+  const err = document.getElementById('loginError');
+
+  const GLOBAL_USERS = JSON.parse(localStorage.getItem("testBazarGlobalUsers")) || {};
+
+  if (!u || !p) {
+    err.innerText = "❌ ইউজারনেম এবং পাসওয়ার্ড দিন!";
+    err.style.display = 'block';
+    return;
+  }
+
+  if (GLOBAL_USERS[u] && GLOBAL_USERS[u] === p) {
+    currentUser = u;
+    document.getElementById('hubUserInfo').innerText = `👤 ${u} — Test দিতে সেট সিলেক্ট করো।`;
+    closeLogin();
+    initHub();
+    if (pendingSetId) {
+      let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+      let attemptCount = (data[u] && data[u][pendingSetId]) || 0;
+      if (attemptCount < MAX_ATTEMPTS) {
+        startQuiz(pendingSetId);
+      } else {
+        alert(`⚠️ আপনি ${allSets[pendingSetId].name} এর সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
+      }
+      pendingSetId = null;
+    }
+  } else {
+    err.innerText = "❌ ভুল ইউজারনেম বা পাসওয়ার্ড।";
+    err.style.display = 'block';
+  }
+}
+
+function startQuiz(setId) {
+  currentSetId = setId;
+  TOTAL_QS = allSets[setId].questions.length;
+
+  let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  if (!data[currentUser]) data[currentUser] = {};
+  data[currentUser][setId] = (data[currentUser][setId] || 0) + 1;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+  initHub();
+
+  cur = 0; score = 0; wrong = 0; answered = false; userAnswers = [];
+  timeLeft = TIME_LIMIT;
+  isReviewMode = false;
+
+  document.getElementById('hubPage').classList.add('hidden');
+  document.getElementById('resultWrap').classList.remove('show');
+  document.getElementById('testArea').classList.remove('hidden');
+  document.getElementById('timerBox').classList.remove('hidden');
+  document.getElementById('timerBox').classList.remove('danger');
+
+  const set = allSets[setId];
+  document.getElementById('testSetLabel').innerText = set.name;
+  document.getElementById('testTopic').innerText = set.topic;
+
+  startTimer();
+  loadQuestion();
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      showResult();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+  const s = (timeLeft % 60).toString().padStart(2, '0');
+  document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+  if (timeLeft < 60) document.getElementById('timerBox').classList.add('danger');
+}
+
+function loadQuestion() {
+  answered = false;
+  const set = allSets[currentSetId];
+  const q = set.questions[cur];
+
+  document.getElementById('qNum').innerText = isReviewMode ? `Review: প্রশ্ন ${cur + 1} / ${TOTAL_QS}` : `প্রশ্ন ${cur + 1} / ${TOTAL_QS}`;
+  document.getElementById('qText').innerText = q.q;
+  document.getElementById('progressFill').style.width = `${((cur + 1) / TOTAL_QS) * 100}%`;
+
+  const optsContainer = document.getElementById('qOpts');
+  optsContainer.innerHTML = '';
+
+  q.opts.forEach((optText, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.innerHTML = `<div class="opt-circle">${LABELS[idx]}</div> <div class="opt-text">${optText}</div>`;
+
+    if (isReviewMode) {
+      btn.classList.add('disabled');
+      if (idx === q.ans) btn.classList.add('correct');
+      else if (userAnswers[cur] === idx) btn.classList.add('wrong');
+    } else {
+      btn.onclick = () => selectAnswer(idx, btn);
+    }
+    optsContainer.appendChild(btn);
+  });
+
+  const nextBtn = document.getElementById('nextBtn');
+  document.getElementById('explanation').classList.remove('show');
+  document.getElementById('scoreShow').innerText = isReviewMode ? "সবুজ = সঠিক উত্তর | লাল = আপনার ভুল উত্তর" : `সঠিক: ${score} | ভুল: ${wrong}`;
+
+  if (isReviewMode) {
+    document.getElementById('explanationText').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+    document.getElementById('explanation').classList.add('show');
+    nextBtn.disabled = false;
+    nextBtn.innerText = cur === set.questions.length - 1 ? 'ফলাফল পেজে ফিরুন' : 'পরবর্তী →';
+  } else {
+    nextBtn.disabled = true;
+    nextBtn.innerText = cur === set.questions.length - 1 ? 'ফলাফল দেখো 🏆' : 'পরবর্তী →';
+  }
+}
+
+function selectAnswer(selectedIdx, btnElement) {
+  if (answered) return;
+  answered = true;
+
+  const set = allSets[currentSetId];
+  const q = set.questions[cur];
+  userAnswers[cur] = selectedIdx;
+
+  const allBtns = document.getElementById('qOpts').children;
+  for (let i = 0; i < allBtns.length; i++) {
+    allBtns[i].classList.add('disabled');
+    if (i === q.ans) allBtns[i].classList.add('correct');
+  }
+
+  if (selectedIdx === q.ans) {
+    score++;
+  } else {
+    btnElement.classList.add('wrong');
+    wrong++;
+  }
+
+  document.getElementById('scoreShow').innerText = `সঠিক: ${score} | ভুল: ${wrong}`;
+  document.getElementById('explanationText').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+  document.getElementById('explanation').classList.add('show');
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQ() {
+  const set = allSets[currentSetId];
+  if (cur < set.questions.length - 1) {
+    cur++;
+    loadQuestion();
+  } else {
+    if (isReviewMode) {
+      document.getElementById('testArea').classList.add('hidden');
+      document.getElementById('resultWrap').classList.add('show');
+    } else {
+      clearInterval(timerInterval);
+      showResult();
+    }
+  }
+}
+
+function showResult() {
+  document.getElementById('testArea').classList.add('hidden');
+  document.getElementById('timerBox').classList.add('hidden');
+  document.getElementById('resultWrap').classList.add('show');
+
+  const total = allSets[currentSetId].questions.length;
+  const pct = Math.round((score / total) * 100);
+
+  document.getElementById('finalScore').innerText = `${pct}%`;
+  document.getElementById('rbCorrect').innerText = score;
+  document.getElementById('rbWrong').innerText = total - score;
+
+  let msg = "অসাধারণ!"; let icon = "🏆";
+  if (pct < 50) { msg = "আরও অনুশীলন প্রয়োজন!"; icon = "📚"; }
+  else if (pct < 80) { msg = "খুব ভালো চেষ্টা!"; icon = "👍"; }
+
+  document.getElementById('resultGrade').innerText = msg;
+  document.getElementById('resultIcon').innerText = icon;
+
+  let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  let count = data[currentUser][currentSetId] || 0;
+  let remaining = MAX_ATTEMPTS - count;
+
+  document.getElementById('attemptInfo').innerText = `👤 ${currentUser} — ${allSets[currentSetId].name}: বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ`;
+}
+
+function showReview() {
+  document.getElementById('resultWrap').classList.remove('show');
+  document.getElementById('testArea').classList.remove('hidden');
+  isReviewMode = true;
+  cur = 0;
+  loadQuestion();
+}
+
+function restartQuiz() {
+  let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  let count = data[currentUser][currentSetId] || 0;
+  if (count >= MAX_ATTEMPTS) {
+    alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+    return;
+  }
+  document.getElementById('resultWrap').classList.remove('show');
+  startQuiz(currentSetId);
+}
+
+function goToHub() {
+  document.getElementById('resultWrap').classList.remove('show');
+  document.getElementById('testArea').classList.add('hidden');
+  document.getElementById('timerBox').classList.add('hidden');
+  document.getElementById('hubPage').classList.remove('hidden');
+  initHub();
+}
+
+window.onload = initHub;
+</script>
+
+</body>
+</html>
+
+
