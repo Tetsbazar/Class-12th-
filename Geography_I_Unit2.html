@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Bazar — Indian Geography | Unit 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ================== CSS STYLES ================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: #f0faf4; min-height: 100vh; color: #1c2e24; }
+.en-font { font-family: 'Syne', sans-serif; }
+
+.top-bar { background: #1a7a4a; padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.top-logo { font-size: 1.2rem; font-weight: 800; color: white; cursor: pointer; }
+.top-logo span { color: #f9a825; }
+.timer-box { background: rgba(255,255,255,0.2); padding: 0.3rem 0.8rem; border-radius: 6px; color: white; font-weight: 700; font-size: 0.95rem; }
+.timer-box.danger { background: #dc3545; animation: pulse 1s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+.main { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
+
+/* HUB PAGE */
+.hub-header { text-align: center; margin-bottom: 2rem; }
+.hub-header h1 { font-family: 'Tiro Bangla', serif; color: #1a7a4a; font-size: 1.6rem; margin-bottom: 0.5rem; line-height: 1.4; }
+.hub-header p { color: #5a7a66; font-size: 0.95rem; font-family: 'Tiro Bangla', serif; font-weight: bold; }
+.set-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+.set-card { background: white; border: 2px solid #c5dccb; border-radius: 12px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s; }
+.set-card:hover { transform: translateY(-3px); border-color: #1a7a4a; box-shadow: 0 6px 20px rgba(26,122,74,0.12); }
+.set-card .icon { font-size: 2.2rem; margin-bottom: 0.3rem; }
+.set-card .set-num { font-weight: 700; font-size: 1.1rem; color: #1a7a4a; }
+.set-card .set-title { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: #5a7a66; margin: 0.2rem 0 0.5rem; }
+.set-card .set-meta { display: flex; gap: 1rem; font-size: 0.75rem; color: #5a7a66; justify-content: center; font-weight: bold;}
+.set-card .set-meta span { background: #f0faf4; padding: 0.2rem 0.6rem; border-radius: 4px; }
+.attempt-badge { font-size: 0.8rem; color: #dc3545; font-weight: 700; margin-top: 0.6rem; font-family: 'Tiro Bangla', serif; }
+
+/* QUIZ AREA */
+.quiz-info { background: white; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; border: 1px solid #c5dccb; display: flex; gap: 1rem; flex-wrap: wrap; }
+.info-item { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #5a7a66; font-weight: 600; }
+.info-item strong { color: #1a7a4a; }
+
+.progress-wrap { background: #c5dccb; border-radius: 4px; height: 6px; margin-bottom: 1.2rem; overflow: hidden; }
+.progress-fill { height: 100%; background: #1a7a4a; border-radius: 4px; transition: width 0.3s; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.q-num { font-size: 0.9rem; font-weight: 700; color: #1a7a4a; margin-bottom: 0.8rem; }
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; color: #1c2e24; font-weight: 700; line-height: 1.6; margin-bottom: 1.2rem; }
+
+.opts { display: flex; flex-direction: column; gap: 0.6rem; }
+.opt { display: flex; align-items: flex-start; gap: 12px; padding: 0.8rem 1rem; border: 1.5px solid #c5dccb; border-radius: 10px; background: transparent; cursor: pointer; text-align: left; transition: all 0.2s; width: 100%; }
+.opt:hover:not(.disabled) { border-color: #1a7a4a; background: #f0faf4; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #c5dccb; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #5a7a66; flex-shrink: 0; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1c2e24; line-height: 1.6; font-weight: 600; padding-top: 2px; }
+
+.opt.correct { border-color: #1a7a4a; background: #e8f7ef; }
+.opt.correct .opt-circle { background: #1a7a4a; border-color: #1a7a4a; color: white; }
+.opt.wrong { border-color: #dc3545; background: #fdf0f0; }
+.opt.wrong .opt-circle { background: #dc3545; border-color: #dc3545; color: white; }
+.opt.disabled { cursor: default; }
+
+.explanation { background: #f0faf4; border-left: 4px solid #1a7a4a; border-radius: 0 8px 8px 0; padding: 1rem; margin-top: 1rem; display: none; }
+.explanation.show { display: block; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #2c4035; line-height: 1.7; }
+
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
+.score-show { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: #5a7a66; font-weight: bold; }
+.next-btn { background: #1a7a4a; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+.next-btn:hover:not(:disabled) { background: #2aad68; }
+.next-btn:disabled { background: #c5dccb; cursor: not-allowed; }
+
+/* RESULT AREA */
+.result-wrap { background: white; border-radius: 14px; padding: 2rem; text-align: center; border: 1px solid #c5dccb; display: none; max-width: 600px; margin: 0 auto; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; line-height: 1; }
+.result-score { font-size: 3.5rem; font-weight: 800; color: #1a7a4a; line-height: 1; margin-bottom: 5px; }
+.result-total { font-size: 1rem; color: #5a7a66; margin-bottom: 0.5rem; font-family: 'Tiro Bangla', serif; font-weight: bold;}
+.result-grade { font-size: 1.2rem; font-weight: 700; color: #1c2e24; margin-bottom: 1.5rem; font-family: 'Tiro Bangla', serif; color: #e8730a; }
+
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: #f0faf4; border-radius: 10px; padding: 1rem; text-align: center; border: 1px solid #c5dccb; }
+.rb-num { font-size: 1.8rem; font-weight: 800; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: #5a7a66; margin-top: 0.2rem; font-weight: bold;}
+
+.attempt-info { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #1a7a4a; font-weight: bold; margin-bottom: 1.5rem; background: #e8f7ef; padding: 10px; border-radius: 8px; }
+
+/* ACTION BUTTONS */
+.result-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+.result-actions button { width: 100%; padding: 14px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 800; cursor: pointer; border: none; transition: 0.2s; }
+.btn-retry { background: #17a2b8; color: white; }
+.btn-retry:hover { background: #138496; }
+.btn-review { background: #28a745; color: white; }
+.btn-review:hover { background: #218838; }
+.btn-home { background: transparent; color: #5a7a66; border: 2px solid #c5dccb !important; }
+.btn-home:hover { background: #f0faf4; }
+
+/* LOGIN MODAL */
+.login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px); }
+.login-overlay.active { display: flex; }
+.login-modal { background: white; padding: 2rem; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+.login-modal h2 { font-family: 'Tiro Bangla', serif; color: #1a7a4a; font-size: 1.4rem; margin-bottom: 0.5rem; text-align: center; }
+.login-modal p { font-family: 'Tiro Bangla', serif; color: #5a7a66; font-size: 0.9rem; margin-bottom: 1.5rem; text-align: center; }
+.input-group { margin-bottom: 1.2rem; }
+.input-group label { display: block; font-size: 0.85rem; font-weight: 700; color: #1c2e24; margin-bottom: 5px; font-family: 'Tiro Bangla', serif; }
+.input-group input { width: 100%; padding: 12px; border: 1.5px solid #c5dccb; border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 0.95rem; outline: none; transition: 0.2s; }
+.input-group input:focus { border-color: #1a7a4a; box-shadow: 0 0 0 3px rgba(26,122,74,0.1); }
+.login-btn { width: 100%; background: #1a7a4a; color: white; border: none; padding: 12px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: 0.2s; margin-bottom: 8px; }
+.cancel-btn { width: 100%; background: transparent; color: #5a7a66; border: 1.5px solid #c5dccb; padding: 10px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; cursor: pointer; }
+.error-msg { color: #dc3545; font-size: 0.85rem; font-weight: 700; margin-top: 10px; font-family: 'Tiro Bangla', serif; display: none; text-align: center; }
+.set-name-display { background: #f0faf4; border-radius: 8px; padding: 0.6rem; text-align: center; margin-bottom: 1rem; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1a7a4a; font-weight: 700; }
+
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-logo" onclick="goToHub()">Test<span>Bazar</span></div>
+  <div class="timer-box hidden" id="timerBox">⏱ <span id="timerDisplay">10:00</span></div>
+</div>
+
+<div class="main">
+
+  <!-- ===== LOGIN OVERLAY ===== -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-modal">
+      <h2>🔐 লগইন করুন</h2>
+      <p>Test শুরু করতে আপনার ইউজারনেম ও পাসওয়ার্ড দিন</p>
+      <div class="set-name-display" id="loginSetName">📚 Set 1</div>
+
+      <div class="input-group">
+        <label>ইউজারনেম</label>
+        <input type="text" id="loginUsername" placeholder="আপনার ইউজারনেম লিখুন">
+      </div>
+      <div class="input-group">
+        <label>পাসওয়ার্ড</label>
+        <input type="password" id="loginPassword" placeholder="আপনার পাসওয়ার্ড লিখুন" onkeydown="if(event.key==='Enter') doLogin()">
+      </div>
+
+      <button class="login-btn" onclick="doLogin()">✅ লগইন করে Test শুরু করো</button>
+      <button class="cancel-btn" onclick="closeLogin()">বাতিল</button>
+      <div class="error-msg" id="loginError">❌ ভুল ইউজারনেম বা পাসওয়ার্ড।</div>
+    </div>
+  </div>
+
+  <!-- ===== HUB PAGE ===== -->
+  <div id="hubPage">
+    <div class="hub-header">
+      <h1>ভারতের ভূগোল<br>Unit 2: জলসম্পদ</h1>
+      <p>নিচের সেটগুলো থেকে বেছে নিন। প্রতিটি সেটে ১৫টি করে প্রশ্ন রয়েছে।</p>
+      <div id="hubUserInfo" style="font-family:'Tiro Bangla',serif;font-size:1rem;color:#1a7a4a;margin-top:0.8rem;font-weight:bold;"></div>
+    </div>
+    <div class="set-grid" id="setGrid"></div>
+  </div>
+
+  <!-- ===== TEST AREA ===== -->
+  <div id="testArea" class="hidden">
+    <div class="quiz-info">
+      <div class="info-item">🎓 <strong id="testSetName">ভূগোল</strong> — 3rd Sem | ভারতের ভূগোল | <span id="testSetLabel">Set 1</span></div>
+      <div class="info-item">📝 <span id="testTopic">Topic</span></div>
+    </div>
+
+    <div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+    <div class="q-card" id="qCard">
+      <div class="q-num" id="qNum">প্রশ্ন ১ / ১৫</div>
+      <div class="q-text" id="qText"></div>
+      <div class="opts" id="qOpts"></div>
+      <div class="explanation" id="explanation"><p id="explanationText"></p></div>
+
+      <div class="nav-row">
+        <div class="score-show" id="scoreShow">সঠিক: ০ | ভুল: ০</div>
+        <button class="next-btn" id="nextBtn" onclick="nextQ()" disabled>পরবর্তী →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RESULT AREA ===== -->
+  <div class="result-wrap" id="resultWrap">
+    <div class="result-icon" id="resultIcon">🏆</div>
+    <div class="result-score en-font" id="finalScore">100%</div>
+    <div class="result-total">স্কোর</div>
+    <div class="result-grade" id="resultGrade">অসাধারণ!</div>
+
+    <div class="result-bars">
+      <div class="result-bar">
+        <div class="rb-num en-font" id="rbCorrect" style="color:#1a7a4a">0</div>
+        <div class="rb-label">সঠিক</div>
+      </div>
+      <div class="result-bar">
+        <div class="rb-num en-font" id="rbWrong" style="color:#dc3545">0</div>
+        <div class="rb-label">ভুল/স্কিপ</div>
+      </div>
+    </div>
+
+    <div class="attempt-info" id="attemptInfo">👤 user — Set 1: বাকি আছে 9 বার Test দেওয়ার সুযোগ</div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="result-actions">
+      <button class="btn-retry" onclick="restartQuiz()">🔄 আবার চেষ্টা করো</button>
+      <button class="btn-review" onclick="showReview()">👀 উত্তর দেখো</button>
+      <button class="btn-home" onclick="goToHub()">🏠 ← Hub এ ফিরে যাও</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// গ্লোবাল ভেরিয়েবল
+// ============================================================
+const MAX_ATTEMPTS = 10;
+const TIME_LIMIT = 10 * 60; // 10 Minutes
+const LABELS = ['ক', 'খ', 'গ', 'ঘ'];
+const STORAGE_KEY = "testBazarAttempts_Geo_India_Unit2_5Sets";
+
+let currentUser = "";
+let currentSetId = 1;
+let pendingSetId = null;
+let cur = 0, score = 0, wrong = 0, answered = false;
+let timerInterval, timeLeft = TIME_LIMIT;
+let userAnswers = [];
+let isReviewMode = false;
+let TOTAL_QS = 0;
+
+// ============================================================
+// ভারতের ভূগোল - Unit 2: জলসম্পদ (৫টি সেটের প্রশ্নাবলি)
+// ============================================================
+const allSets = {
+  1: {
+    name: 'Set 1', icon: '💧', topic: 'জলসম্পদ, জলের ব্যবহার এবং জলসংকট',
+    questions: [
+      { q: "১. পৃথিবীর মোট জলের কত শতাংশ মিষ্টি বা স্বাদুজল?", opts: ["১.৫ শতাংশ", "২.৮ শতাংশ", "৩.০ শতাংশ", "৪.৫ শতাংশ"], ans: 1, exp: "বইয়ের তথ্য অনুযায়ী পৃথিবীর মোট জলের মাত্র ২.৮ শতাংশ হলো মিষ্টি জল।" },
+      { q: "২. পৃথিবীর মোট জলসম্পদের কত শতাংশ ভারতে রয়েছে?", opts: ["২ শতাংশ", "৪ শতাংশ", "৫ শতাংশ", "১১ শতাংশ"], ans: 1, exp: "সমগ্র বিশ্বের মোট জলসম্পদের মাত্র ৪ শতাংশ ভারতের ভাগে রয়েছে।" },
+      { q: "৩. ভারতে জলের চাহিদা কোন্ ক্ষেত্রে সবচেয়ে বেশি?", opts: ["শিল্পে", "বিদ্যুৎ উৎপাদনে", "পানীয় জল হিসেবে", "সেচ কার্যে"], ans: 3, exp: "ভারতের মতো কৃষিপ্রধান দেশে কৃষিতে বা সেচ কার্যে সবচেয়ে বেশি জলের প্রয়োজন হয়।" },
+      { q: "৪. বিশ্ব স্বাস্থ্য সংস্থার (WHO) মতে, মানুষের ন্যূনতম দৈনিক জলের প্রয়োজন কত লিটার?", opts: ["২০ লিটার", "৩০ লিটার", "৫০ লিটার", "৭০ লিটার"], ans: 2, exp: "বিশ্ব স্বাস্থ্য সংস্থার মতে, সুস্থভাবে বেঁচে থাকার জন্য একজন মানুষের ন্যূনতম দৈনিক ৫০ লিটার জলের প্রয়োজন।" },
+      { q: "৫. এক কেজি ধান উৎপাদনে প্রায় কত লিটার জলের প্রয়োজন হয়?", opts: ["৩৫০ লিটার", "৫৫০ লিটার", "৫৮০ লিটার", "১১০০ লিটার"], ans: 3, exp: "কৃষি উৎপাদনে ধানে সবচেয়ে বেশি জল লাগে। এক কেজি ধান উৎপাদনে প্রায় ১১০০ লিটার জলের প্রয়োজন হয়।" },
+      { q: "৬. পৃথিবীর মোট জলের কত ভাগ নোনা জল, যা সরাসরি ব্যবহারের অযোগ্য?", opts: ["৭০.১ শতাংশ", "৮০.৫ শতাংশ", "৯৭.২ শতাংশ", "৯৯.০ শতাংশ"], ans: 2, exp: "পৃথিবীর বারিমণ্ডলের বিশাল জলরাশির শতকরা ৯৭.২ ভাগই হলো সাগর-মহাসাগরের নোনা জল।" },
+      { q: "৭. বিংশ শতাব্দীতে পৃথিবীর গড় তাপমাত্রা তার আগের শতাব্দীর তুলনায় কত ডিগ্রি সেন্টিগ্রেড বেড়েছে?", opts: ["০.৬ ডিগ্রি", "১.০ ডিগ্রি", "১.২ ডিগ্রি", "২.০ ডিগ্রি"], ans: 0, exp: "বিশ্ব উষ্ণায়নের ফলে বিংশ শতাব্দীতে পৃথিবীর গড় তাপমাত্রা ০.৬ ডিগ্রি সেন্টিগ্রেড বৃদ্ধি পেয়েছে, যা জলসংকটের অন্যতম কারণ।" },
+      { q: "৮. ভারতের কোন্ রাজ্যে ভৌমজলস্তর ক্রমাগত হ্রাস পাওয়ার জন্য ২০১১ সালে 'জল ধরো জল ভরো' প্রকল্প চালু করা হয়?", opts: ["রাজস্থান", "পশ্চিমবঙ্গ", "তামিলনাড়ু", "মহারাষ্ট্র"], ans: 1, exp: "ভৌমজলস্তরের পতন রোধ করতে পশ্চিমবঙ্গ সরকার ২০১১ সালে 'জল ধরো জল ভরো' কর্মসূচি গ্রহণ করে।" },
+      { q: "৯. পৃথিবীর স্থলভাগের কত শতাংশ এলাকা ভারতের অধিকারে রয়েছে?", opts: ["২.৪ শতাংশ", "৩.২ শতাংশ", "৫.০ শতাংশ", "৭.০ শতাংশ"], ans: 0, exp: "পৃথিবীর মোট স্থলভাগের মাত্র ২.৪ শতাংশ ভারতের অধিকারে থাকলেও এখানে বিশ্বের প্রায় ১৭% মানুষ বাস করে।" },
+      { q: "১০. ভারতের ব্যবহৃত জলের প্রায় কত শতাংশ ভৌমজল থেকে আসে?", opts: ["২০ শতাংশ", "৩০ শতাংশ", "৫০ শতাংশ", "৭০ শতাংশ"], ans: 2, exp: "ভারতে ব্যবহৃত মোট জলের প্রায় ৫০ শতাংশ ভূগর্ভস্থ বা ভৌমজল থেকে আসে। বিশ্বের মধ্যে ভারতের কৃষিসেচই সবচেয়ে বেশি ভৌমজল নির্ভর।" },
+      { q: "১১. এক টন কাগজ তৈরিতে কী পরিমাণ বিশুদ্ধ জলের প্রয়োজন হয়?", opts: ["৫০ টন", "১০০ টন", "২৫০ টন", "১২৬০ টন"], ans: 2, exp: "শিল্পক্ষেত্রে প্রচুর জল ব্যবহৃত হয়। পরিসংখ্যান অনুযায়ী এক টন কাগজ তৈরি করতে প্রায় ২৫০ টন বিশুদ্ধ জলের প্রয়োজন হয়।" },
+      { q: "১২. একটি নদীর জল ও পলি সেই নদীতে এসে পড়লে সেই সমগ্র অঞ্চলকে কী বলা হয়?", opts: ["জলবিভাজিকা", "নদী অববাহিকা", "নদী মোহনা", "বদ্বীপ"], ans: 1, exp: "নদীর চারিদিকের যে অঞ্চলের জল ও পলি ওই নদীতে এসে পড়ে সেই সমগ্র অঞ্চলকে ওই নদীর অববাহিকা বলে।" },
+      { q: "১৩. বর্ষাকালে ভারতের কোন্ রাজ্যে মোট বৃষ্টির মাত্র ৩০% হয়ে থাকে?", opts: ["রাজস্থান", "গুজরাত", "মধ্যপ্রদেশ", "তামিলনাড়ু"], ans: 3, exp: "তামিলনাড়ুতে বর্ষাকাল ছাড়া বছরের অন্য সময়ে বেশি বৃষ্টিপাত হয়। বর্ষাকালে এখানে মোট বৃষ্টির মাত্র ৩০% হয়।" },
+      { q: "১৪. আমাদের দেশের শহরগুলিতে গড়ে জলের অপচয়ের পরিমাণ কত ভাগ?", opts: ["১০-১৫ ভাগ", "২০-২৫ ভাগ", "৩০-৫০ ভাগ", "৬০-৭০ ভাগ"], ans: 2, exp: "পরিসংখ্যান অনুযায়ী ভারতের শহরগুলিতে গড়ে প্রায় ৩০ থেকে ৫০ ভাগ জলের অপচয় ঘটে।" },
+      { q: "১৫. নদীর জলের আন্তঃঅববাহিকা স্থানান্তর (River linking) ভারতে কী অবস্থায় রয়েছে?", opts: ["সম্পূর্ণ বাস্তবায়িত", "আংশিক বাস্তবায়িত", "প্রস্তাব আকারে রয়েছে", "বাতিল করা হয়েছে"], ans: 2, exp: "এক অববাহিকা থেকে অন্য অববাহিকায় জলের স্থানান্তর (নদী সংযোগ) ভারতে এখনও প্রস্তাব আকারেই রয়েছে, বাস্তবায়িত হয়নি।" }
+    ]
+  },
+  2: {
+    name: 'Set 2', icon: '⛰️', topic: 'জলবিভাজিকা ও এর ব্যবস্থাপনা',
+    questions: [
+      { q: "১. একটি নদী অববাহিকা অপর একটি নদী অববাহিকা থেকে যে উচ্চভূমি দ্বারা বিচ্ছিন্ন থাকে, তাকে কী বলে?", opts: ["জলবিভাজিকা", "বদ্বীপ", "গিরিখাত", "প্লাবনভূমি"], ans: 0, exp: "দুটি পাশাপাশি অবস্থিত নদী অববাহিকার মধ্যবর্তী সীমানা নির্ধারণকারী উচ্চভূমিকে জলবিভাজিকা বা Watershed বলে।" },
+      { q: "২. মধ্যপ্রদেশের কোন্ পর্বত শোন ও নর্মদা নদীর মধ্যবর্তী জলবিভাজিকা হিসেবে কাজ করে?", opts: ["মহাকাল পর্বত", "মহাদেব পর্বত", "অমরকণ্টক পর্বত", "বিন্ধ্য পর্বত"], ans: 2, exp: "মধ্যপ্রদেশের অমরকণ্টক পর্বত শোন এবং নর্মদা নদীর মধ্যের জলবিভাজিকার একটি প্রকৃষ্ট উদাহরণ।" },
+      { q: "৩. দুটি পাশাপাশি অবস্থিত জলবিভাজিকার মধ্যবর্তী উঁচু সীমানাকে কী বলা হয়?", opts: ["রিচার্জ খাদ", "ওয়াটার ডিভাইড বা রিজলাইন (Ridgeline)", "চেক ড্যাম", "কন্ট্যুর লাইন"], ans: 1, exp: "দুটি পাশাপাশি অবস্থিত জলবিভাজিকার মধ্যবর্তী উঁচু সীমানা নির্ধারণকারী ভূমিভাগকে ওয়াটার ডিভাইড বা ridgeline বলা হয়।" },
+      { q: "৪. অধিকাংশ জলবিভাজিকা প্রকল্প কর্মসূচি মূলত কোন্ আকারের জলবিভাজিকার ভিত্তিতে হয়ে থাকে?", opts: ["ম্যাক্রো ওয়াটারসেড", "মাইক্রো ওয়াটারসেড (Micro watershed)", "সাব ক্যাচমেন্ট", "বেসিন"], ans: 1, exp: "ব্যবস্থাপনা ও রূপায়ণের সুবিধার্থে বেশিরভাগ জলবিভাজিকা প্রকল্প কর্মসূচি মাইক্রো ওয়াটারসেডভিত্তিক হয়ে থাকে।" },
+      { q: "৫. শুষ্ক অঞ্চলে জলবিভাজিকা ব্যবস্থাপনার প্রধান উদ্দেশ্য কী?", opts: ["বাষ্পীভবনের হার কমানো", "বন্যা নিয়ন্ত্রণ", "জলবিদ্যুৎ উৎপাদন", "নদীপথ পরিষ্কার রাখা"], ans: 0, exp: "শুষ্ক অঞ্চলে (Arid region) জলবিভাজিকা ব্যবস্থাপনার প্রধান উদ্দেশ্য হলো বাষ্পীভবনের হার কমানো এবং মৃত্তিকার আর্দ্রতা ধরে রাখা।" },
+      { q: "৬. বৃষ্টিবহুল অঞ্চলে জলবিভাজিকা ব্যবস্থাপনার প্রধান উদ্দেশ্য কী?", opts: ["বাষ্পীভবনের হার কমানো", "জলপ্রবাহের হার বজায় রেখে বন্যা নিয়ন্ত্রণ", "সেচকার্যের জন্য জল সঞ্চয়", "চেক ড্যাম ভেঙে দেওয়া"], ans: 1, exp: "বৃষ্টিবহুল অঞ্চলে প্রচুর বৃষ্টিপাতের কারণে বন্যা ও ভূমিধস রোধ করে জলপ্রবাহের হার বজায় রাখাই এই ব্যবস্থাপনার মূল লক্ষ্য।" },
+      { q: "৭. পর্বতের ঢালু জমিতে আড়াআড়িভাবে ছোটো বাঁধ নির্মাণ করে বৃষ্টির জল ধরে রাখাকে কী বলে?", opts: ["ফড", "কুণ্ডি", "চেক ড্যাম (Check dam)", "সুরঙ্গম"], ans: 2, exp: "পর্বতের ঢালু জমিতে আড়াআড়িভাবে ছোটো ছোটো বাঁধ নির্মাণ করে বৃষ্টির জল ধরে রেখে সেচ করার পদ্ধতিকে চেক ড্যাম বলে।" },
+      { q: "৮. মহারাষ্ট্রে গ্রামকে খরামুক্ত করার লক্ষ্যে নদীকে গভীর ও প্রসারিত করার জলবিভাজিকা কর্মসূচির নাম কী?", opts: ["কপিলধারা যোজনা", "জলযুক্ত শিবার অভিযান", "মিশন কাকাতিয়া", "মুখ্যমন্ত্রী জল স্বাবলম্বন অভিযান"], ans: 1, exp: "মহারাষ্ট্র সরকার গ্রামগুলিকে খরামুক্ত করার উদ্দেশ্যে 'জলযুক্ত শিবার অভিযান' (Jalyukt Shivar Abhiyan) গ্রহণ করেছে।" },
+      { q: "৯. রাজস্থানে চেক বাঁধ ও বনসৃজন সহ খরাপ্রবণ এলাকার উন্নয়নের জন্য গৃহীত অভিযানের নাম কী?", opts: ["সুজলাম সুফলাম জল অভিযান", "মুখ্যমন্ত্রী জল স্বাবলম্বন অভিযান (MJSA)", "নীরু-চেট্টু কর্মসূচি", "পানি বাঁচাও পয়সা কামাও"], ans: 1, exp: "রাজস্থানে খরাপ্রবণ এলাকার উন্নয়নের জন্য 'মুখ্যমন্ত্রী জল স্বাবলম্বন অভিযান' চালু করা হয়েছে।" },
+      { q: "১০. অন্ধ্রপ্রদেশে চেক বাঁধ, কৃষি পুষ্করিণী ও বনসৃজনের মতো সংরক্ষণ কৌশলের নাম কী?", opts: ["নীরু-চেট্টু কর্মসূচি (Neeru-Chettu Program)", "মিশন কাকাতিয়া", "জল জীবন মিশন", "জল সংবর্ধন যোজনা"], ans: 0, exp: "অন্ধ্রপ্রদেশ রাজ্যে জলবিভাজিকা ব্যবস্থাপনার অংশ হিসেবে 'নীরু-চেট্টু কর্মসূচি' গ্রহণ করা হয়েছে।" },
+      { q: "১১. মধ্যপ্রদেশের জলবিভাজিকা অঞ্চলে ক্ষুদ্র ও প্রান্তিক চাষিদের সেচ কূপ প্রদানের যোজনার নাম কী?", opts: ["জল সংবর্ধন যোজনা", "মিশন কাকাতিয়া", "কপিলধারা যোজনা", "মেরা পানি মেরি বিরাসত"], ans: 2, exp: "মধ্যপ্রদেশে ক্ষুদ্র চাষিদের সেচ কূপ প্রদানের জন্য 'কপিলধারা যোজনা' চালু করা হয়েছে।" },
+      { q: "১২. তেলেঙ্গানায় ভৌমজল পূরণের জন্য ক্ষুদ্র সেচ ট্যাঙ্ক স্থাপনের প্রকল্পের নাম কী?", opts: ["কুদিমারামাত্তু প্রকল্প", "মিশন কাকাতিয়া", "জলযুক্ত শিবার", "সুজলাম সুফলাম"], ans: 1, exp: "তেলেঙ্গানায় ক্ষুদ্র সেচ ট্যাঙ্ক স্থাপন করে ভৌমজল পূরণের কর্মসূচিটি 'মিশন কাকাতিয়া' নামে পরিচিত।" },
+      { q: "১৩. গুজরাতে নদী ও হ্রদকে পলিমুক্ত করে জলসঞ্চয়ের পরিমাণ বৃদ্ধির অভিযানের নাম কী?", opts: ["সুজলাম সুফলাম জল অভিযান", "জল জীবন মিশন", "জল ধরো জল ভরো", "মিশন কাকাতিয়া"], ans: 0, exp: "গুজরাত রাজ্যে জল সংরক্ষণের জন্য 'সুজলাম সুফলাম জল অভিযান' চালু করা হয়েছে।" },
+      { q: "১৪. তামিলনাড়ুতে হ্রদ ও পুকুরগুলিকে পলিমুক্ত করার জনগণ পরিচালিত কর্মসূচির নাম কী?", opts: ["জলযুক্ত শিবার", "কুদিমারামাত্তু প্রকল্প (Kudimaramathu Scheme)", "পানি বাঁচাও পয়সা কামাও", "নীরু-চেট্টু"], ans: 1, exp: "তামিলনাড়ুতে জনগণ পরিচালিত এই জলবিভাজিকা উন্নয়ন কর্মসূচির নাম 'কুদিমারামাত্তু প্রকল্প'।" },
+      { q: "১৫. জলবিভাজিকার ঢাল বরাবর সিঁড়ির মতো বড়ো বড়ো ধাপ তৈরি করে জল সংরক্ষণ করাকে কী বলে?", opts: ["কন্ট্যুর বাণ্ডিং বা ধাপ তৈরি (Terrace or Contour bunds)", "চেক ড্যাম", "রিচার্জ খাদ", "ভ্যালি ট্রেন"], ans: 0, exp: "ঢাল বরাবর বিভিন্ন উচ্চতায় সিঁড়ির মতো ধাপ তৈরি করা জলবিভাজিকার একটি প্রতিরোধমূলক ব্যবস্থা।" }
+    ]
+  },
+  3: {
+    name: 'Set 3', icon: '🌧️', topic: 'বৃষ্টির জল সংরক্ষণ ও ভৌমজল',
+    questions: [
+      { q: "১. 'ভারতের জাতীয় জলনীতি' কত সালে প্রণীত হয়, যেখানে বৃষ্টির জল সংরক্ষণের ওপর বিশেষ গুরুত্ব দেওয়া হয়?", opts: ["১৯৯৫ সালে", "২০০০ সালে", "২০০৫ সালে", "২০১০ সালে"], ans: 1, exp: "২০০০ সালের 'ভারতের জাতীয় জলনীতি' অনুসারে বৃষ্টির জল সংরক্ষণের বিষয়টির ওপর বিশেষ গুরুত্ব আরোপিত হয়।" },
+      { q: "২. রাষ্ট্রসংঘ প্রতিবছর কোন্ দিনটিকে 'বিশ্ব জলদিবস' হিসেবে পালন করে?", opts: ["২ ফেব্রুয়ারি", "২২ মার্চ", "৫ জুন", "১৬ সেপ্টেম্বর"], ans: 1, exp: "জলের গুরুত্ব ও সংরক্ষণের বার্তা ছড়াতে রাষ্ট্রসংঘ প্রতিবছর ২২ মার্চ দিনটিকে বিশ্ব জলদিবস হিসেবে পালন করে।" },
+      { q: "৩. আন্তর্জাতিক মিষ্টি জল দিবস বা বর্ষ কোন্ সালকে ঘোষণা করা হয়েছিল?", opts: ["২০০০ সাল", "২০০৩ সাল", "২০০৫ সাল", "২০১৩ সাল"], ans: 1, exp: "২০০৩ সালটি ছিল আন্তর্জাতিক মিষ্টি জল বর্ষ বা দিবস।" },
+      { q: "৪. 'জীবনের জন্য জল দশক' কোন্ সময়কালকে বলা হয়?", opts: ["১৯৯৫ - ২০০৫", "২০০০ - ২০১০", "২০০৫ - ২০১৫", "২০১০ - ২০২০"], ans: 2, exp: "রাষ্ট্রসংঘের ঘোষণা অনুযায়ী ২০০৫ থেকে ২০১৫ সাল অবধি সময়কালকে 'জীবনের জন্য জল দশক' বলা হয়।" },
+      { q: "৫. ভৌমজলস্তর বৃদ্ধির সবচেয়ে গ্রহণযোগ্য ও কার্যকর পদ্ধতি কোনটি?", opts: ["চেক ড্যাম নির্মাণ", "পুকুর খনন", "নলকূপ খনন (Recharge Tubewell)", "খাল খনন"], ans: 2, exp: "নলকূপ খনন করে সরাসরি ভৌমজলস্তর পর্যন্ত বৃষ্টির জল পৌঁছে দেওয়া ভৌমজলস্তর বৃদ্ধির সবচেয়ে গ্রহণযোগ্য পদক্ষেপ।" },
+      { q: "৬. হরিয়ানা রাজ্যের বৃষ্টির জল সংরক্ষণ কর্মসূচির নাম কী?", opts: ["জল জীবন মিশন", "পানি বাঁচাও পয়সা কামাও", "মেরা পানি মেরি বিরাসত (Mera Pani Meri Virasat)", "কপিল ধারা যোজনা"], ans: 2, exp: "হরিয়ানা রাজ্যে জল সংরক্ষণের জন্য 'মেরা পানি মেরি বিরাসত' প্রকল্প চালু রয়েছে।" },
+      { q: "৭. পাঞ্জাবের বৃষ্টির জল সংরক্ষণ কর্মসূচির নাম কী?", opts: ["পানি বাঁচাও পয়সা কামাও (Pani Bachao Paisa Kamao)", "জল সংবর্ধন যোজনা", "জলযুক্ত শিবার", "জল জীবন মিশন"], ans: 0, exp: "পাঞ্জাব রাজ্যে জল সংরক্ষণের জন্য 'পানি বাঁচাও পয়সা কামাও' প্রকল্প চালু করা হয়েছে।" },
+      { q: "৮. উত্তরপ্রদেশের জল সংরক্ষণের কর্মসূচির নাম কী?", opts: ["মিশন কাকাতিয়া", "জল জীবন মিশন (Jal Jeevan Mission)", "নীরু-চেট্টু", "সুজলাম সুফলাম"], ans: 1, exp: "উত্তরপ্রদেশে জল সংরক্ষণের জন্য 'জল জীবন মিশন' কর্মসূচি পরিচালিত হয়।" },
+      { q: "৯. বৃষ্টির জল ধরে রাখার জন্য গ্রামের পুকুর বা জলাশয়ের তলদেশে বড়ো গর্ত কাটা হলে তাকে কী বলে?", opts: ["সিঙ্কহোল", "রিচার্জ খাদ", "চেক ড্যাম", "পোনর"], ans: 1, exp: "জলাশয়ের তলদেশে গর্ত কেটে অতিরিক্ত জল ধরে রাখা হয় যা পরে চুঁইয়ে ভৌমজল বাড়ায়, একে রিচার্জ খাদ বলে।" },
+      { q: "১০. মাটিতে কৃত্রিম গর্ত তৈরি করে বৃষ্টির জল সংরক্ষণের ক্ষেত্রে গর্তের গভীরতা কত হওয়া প্রয়োজন?", opts: ["১-২ মিটার", "২-৩ মিটার", "৫-৬ মিটার", "১০ মিটার"], ans: 1, exp: "অগভীর জলস্তরে জল জোগানের জন্য সৃষ্ট কৃত্রিম গর্তের ব্যাস ১-২ মিটার এবং গভীরতা ২-৩ মিটার হওয়া প্রয়োজন।" },
+      { q: "১১. ছাদের ক্ষেত্রফল কমপক্ষে কত বর্গমিটারের বেশি হলে পরিত্যক্ত কুয়োর মাধ্যমে বৃষ্টির জল সঞ্চয় বিশেষ কার্যকরী হয়?", opts: ["১০০ বর্গমিটার", "৫০০ বর্গমিটার", "১,০০০ বর্গমিটার", "৫,০০০ বর্গমিটার"], ans: 2, exp: "বাড়ির ছাদের ক্ষেত্রফল ১,০০০ বর্গমিটারের বেশি হলে পরিত্যক্ত কুয়োর মাধ্যমে জল সঞ্চয় পদ্ধতি বিশেষ কার্যকরী হয়।" },
+      { q: "১২. নলকূপের মাধ্যমে বৃষ্টির জল সঞ্চয়ের ক্ষেত্রে ছাদের ক্ষেত্রফল কমপক্ষে কত হওয়া উচিত?", opts: ["৫০ বর্গমিটার", "১০০ বর্গমিটার", "১৫০ বর্গমিটার", "৩০০ বর্গমিটার"], ans: 2, exp: "যেসব বাড়ির ছাদের ক্ষেত্রফল ১৫০ বর্গমিটারের বেশি, সেই সকল বাড়িতে নলকূপের মাধ্যমে জল সঞ্চয় কার্যকর হওয়া সম্ভব।" },
+      { q: "১৩. গাঙ্গেয় বদ্বীপ অঞ্চলে ভূগর্ভস্থ গভীর স্তর থেকে ক্রমাগত জল উত্তোলনের ফলে কোন্ দূষণ মারাত্মক আকার ধারণ করেছে?", opts: ["সীসা দূষণ", "ক্যাডমিয়াম দূষণ", "ফ্লুরাইড দূষণ", "আর্সেনিক দূষণ"], ans: 3, exp: "গাঙ্গেয় বদ্বীপ অঞ্চলে অত্যধিক ভৌমজল উত্তোলনের ফলে আর্সেনিকের যৌগ জলের সাথে মিশে মারাত্মক আর্সেনিক দূষণ ঘটাচ্ছে।" },
+      { q: "১৪. অতিরিক্ত ক্লোরাইড ভূগর্ভের জলে মিশলে কোন্ দূষণ ঘটে?", opts: ["আর্সেনিক দূষণ", "ফ্লুরাইড দূষণ", "পারদ দূষণ", "নাইট্রেট দূষণ"], ans: 1, exp: "ক্রায়োলাইট এবং ফ্লোর অ্যাপেটাইট খনিজ থেকে অতিরিক্ত ক্লোরাইড ভূগর্ভের জলে মিশলে ফ্লুরাইড দূষণ ঘটে।" },
+      { q: "১৫. মৃত্তিকার ওপর গড়িয়ে পড়া জলের গতিবেগ কমাতে ও ক্ষয়রোধ করতে কী ধরনের শস্য চাষ করা উচিত?", opts: ["একবীজপত্রী ঘাস", "বেশি পাতাওয়ালা ও গভীর শিকড়যুক্ত ডাল শস্য", "শুধুমাত্র ধান", "কাঁটাযুক্ত গুল্ম"], ans: 1, exp: "বেশি পাতাওয়ালা ও গভীর শিকড়যুক্ত ডাল শস্য চাষ করলে বৃষ্টির ফোঁটা সজোরে মাটিতে পড়তে পারে না, ফলে মাটির ক্ষয় কমে এবং জল বেশি শোষণ হয়।" }
+    ]
+  },
+  4: {
+    name: 'Set 4', icon: '🌾', topic: 'ভারতের জলসেচ ব্যবস্থা - ১ (প্রথাগত খাল, কূপ ও জলাশয়)',
+    questions: [
+      { q: "১. বর্তমান ভারতের মোট চাষযোগ্য জমির কত শতাংশ জলসেচের অন্তর্গত?", opts: ["৩০ শতাংশ", "৩৫ শতাংশ", "৪৫ শতাংশ", "৬০ শতাংশ"], ans: 2, exp: "স্বাধীনতার পর সেচ ব্যবস্থার অনেক উন্নতি হলেও বর্তমানে ভারতের মোট চাষযোগ্য জমির মাত্র ৪৫ শতাংশ জলসেচের আওতাভুক্ত।" },
+      { q: "২. ভারতের কোন্ ধরনের খালকে 'প্লাবন খাল' বলা হয়?", opts: ["যেসব খালে সারাবছর জল থাকে", "যেসব খাল কেবল বর্ষা বা বন্যার অতিরিক্ত জল পরিবহণ করে", "যেসব খাল ভূগর্ভস্থ জলের সাথে যুক্ত", "যেসব খাল পাহাড়ি অঞ্চলে দেখা যায়"], ans: 1, exp: "প্লাবন খালগুলোতে বর্ষাকাল বাদে অন্য সময়ে জল থাকে না।" },
+      { q: "৩. দক্ষিণ ভারতে কোন্ ধরনের খালের মাধ্যমে জলসেচ বেশি দেখা যায়?", opts: ["নিত্যবহ খাল", "প্লাবন খাল", "ভূগর্ভস্থ খাল", "সেচ নালা"], ans: 1, exp: "দক্ষিণ ভারতের নদীগুলি মূলত বর্ষার জলে পুষ্ট হওয়ায় সেখানে প্লাবন খালের মাধ্যমেই বেশি জলসেচ করা হয়।" },
+      { q: "৪. তুষারগলা জলে পুষ্ট উত্তর ভারতের নদীগুলি থেকে কাটা খালগুলিকে কী বলে?", opts: ["প্লাবন খাল", "রিচার্জ খাদ", "নিত্যবহ খাল", "কন্ট্যুর খাল"], ans: 2, exp: "উত্তর ভারতের নদীগুলি তুষারগলা জলে পুষ্ট বলে সারাবছর জল থাকে। তাই এই নদী থেকে খনন করা খালগুলিকে নিত্যবহ খাল বলে।" },
+      { q: "৫. ভারতের কোন্ রাজ্যে নিত্যবহ খালের মাধ্যমে সবচেয়ে বেশি সেচকাজ হয়?", opts: ["রাজস্থান", "পাঞ্জাব", "মধ্যপ্রদেশ", "উত্তরপ্রদেশ"], ans: 3, exp: "উত্তরপ্রদেশে উচ্চ-গঙ্গা খাল, নিম্ন গঙ্গা খাল, সারদা খাল ইত্যাদির মাধ্যমে নিত্যবহ খালের সাহায্যে সবচেয়ে বেশি সেচকাজ হয়।" },
+      { q: "৬. ইন্দিরা গান্ধি খাল বা রাজস্থান খাল ভারতের কোন্ নদীর জল ব্যবহার করে?", opts: ["যমুনা", "গঙ্গা ও শোন", "বিপাশা ও শতদ্রু", "চম্বল"], ans: 2, exp: "বিপাশা ও শতদ্রু নদীর সংযোগস্থলে হারিক বাঁধ থেকে এই খালটি খনন করা হয়েছে।" },
+      { q: "৭. ভারতের দীর্ঘতম সেচখালের নাম কী?", opts: ["ইডেন খাল", "পশ্চিম যমুনা খাল", "ইন্দিরা গান্ধি খাল (রাজস্থান খাল)", "সারদা খাল"], ans: 2, exp: "৪৪৫ কিমি দীর্ঘ ইন্দিরা গান্ধি খাল বা রাজস্থান খাল হলো ভারতের দীর্ঘতম সেচখাল।" },
+      { q: "৮. মেত্তুর বাঁধ থেকে কাটা 'কাবেরী বদ্বীপ খাল' ভারতের কোন্ রাজ্যের প্রাচীনতম খাল?", opts: ["কর্ণাটক", "অন্ধ্রপ্রদেশ", "তামিলনাড়ু", "কেরল"], ans: 2, exp: "কাবেরী নদী মেত্তুর বাঁধ থেকে কাটা এই খালটি তামিলনাড়ুর কাবেরী বদ্বীপে অবস্থিত এবং এটি সমগ্র ভারতের অন্যতম প্রাচীন খাল।" },
+      { q: "৯. ভারতের কোন্ রাজ্যে কূপের মাধ্যমে জলসেচ এলাকার পরিমাণ সবচেয়ে বেশি?", opts: ["পাঞ্জাব", "উত্তরপ্রদেশ", "মহারাষ্ট্র", "বিহার"], ans: 1, exp: "সারা ভারতের মধ্যে কূপের (Wells) জল দিয়ে সেচ এলাকার পরিমাণ সবচেয়ে বেশি উত্তরপ্রদেশে।" },
+      { q: "১০. জলাশয় বা পুকুরের (Tanks) মাধ্যমে ভারতের কোন্ রাজ্যে সবচেয়ে বেশি জলসেচ করা হয়?", opts: ["পশ্চিমবঙ্গ", "অন্ধ্রপ্রদেশ", "আসাম", "রাজস্থান"], ans: 1, exp: "দক্ষিণ ভারতের ভূপ্রকৃতি জলাশয় নির্মাণের অনুকূল হওয়ায় অন্ধ্রপ্রদেশ রাজ্যে জলাশয় বা পুকুরের মাধ্যমে সবচেয়ে বেশি সেচকাজ হয়।" },
+      { q: "১১. ভারতের প্রথম পঞ্চবার্ষিকী পরিকল্পনার শুরুতে (১৯৫১ সালে) সেচসেবিত জমির পরিমাণ কত ছিল?", opts: ["১ কোটি হেক্টর", "২ কোটি ২৬ লক্ষ হেক্টর", "৫ কোটি হেক্টর", "১০ কোটি হেক্টর"], ans: 1, exp: "১৯৫১ সালে প্রথম পঞ্চবার্ষিকী পরিকল্পনার সূচনায় এদেশে সেচের সুবিধাপ্রাপ্ত জমির পরিমাণ ছিল মাত্র ২ কোটি ২৬ লক্ষ হেক্টর।" },
+      { q: "১২. 'বড়ো সেচপ্রকল্প' বলতে সেই প্রকল্পকে বোঝায় যেখানে সেচসেবিত জমির পরিমাণ হয়-", opts: ["১ হাজার হেক্টরের বেশি", "২ হাজার হেক্টরের বেশি", "৫ হাজার হেক্টরের বেশি", "১০ হাজার হেক্টর বা তার বেশি"], ans: 3, exp: "যেসব সেচপ্রকল্পে ১০ হাজার হেক্টর বা তার বেশি জমিতে সেচের জল দেওয়া যায় সেগুলিকে বড়ো সেচপ্রকল্প বলা হয়।" },
+      { q: "১৩. মাঝারি সেচপ্রকল্পে কত হেক্টর জমিতে সেচের জল দেওয়া যায়?", opts: ["৫০০ থেকে ১ হাজার হেক্টর", "১ হাজার থেকে ২ হাজার হেক্টর", "২ হাজার থেকে ১০ হাজার হেক্টর", "১০ হাজার থেকে ২০ হাজার হেক্টর"], ans: 2, exp: "যেসব সেচপ্রকল্পে ২ হাজার থেকে ১০ হাজার হেক্টর জমিতে সেচের জল দেওয়া যায় সেগুলিকে মাঝারি সেচপ্রকল্প বলে।" },
+      { q: "১৪. কৃষিজমিকে ছোটো ছোটো খণ্ডে ভাগ করে চারপাশে মাটির আল বা বাঁধ দিয়ে জলসেচের পদ্ধতিকে কী বলে?", opts: ["ফারো পদ্ধতি", "বর্ডার-স্ট্রিপ জলসেচ পদ্ধতি (Border-strip Irrigation Method)", "অববাহিকা পদ্ধতি", "স্প্রিঙ্কলার পদ্ধতি"], ans: 1, exp: "কৃষিজমিকে ৫-২০ মি চওড়া এবং ১০০-৪০০ মি লম্বা খণ্ডে ভাগ করে চারপাশে মাটির বাঁধ দিয়ে জলসেচ করাকে বর্ডার-স্ট্রিপ পদ্ধতি বলে।" },
+      { q: "১৫. তুলো, আখ ও আলু চাষের জন্য সারিসারি ছোটো নালা তৈরি করে কোন্ পদ্ধতিতে জলসেচ করা হয়?", opts: ["অববাহিকা জলসেচ পদ্ধতি", "বর্ডার-স্ট্রিপ জলসেচ পদ্ধতি", "ফারো জলসেচ পদ্ধতি (Furrow Irrigation)", "প্লাবন পদ্ধতি"], ans: 2, exp: "ফারো পদ্ধতিতে সমান্তরালভাবে ছোটো নালা কৃষিজমিতে কেটে জলসেচ করা হয়, যা তুলো, আখ ইত্যাদি চাষে খুবই কার্যকর।" }
+    ]
+  },
+  5: {
+    name: 'Set 5', icon: '🌱', topic: 'আধুনিক জলসেচ, প্রথাগত পদ্ধতি ও স্বেচ্ছাসেবী উদ্যোগ',
+    questions: [
+      { q: "১. কোন্ আধুনিক জলসেচ পদ্ধতিতে গাছের গোড়ায় বা শিকড়ে বিন্দু বিন্দু করে প্রয়োজনমতো জল দেওয়া হয়?", opts: ["স্প্রিঙ্কলার পদ্ধতি", "ফারো পদ্ধতি", "ড্রিপ জলসেচ পদ্ধতি (Drip or Trickle Irrigation)", "সাবসারফেস সেচন"], ans: 2, exp: "ড্রিপ পদ্ধতিতে প্লাস্টিকের নলের খোলা মুখ দিয়ে খুব ধীরে ধীরে জল বেরিয়ে এসে গাছের গোড়াকে ভিজিয়ে দেয়, এতে জলের অপচয় সবচেয়ে কম হয়।" },
+      { q: "২. ড্রিপ জলসেচ পদ্ধতির মাধ্যমে কোন্ দেশে ফুল চাষ ব্যাপকভাবে সফল হয়েছে?", opts: ["আমেরিকা যুক্তরাষ্ট্র", "ইজরায়েল", "ভারত", "জাপান"], ans: 1, exp: "ড্রিপ পদ্ধতির মাধ্যমে জলের অপচয় রোধ করে ইজরায়েলে ফুল চাষ এবং আমেরিকা যুক্তরাষ্ট্রে আঙুর চাষ করা হয়।" },
+      { q: "৩. কৃষিক্ষেত্রে যন্ত্রের দ্বারা ফোয়ারার মতো জলসেচ করার পদ্ধতিকে কী বলে?", opts: ["স্প্রিঙ্কলার বা ছিটানো জলসেচ পদ্ধতি (Sprinkler Irrigation)", "ফারো পদ্ধতি", "ড্রিপ পদ্ধতি", "প্লাবন পদ্ধতি"], ans: 0, exp: "স্প্রিঙ্কলারের সাহায্যে ফোয়ারার মতো জল ছিটানো হয়। ছোটো চারাগাছ, ফুল গাছ, শাকসবজি ও চা বাগিচায় এই পদ্ধতি বেশি ব্যবহৃত হয়।" },
+      { q: "৪. মরু অঞ্চলে বা যেখানে জলের মান নিম্ন, সেখানে মাটির গভীরে গাছের মূল পর্যন্ত জল পৌঁছে দেওয়ার পদ্ধতিকে কী বলে?", opts: ["তরঙ্গায়িত জলসেচ", "গভীর পাইপের সাহায্যে জলসেচ", "সলতে পদ্ধতি", "গাচের ছায়ায় জলসেচ"], ans: 1, exp: "মরু অঞ্চলে জল বাষ্পীভূত হওয়া রোধ করতে প্রায় ৪ মিটার গভীর উল্লম্ব পাইপের মাধ্যমে সরাসরি মূলে জল পৌঁছে দেওয়া হয়।" },
+      { q: "৫. মাটির নীচে একাধিক গর্ত করে ফাঁপা মাটির পাত্র ও সুতোর সাহায্যে জলসেচের দেশজ পদ্ধতিকে কী বলে?", opts: ["ফারো পদ্ধতি", "ড্রিপ পদ্ধতি", "সলতে পদ্ধতিতে জলসেচ", "ছিদ্রযুক্ত পাইপ পদ্ধতি"], ans: 2, exp: "এই পদ্ধতিতে জলভরতি মাটির পাত্র থেকে সলতে বা সুতোর মাধ্যমে গাছের গোড়ায় ধীরে ধীরে জল সঞ্চালিত হয়।" },
+      { q: "৬. মধ্য ভারতে বা বুন্দেলখণ্ড অঞ্চলে গ্রামের মাঠে বর্ষার জল ধরে রাখার প্রথাগত পদ্ধতি কী নামে পরিচিত?", opts: ["তালাব (Talab) বা পোখারিয়াণ", "सुरঙ্গম", "ফড", "মাদাকা"], ans: 0, exp: "মধ্য ভারতের প্রথাগত জলসেচনের আধার হলো তালাব। বুন্দেলখণ্ড অঞ্চলে এদেরকে পোখারিয়াণ বলা হয়।" },
+      { q: "৭. রাজস্থানে আয়তাকার এবং তিন-চারদিকে সিঁড়িযুক্ত জল ধরে রাখার প্রথাগত কুয়োকে কী বলে?", opts: ["তালাব", "ঝালরা (Jhalra)", "কুণ্ডি", "কাট্টা"], ans: 1, exp: "রাজস্থানে স্তরযুক্ত সিঁড়ি বিশিষ্ট এই ধরনের কুয়োকে ঝালরা বলে। গুজরাতে এরা বাভলি বা বাওলি নামে পরিচিত।" },
+      { q: "৮. রাজস্থানের মরু অঞ্চলে জলের বাষ্পীভবন ও চুঁইয়ে পড়া রোধ করতে গম্বুজের মতো ছাদযুক্ত জলাধারকে কী বলে?", opts: ["কুণ্ডি (Kundi)", "সুরঙ্গম", "ফড", "ঝালরা"], ans: 0, exp: "রাজস্থানের মরু অঞ্চলে ভূপৃষ্ঠের তলদেশ বাঁধিয়ে এবং উপরে গম্বুজের মতো ছাদ দিয়ে কুণ্ডি নির্মাণ করা হয় যাতে জল নষ্ট না হয়।" },
+      { q: "৯. কেরল রাজ্যে পাহাড় কেটে অনুভূমিক পথে মাধ্যাকর্ষণের টানে জল আনার দেশজ পদ্ধতিকে কী বলে?", opts: ["ফড", "কাট্টা", "সুরঙ্গম (Surangam)", "মাদাকা"], ans: 2, exp: "পশ্চিমঘাট পর্বতের পশ্চিম ঢালে কেরল রাজ্যে মাটির নীচের জল সেচের জন্য এই ধরনের সুড়ঙ্গপথ বা সুরঙ্গম বানানো হয়।" },
+      { q: "১০. মহারাষ্ট্রের বিদর্ভ অঞ্চলে ছোটো নদীতে কোণাকুনি বাঁধ দিয়ে জলসেচের প্রথাগত ব্যবস্থাকে কী বলে?", opts: ["ফড (Phad)", "মাদাকা", "কাট্টা", "তালাব"], ans: 0, exp: "মহারাষ্ট্রের বিদর্ভ ও তাপী নদী অববাহিকায় ফড নামে খাল নির্ভর এক ধরনের দেশজ ছোটো জলসেচ ব্যবস্থা প্রচলিত রয়েছে।" },
+      { q: "১১. মেঘালয় সহ উত্তর-পূর্ব ভারতের পাহাড়ি ঢালে ঝরনার জল পরিবহণ করতে কোন্ দেশজ সেচ পদ্ধতি ব্যবহার করা হয়?", opts: ["ফড", "সুরঙ্গম", "বাঁশ সেচন (Bamboo Irrigation)", "মাদাকা"], ans: 2, exp: "মেঘালয়ে পাহাড়ের ঢালে পান, গোলমরিচ ও ফলের গাছে জল দেওয়ার জন্য বাঁশের পাইপ বা বাঁশ সেচন ব্যবস্থা দীর্ঘকাল ধরে প্রচলিত।" },
+      { q: "১২. 'তরুণ ভারত সংঘ' (TBS) নামক স্বেচ্ছাসেবী সংস্থাটি ১৯৭৫ সালে ভারতের কোন্ রাজ্যে প্রতিষ্ঠিত হয়?", opts: ["মহারাষ্ট্র", "কেরল", "রাজস্থান", "গুজরাত"], ans: 2, exp: "রাজস্থানের জয়পুর অঞ্চলের কিছু ছাত্র ও শিক্ষক মিলে 'তরুণ ভারত সংঘ' প্রতিষ্ঠা করেন, যারা জল সংরক্ষণে অসাধারণ কাজ করেছে।" },
+      { q: "১৩. 'Water Man of India' নামে কে পরিচিত, যিনি তরুণ ভারত সংঘের কর্ণধার?", opts: ["সুন্দরলাল বহুগুণা", "রাজেন্দ্র সিং", "বাবা আমতে", "মেধা পাটেকর"], ans: 1, exp: "১৯৮৫ সাল থেকে তরুণ ভারত সংঘের (TBS) কর্ণধার রাজেন্দ্র সিং জল সংরক্ষণে তাঁর অবদানের জন্য 'Water Man of India' নামে পরিচিত।" },
+      { q: "১৪. মহারাষ্ট্রের 'গ্রাম গৌরব প্রতিষ্ঠান' নামক স্বেচ্ছাসেবী সংস্থাটি যে জল বণ্টন ব্যবস্থা চালু করেছে, তা কী নামে পরিচিত?", opts: ["জল স্বাবলম্বন", "পানি পঞ্চায়েত", "জল ভাগীরথী", "মিশন কাকাতিয়া"], ans: 1, exp: "মহারাষ্ট্রের গ্রামগুলিতে যৌথ উদ্যোগে সেচের জলের সুষম বণ্টনের জন্য এই ব্যবস্থা 'পানি পঞ্চায়েত' নামে পরিচিত।" },
+      { q: "১৫. রাজস্থানের মারওয়াড়ে জল সংরক্ষণের উদ্দেশ্যে 'জল ভাগীরথী ফাউন্ডেশন' কোন্ জলাশয় নির্মাণের উদ্যোগ নেয়?", opts: ["কুণ্ডি", "তানকা (Tanka)", "বাওলি", "ফড"], ans: 1, exp: "জল ভাগীরথী ফাউন্ডেশন রাজস্থানের বৃষ্টিপাতহীন অঞ্চলে বৃষ্টির জল সংগ্রহের জন্য পুকুর বা জলাশয় নির্মাণ করে, যা স্থানীয় ভাষায় তানকা নামে পরিচিত।" }
+    ]
+  }
+};
+
+// ============================================================
+// মূল লজিক (লগইন, টাইমার, কুইজ পরিচালনা এবং রেজাল্ট)
+// ============================================================
+
+function initHub() {
+  const grid = document.getElementById('setGrid');
+  grid.innerHTML = '';
+
+  Object.keys(allSets).forEach(setId => {
+    const set = allSets[setId];
+    const card = document.createElement('div');
+    card.className = 'set-card';
+
+    let attemptCount = 0;
+    if (currentUser) {
+      let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+      attemptCount = (data[currentUser] && data[currentUser][setId]) || 0;
+    }
+
+    card.innerHTML = `
+      <div class="icon">${set.icon}</div>
+      <div class="set-num">${set.name}</div>
+      <div class="set-title">${set.topic}</div>
+      <div class="set-meta"><span>${set.questions.length} প্রশ্ন</span><span>১০ মিনিট</span></div>
+      ${currentUser ? `<div class="attempt-badge">${attemptCount}/${MAX_ATTEMPTS} Attempts</div>` : ''}
+    `;
+
+    card.onclick = () => {
+      if (currentUser) {
+        if (attemptCount >= MAX_ATTEMPTS) {
+          alert(`⚠️ আপনি ${set.name} এর সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
+          return;
+        }
+        startQuiz(setId);
+      } else {
+        openLogin(setId);
+      }
+    };
+    grid.appendChild(card);
+  });
+}
+
+function openLogin(setId) {
+  pendingSetId = setId;
+  document.getElementById('loginSetName').innerText = `📚 ${allSets[setId].name}`;
+  document.getElementById('loginOverlay').classList.add('active');
+  document.getElementById('loginUsername').value = '';
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginError').style.display = 'none';
+}
+
+function closeLogin() {
+  document.getElementById('loginOverlay').classList.remove('active');
+}
+
+function doLogin() {
+  const u = document.getElementById('loginUsername').value.trim();
+  const p = document.getElementById('loginPassword').value.trim();
+  const err = document.getElementById('loginError');
+
+  const GLOBAL_USERS = JSON.parse(localStorage.getItem("testBazarGlobalUsers")) || {};
+
+  if (!u || !p) {
+    err.innerText = "❌ ইউজারনেম এবং পাসওয়ার্ড দিন!";
+    err.style.display = 'block';
+    return;
+  }
+
+  if (GLOBAL_USERS[u] && GLOBAL_USERS[u] === p) {
+    currentUser = u;
+    document.getElementById('hubUserInfo').innerText = `👤 ${u} — Test দিতে সেট সিলেক্ট করো।`;
+    closeLogin();
+    initHub();
+    if (pendingSetId) {
+      let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+      let attemptCount = (data[u] && data[u][pendingSetId]) || 0;
+      if (attemptCount < MAX_ATTEMPTS) {
+        startQuiz(pendingSetId);
+      } else {
+        alert(`⚠️ আপনি ${allSets[pendingSetId].name} এর সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
+      }
+      pendingSetId = null;
+    }
+  } else {
+    err.innerText = "❌ ভুল ইউজারনেম বা পাসওয়ার্ড।";
+    err.style.display = 'block';
+  }
+}
+
+function startQuiz(setId) {
+  currentSetId = setId;
+  TOTAL_QS = allSets[setId].questions.length;
+
+  let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  if (!data[currentUser]) data[currentUser] = {};
+  data[currentUser][setId] = (data[currentUser][setId] || 0) + 1;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+  initHub();
+
+  cur = 0; score = 0; wrong = 0; answered = false; userAnswers = [];
+  timeLeft = TIME_LIMIT;
+  isReviewMode = false;
+
+  document.getElementById('hubPage').classList.add('hidden');
+  document.getElementById('resultWrap').classList.remove('show');
+  document.getElementById('testArea').classList.remove('hidden');
+  document.getElementById('timerBox').classList.remove('hidden');
+  document.getElementById('timerBox').classList.remove('danger');
+
+  const set = allSets[setId];
+  document.getElementById('testSetLabel').innerText = set.name;
+  document.getElementById('testTopic').innerText = set.topic;
+
+  startTimer();
+  loadQuestion();
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      showResult();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+  const s = (timeLeft % 60).toString().padStart(2, '0');
+  document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+  if (timeLeft < 60) document.getElementById('timerBox').classList.add('danger');
+}
+
+function loadQuestion() {
+  answered = false;
+  const set = allSets[currentSetId];
+  const q = set.questions[cur];
+
+  document.getElementById('qNum').innerText = isReviewMode ? `Review: প্রশ্ন ${cur + 1} / ${TOTAL_QS}` : `প্রশ্ন ${cur + 1} / ${TOTAL_QS}`;
+  document.getElementById('qText').innerText = q.q;
+  document.getElementById('progressFill').style.width = `${((cur + 1) / TOTAL_QS) * 100}%`;
+
+  const optsContainer = document.getElementById('qOpts');
+  optsContainer.innerHTML = '';
+
+  q.opts.forEach((optText, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.innerHTML = `<div class="opt-circle">${LABELS[idx]}</div> <div class="opt-text">${optText}</div>`;
+
+    if (isReviewMode) {
+      btn.classList.add('disabled');
+      if (idx === q.ans) btn.classList.add('correct');
+      else if (userAnswers[cur] === idx) btn.classList.add('wrong');
+    } else {
+      btn.onclick = () => selectAnswer(idx, btn);
+    }
+    optsContainer.appendChild(btn);
+  });
+
+  const nextBtn = document.getElementById('nextBtn');
+  document.getElementById('explanation').classList.remove('show');
+  document.getElementById('scoreShow').innerText = isReviewMode ? "সবুজ = সঠিক উত্তর | লাল = আপনার ভুল উত্তর" : `সঠিক: ${score} | ভুল: ${wrong}`;
+
+  if (isReviewMode) {
+    document.getElementById('explanationText').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+    document.getElementById('explanation').classList.add('show');
+    nextBtn.disabled = false;
+    nextBtn.innerText = cur === set.questions.length - 1 ? 'ফলাফল পেজে ফিরুন' : 'পরবর্তী →';
+  } else {
+    nextBtn.disabled = true;
+    nextBtn.innerText = cur === set.questions.length - 1 ? 'ফলাফল দেখো 🏆' : 'পরবর্তী →';
+  }
+}
+
+function selectAnswer(selectedIdx, btnElement) {
+  if (answered) return;
+  answered = true;
+
+  const set = allSets[currentSetId];
+  const q = set.questions[cur];
+  userAnswers[cur] = selectedIdx;
+
+  const allBtns = document.getElementById('qOpts').children;
+  for (let i = 0; i < allBtns.length; i++) {
+    allBtns[i].classList.add('disabled');
+    if (i === q.ans) allBtns[i].classList.add('correct');
+  }
+
+  if (selectedIdx === q.ans) {
+    score++;
+  } else {
+    btnElement.classList.add('wrong');
+    wrong++;
+  }
+
+  document.getElementById('scoreShow').innerText = `সঠিক: ${score} | ভুল: ${wrong}`;
+  document.getElementById('explanationText').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+  document.getElementById('explanation').classList.add('show');
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQ() {
+  const set = allSets[currentSetId];
+  if (cur < set.questions.length - 1) {
+    cur++;
+    loadQuestion();
+  } else {
+    if (isReviewMode) {
+      document.getElementById('testArea').classList.add('hidden');
+      document.getElementById('resultWrap').classList.add('show');
+    } else {
+      clearInterval(timerInterval);
+      showResult();
+    }
+  }
+}
+
+function showResult() {
+  document.getElementById('testArea').classList.add('hidden');
+  document.getElementById('timerBox').classList.add('hidden');
+  document.getElementById('resultWrap').classList.add('show');
+
+  const total = allSets[currentSetId].questions.length;
+  const pct = Math.round((score / total) * 100);
+
+  document.getElementById('finalScore').innerText = `${pct}%`;
+  document.getElementById('rbCorrect').innerText = score;
+  document.getElementById('rbWrong').innerText = total - score;
+
+  let msg = "অসাধারণ!"; let icon = "🏆";
+  if (pct < 50) { msg = "আরও অনুশীলন প্রয়োজন!"; icon = "📚"; }
+  else if (pct < 80) { msg = "খুব ভালো চেষ্টা!"; icon = "👍"; }
+
+  document.getElementById('resultGrade').innerText = msg;
+  document.getElementById('resultIcon').innerText = icon;
+
+  let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  let count = data[currentUser][currentSetId] || 0;
+  let remaining = MAX_ATTEMPTS - count;
+
+  document.getElementById('attemptInfo').innerText = `👤 ${currentUser} — ${allSets[currentSetId].name}: বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ`;
+}
+
+function showReview() {
+  document.getElementById('resultWrap').classList.remove('show');
+  document.getElementById('testArea').classList.remove('hidden');
+  isReviewMode = true;
+  cur = 0;
+  loadQuestion();
+}
+
+function restartQuiz() {
+  let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  let count = data[currentUser][currentSetId] || 0;
+  if (count >= MAX_ATTEMPTS) {
+    alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+    return;
+  }
+  document.getElementById('resultWrap').classList.remove('show');
+  startQuiz(currentSetId);
+}
+
+function goToHub() {
+  document.getElementById('resultWrap').classList.remove('show');
+  document.getElementById('testArea').classList.add('hidden');
+  document.getElementById('timerBox').classList.add('hidden');
+  document.getElementById('hubPage').classList.remove('hidden');
+  initHub();
+}
+
+window.onload = initHub;
+</script>
+
+</body>
+</html>
+
+
