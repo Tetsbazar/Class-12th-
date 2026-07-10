@@ -13,6 +13,7 @@ body { font-family: 'Syne', sans-serif; background: var(--bg-main); min-height: 
 .top-bar { background: var(--primary); padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
 .top-logo { font-size: 1.2rem; font-weight: 800; color: white; cursor: pointer; }
 .top-logo span { color: var(--accent); }
+#topUserDisplay { color: white; font-weight: 700; font-size: 0.9rem; font-family: 'Tiro Bangla', serif;}
 .main { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
 .hub-header { text-align: center; margin-bottom: 2rem; }
 .hub-header h1 { font-family: 'Tiro Bangla', serif; color: var(--primary); font-size: 1.6rem; margin-bottom: 0.5rem; line-height: 1.4; }
@@ -83,6 +84,7 @@ body { font-family: 'Syne', sans-serif; background: var(--bg-main); min-height: 
 
 <header class="top-bar">
   <div class="top-logo" onclick="location.reload()">Test<span>Bazar</span></div>
+  <div id="topUserDisplay">👤 Guest</div>
 </header>
 
 <div class="main">
@@ -108,7 +110,7 @@ body { font-family: 'Syne', sans-serif; background: var(--bg-main); min-height: 
   <!-- HUB PAGE -->
   <div id="hubPage">
     <div class="hub-header">
-      <h1>মানবীয় ভূগোলের মৌলিক বিষয়সমূহ<br>Unit 1: জনসংখ্যা (Population)</h1>
+      <h1>মানবীয় ভূগোলের মৌলিক বিষয়সমূহ<br>Unit 1: জনসংখ্যা</h1>
       <p>আপনার পছন্দের সেট নির্বাচন করে মক টেস্ট শুরু করুন</p>
     </div>
     <div class="set-grid" id="setGrid"></div>
@@ -201,7 +203,7 @@ const ALL_SETS = {
       {q: "১২. খনিজ সম্পদের প্রাচুর্যের কারণে ভারতের কোন অঞ্চলে ঘন জনবসতি গড়ে উঠেছে?", opts: ["হিমালয় পার্বত্য অঞ্চলে", "থর মরুভূমিতে", "ঝাড়খণ্ডের লোহা খনি অঞ্চল (কিরিবুরু, মেঘাহাতুবুরু)", "লাক্ষাদ্বীপে"], ans: 2, exp: "<b>ব্যাখ্যা:</b> খনিজ দ্রব্যের প্রাচুর্যের জন্য ভারতের ঝাড়খণ্ডের দক্ষিণ প্রান্তে লোহা খনিগুলিকে কেন্দ্র করে কিরিবুরু, মেঘাহাতুবুরু ও বোলানিতে ঘন জনবসতি গড়ে উঠেছে।"},
       {q: "১৩. কানাডা ও ইউরোপের সরলবর্গীয় বনভূমির প্রান্তভাগে জনবসতি গড়ে ওঠার কারণ কী?", opts: ["কৃষিকাজের সুবিধা", "বনভূমি থেকে কাঠ সংগ্রহ ও সরবরাহ", "খনিজ সম্পদের প্রাচুর্য", "শিল্পের প্রসার"], ans: 1, exp: "<b>ব্যাখ্যা:</b> কানাডা ও ইউরোপের সরলবর্গীয় বনভূমি থেকে কাঠ সংগ্রহ ও সরবরাহ করার জন্য বনভূমির প্রান্তভাগে জনবসতি গড়ে উঠেছে।"},
       {q: "১৪. ১৯৪৭ সালে দেশভাগের পর ভারতে জনসংখ্যা বৃদ্ধির একটি অপ্রাকৃতিক কারণ কী?", opts: ["খনিজ সম্পদের আবিষ্কার", "শিল্পের বিকাশ", "তৎকালীন পূর্ব ও পশ্চিম পাকিস্তান থেকে দলে দলে শরণার্থীর আগমন", "কৃষির উন্নতি"], ans: 2, exp: "<b>ব্যাখ্যা:</b> জনসংখ্যার বণ্টন রাজনৈতিক পরিস্থিতির সঙ্গেও সম্পর্কিত। ১৯৪৭ সালে দেশভাগের পর তৎকালীন পূর্ব ও পশ্চিম পাকিস্তান থেকে দলে দলে শরণার্থী ভারতে আসায় ভারতের জনসংখ্যা বহুগুণ বেড়েছে।"},
-      {q: "১৫. ২০৫০ সালে পৃথিবীর জনসংখ্যা বেড়ে কত হবে বলে রাষ্ট্রসংঘ অনুমান করেছে?", opts: ["প্রায় ৭০০ কোটি", "প্রায় ৮৯০ কোটি", "প্রায় ১০০০ কোটি", "প্রায় ১২০০ কোটি"], ans: 1, exp: "<b>ব্যাখ্যা:</b> রাষ্ট্রসংঘের হিসাব অনুযায়ী, ২০৫০ সালে পৃথিবীর মোট জনসংখ্যা বেড়ে দাঁড়াবে প্রায় ৮৯০ কোটি।"}
+      {q: "১৫. ২০৫০ সালে পৃথিবীর জনসংখ্যা বেড়ে কত হবে বলে রাষ্ট্রসংঘ অনুমান করেছে?", opts: ["প্রায় ৭০০ কোটি", "প্রায় ۸৯০ কোটি", "প্রায় ১০০০ কোটি", "প্রায় ১২০০ কোটি"], ans: 1, exp: "<b>ব্যাখ্যা:</b> রাষ্ট্রসংঘের হিসাব অনুযায়ী, ২০৫০ সালে পৃথিবীর মোট জনসংখ্যা বেড়ে দাঁড়াবে প্রায় ৮৯০ কোটি।"}
     ]
   },
   3: {
@@ -241,7 +243,7 @@ const ALL_SETS = {
       {q: "১২. পরিব্রাজন ও দূরত্বের সম্পর্ক নিয়ে 'Distance Decay Function' (দূরত্ব বাড়লে অভিবাসী কমে)-এর কথা প্রব্রজন নীতিতে কে বলেছেন?", opts: ["র‍্যাভেনস্টাইন (E. G. Ravenstein)", "থম্পসন", "জিমারম্যান", "ট্রেওয়ার্থা"], ans: 0, exp: "<b>ব্যাখ্যা:</b> ই. জি. র‍্যাভেনস্টাইন তাঁর 'Laws of Migration'-এ উল্লেখ করেছেন যে, বৃহৎ সংখ্যক অধিবাসী স্বল্প দূরত্বে গমন করে এবং দূরত্ব বাড়ার সাথে সাথে অভিবাসীর সংখ্যা হ্রাস পেতে থাকে (distance decay function)।"},
       {q: "১৩. পরিব্রাজনের 'স্রোত ও বিপরীত স্রোত' (Streams and Counter-streams) বলতে কী বোঝায়?", opts: ["মানুষ কেবল একমুখী পরিব্রাজন করে", "যেদিকে মূল পরিব্রাজন ঘটে তার ঠিক বিপরীত দিকেও কিছু মানুষের পরিব্রাজন ঘটে", "নদীর স্রোতের দিকে পরিব্রাজন", "সমুদ্র পথে পরিব্রাজন"], ans: 1, exp: "<b>ব্যাখ্যা:</b> পরিব্রাজনের নিয়ম অনুযায়ী, প্রতিটি পরিযানের একটি মূল স্রোত ও তার বিপরীত স্রোত থাকে। অর্থাৎ যে উৎসস্থল থেকে গন্তব্যের দিকে মানুষ যায়, সেখান থেকেও কিছু মানুষ উৎসের দিকে ফিরে আসে।"},
       {q: "১৪. গ্রাম-শহরের পার্থক্য অনুযায়ী, কারা বেশি সংখ্যায় পরিযান (Migration) করে?", opts: ["শহরের মূল অধিবাসীরা", "গ্রামের মূল অধিবাসীরা", "উভয়ই সমান", "কেউ পরিযান করে না"], ans: 1, exp: "<b>ব্যাখ্যা:</b> প্রব্রজন নীতি অনুযায়ী, শহরের মূল অধিবাসীদের তুলনায় গ্রামের মূল অধিবাসীরা বেশি সংখ্যায় পরিযান করে। এদের অভিমুখ থাকে কৃষি এলাকা থেকে শিল্প ও বাণিজ্য কেন্দ্রের দিকে।"},
-      {q: "১৫. 'দীর্ঘমেয়াদি পরিব্রাজন' বলতে গন্তব্য স্থানে কমপক্ষে কতদিন বসবাস করাকে বোঝায়?", opts: ["১ মাস", "৬ মাস", "১২ মাস বা ১ বছর", "৫ বছর"], ans: 2, exp: "<b>ব্যাখ্যা:</b> মানুষ উৎস অঞ্চল থেকে গমন করে গন্তব্য স্থানে কমপক্ষে ১২ মাস বা ১ বছরের জন্য বসবাস করলে, তাকে দীর্ঘমেয়াদি পরিব্রাজন (Long term migration) বলে。"}
+      {q: "১৫. 'দীর্ঘমেয়াদি পরিব্রাজন' বলতে গন্তব্য স্থানে কমপক্ষে কতদিন বসবাস করাকে বোঝায়?", opts: ["১ মাস", "৬ মাস", "১২ মাস বা ১ বছর", "৫ বছর"], ans: 2, exp: "<b>ব্যাখ্যা:</b> মানুষ উৎস অঞ্চল থেকে গমন করে গন্তব্য স্থানে কমপক্ষে ১২ মাস বা ১ বছরের জন্য বসবাস করলে, তাকে দীর্ঘমেয়াদি পরিব্রাজন (Long term migration) বলে।"}
     ]
   },
   5: {
@@ -275,7 +277,7 @@ const ALL_SETS = {
       {q: "৬. 'জনবিরলতা' বা 'জনস্বল্পতা' (Under Population) কী?", opts: ["যখন জনসংখ্যা অতিরিক্ত বাড়ে", "যখন প্রাকৃতিক সম্পদের তুলনায় জনসংখ্যা অনেক কম থাকে", "যখন কেবল বৃদ্ধদের সংখ্যা বেশি থাকে", "যখন শিশু মৃত্যুহার শূন্য হয়"], ans: 1, exp: "<b>ব্যাখ্যা:</b> কোনো দেশের বিপুল প্রাকৃতিক সম্পদের তুলনায় যদি জনসংখ্যা খুব কম হয় এবং সম্পদের পূর্ণ ব্যবহার সম্ভব না হয়, তবে তাকে জনবিরলতা বা Under Population বলে।"},
       {q: "৭. গ্রামীণ অঞ্চলে অতিরিক্ত জনসংখ্যার কারণে যে জনাকীর্ণতা ঘটে তাকে কী বলা হয়?", opts: ["পরম জনাকীর্ণতা", "আপেক্ষিক জনাকীর্ণতা", "আঞ্চলিক জনাকীর্ণতা", "জাতীয় স্তরে জনাকীর্ণতা"], ans: 2, exp: "<b>ব্যাখ্যা:</b> দেশের গ্রামীণ অঞ্চলে বিশেষ করে কৃষিজমির উপর যখন জনসংখ্যার চাপ অতিরিক্ত বেড়ে যায়, তখন সেই জনাকীর্ণতাকে আঞ্চলিক জনাকীর্ণতা বলা হয়।"},
       {q: "৮. আঞ্চলিক জনাকীর্ণতার একটি প্রধান কারণ কী?", opts: ["শিল্পে উন্নত হওয়া", "খনিজ সম্পদের প্রাচুর্য", "গ্রামীণ জনসংখ্যার দ্রুত স্বাভাবিক বৃদ্ধি", "অকৃষি ক্ষেত্রের বিকাশ"], ans: 2, exp: "<b>ব্যাখ্যা:</b> আঞ্চলিক জনাকীর্ণতার অন্যতম প্রধান কারণ হলো গ্রামীণ জনসংখ্যার দ্রুত স্বাভাবিক বৃদ্ধি, যার ফলে কৃষিজমির ওপর চাপ মারাত্মকভাবে বৃদ্ধি পায়।"},
-      {q: "৯. স্থিতিশীল জনসংখ্যার (Stationary Population) অন্তর্গত একটি দেশের উদাহরণ দাও।", opts: ["ভারত", "উগান্ডা", "চিলি", "सুইডেন"], ans: 3, exp: "<b>ব্যাখ্যা:</b> সুইডেনের মতো উন্নত দেশে জন্মহার ও মৃত্যুহার দুই-ই অত্যন্ত কম এবং প্রায় সমান, যার ফলে জনসংখ্যা স্থিতিশীল বা স্থির থাকে।"},
+      {q: "৯. স্থিতিশীল জনসংখ্যার (Stationary Population) অন্তর্গত একটি দেশের উদাহরণ দাও।", opts: ["ভারত", "উগান্ডা", "চিলি", "সুইডেন"], ans: 3, exp: "<b>ব্যাখ্যা:</b> সুইডেনের মতো উন্নত দেশে জন্মহার ও মৃত্যুহার দুই-ই অত্যন্ত কম এবং প্রায় সমান, যার ফলে জনসংখ্যা স্থিতিশীল বা স্থির থাকে।"},
       {q: "১০. কোনো দেশের জন্মহার ও মৃত্যুহার প্রায় সমান হলে তাকে কী বলে?", opts: ["জনবিস্ফোরণ", "জনাকীর্ণতা", "শূন্য জনসংখ্যা বৃদ্ধি (Zero Population Growth)", "জনস্বল্পতা"], ans: 2, exp: "<b>ব্যাখ্যা:</b> কোনো দেশে যখন জন্মহার এবং মৃত্যুহার প্রায় সমান হয়ে যায়, তখন সেই দেশের জনসংখ্যার আর কোনো স্বাভাবিক বৃদ্ধি ঘটে না। একে শূন্য জনসংখ্যা বৃদ্ধি বলে।"},
       {q: "১১. জনসংখ্যা পরিবর্তনের 'বিবর্তন তত্ত্ব' বা ডেমোগ্রাফিক ট্রানজিশন মডেল (Demographic Transition Model) কে প্রদান করেন?", opts: ["ম্যালথাস", "থম্পসন (Warren Thompson)", "জিমারম্যান", "ওয়েবার"], ans: 1, exp: "<b>ব্যাখ্যা:</b> ১৯২৯ সালে ওয়ারেন থম্পসন সর্বপ্রথম জন্মহার ও মৃত্যুহারের তারতম্যের ভিত্তিতে 'জনসংখ্যা বিবর্তন তত্ত্ব' বা জনবিবর্তন মডেলটি প্রকাশ করেন।"},
       {q: "১২. জনবিবর্তন মডেলের কোন পর্যায়ে জনসংখ্যা সবচেয়ে দ্রুত বৃদ্ধি পায় বা জনবিস্ফোরণ ঘটে?", opts: ["প্রথম পর্যায়ে", "দ্বিতীয় পর্যায়ে", "তৃতীয় পর্যায়ে", "চতুর্থ পর্যায়ে"], ans: 1, exp: "<b>ব্যাখ্যা:</b> জনবিবর্তন তত্ত্বের দ্বিতীয় পর্যায়ে চিকিৎসা বিজ্ঞানের উন্নতির কারণে মৃত্যুহার দ্রুত কমে যায়, কিন্তু জন্মহার বেশি থাকায় জনসংখ্যা অত্যন্ত দ্রুত বৃদ্ধি পায়, যাকে জনবিস্ফোরণ বলে।"},
@@ -312,6 +314,10 @@ let scoreCorrect = 0;
 let scoreWrong = 0;
 let userAnswers = [];
 let isQuizActive = false;
+let loggedInUser = "";
+
+const STORAGE_KEY_ATTEMPTS = "testBazarAttempts_GeoH_Unit1";
+const MAX_ATTEMPTS = 10;
 
 function initHub() {
   const grid = document.getElementById('setGrid');
@@ -336,11 +342,21 @@ function initHub() {
 
 function openLogin(setId) {
   currentSetId = setId;
-  document.getElementById('loginOverlay').classList.add('active');
-  document.getElementById('loginUsername').value = '';
-  document.getElementById('loginPassword').value = '';
-  document.getElementById('loginError').style.display = 'none';
-  document.getElementById('loginUsername').focus();
+  if(loggedInUser !== "") {
+     let attemptsData = JSON.parse(localStorage.getItem(STORAGE_KEY_ATTEMPTS)) || {};
+     let count = attemptsData[loggedInUser + "_" + currentSetId] || 0;
+     if(count >= MAX_ATTEMPTS) {
+        alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
+        return;
+     }
+     startQuiz();
+  } else {
+     document.getElementById('loginOverlay').classList.add('active');
+     document.getElementById('loginUsername').value = '';
+     document.getElementById('loginPassword').value = '';
+     document.getElementById('loginError').style.display = 'none';
+     document.getElementById('loginUsername').focus();
+  }
 }
 
 function closeLogin() {
@@ -350,15 +366,46 @@ function closeLogin() {
 function doLogin() {
   const u = document.getElementById('loginUsername').value.trim();
   const p = document.getElementById('loginPassword').value.trim();
-  if(u === 'testbazar' && p === '1234') {
+  const err = document.getElementById('loginError');
+
+  // Index file theke save kora global user data fetch kora
+  const GLOBAL_USERS = JSON.parse(localStorage.getItem("testBazarGlobalUsers")) || {};
+
+  if(!u || !p) {
+    err.innerText = "ইউজারনেম এবং পাসওয়ার্ড দিন!";
+    err.style.display = 'block';
+    return;
+  }
+
+  // Username and password verification
+  if(GLOBAL_USERS[u] && GLOBAL_USERS[u] === p) {
+    loggedInUser = u;
+
+    // Check attempts limit
+    let attemptsData = JSON.parse(localStorage.getItem(STORAGE_KEY_ATTEMPTS)) || {};
+    let count = attemptsData[loggedInUser + "_" + currentSetId] || 0;
+
+    if(count >= MAX_ATTEMPTS) {
+       err.innerText = `⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`;
+       err.style.display = 'block';
+       return;
+    }
+
+    document.getElementById('topUserDisplay').innerText = "👤 " + u;
     closeLogin();
     startQuiz();
   } else {
-    document.getElementById('loginError').style.display = 'block';
+    err.innerText = "❌ ভুল ইউজারনেম বা পাসওয়ার্ড!";
+    err.style.display = 'block';
   }
 }
 
 function startQuiz() {
+  // Save attempt count
+  let attemptsData = JSON.parse(localStorage.getItem(STORAGE_KEY_ATTEMPTS)) || {};
+  attemptsData[loggedInUser + "_" + currentSetId] = (attemptsData[loggedInUser + "_" + currentSetId] || 0) + 1;
+  localStorage.setItem(STORAGE_KEY_ATTEMPTS, JSON.stringify(attemptsData));
+
   document.getElementById('hubPage').classList.add('hidden');
   document.getElementById('testArea').classList.remove('hidden');
   document.getElementById('resultWrap').classList.remove('show');
@@ -475,6 +522,13 @@ function showResult() {
 }
 
 function restartQuiz() {
+  let attemptsData = JSON.parse(localStorage.getItem(STORAGE_KEY_ATTEMPTS)) || {};
+  let count = attemptsData[loggedInUser + "_" + currentSetId] || 0;
+  if(count >= MAX_ATTEMPTS) {
+      alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+      goToHub();
+      return;
+  }
   startQuiz();
 }
 
