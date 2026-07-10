@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Test Bazar — Free Demo Test | 3rd Sem (Full Length)</title>
+<title>Test Bazar — Free Demo Test | 3rd Sem</title>
 <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* ================== CSS STYLES ================== */
@@ -11,44 +11,44 @@
 body { font-family: 'Syne', sans-serif; background: #f4f9f9; min-height: 100vh; color: #2c3e50; }
 .en-font { font-family: 'Syne', sans-serif; }
 
-.top-bar { background: #e65100; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 15px rgba(230, 81, 0, 0.2); }
-.top-logo { font-size: 1.4rem; font-weight: 800; color: white; cursor: pointer; letter-spacing: 1px;}
-.timer-box { background: rgba(255,255,255,0.25); padding: 0.4rem 1rem; border-radius: 8px; color: white; font-weight: 800; font-size: 1.05rem; }
+.top-bar { background: #e65100; padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 15px rgba(230, 81, 0, 0.2); }
+.top-logo { font-size: 1.2rem; font-weight: 800; color: white; cursor: pointer; letter-spacing: 1px;}
+.timer-box { background: rgba(255,255,255,0.25); padding: 0.3rem 0.8rem; border-radius: 6px; color: white; font-weight: 800; font-size: 0.95rem; }
 
-.main { max-width: 850px; margin: 0 auto; padding: 2rem 1.5rem; }
+.main { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
 
 /* HUB PAGE */
-.hub-header { text-align: center; margin-bottom: 2.5rem; }
-.hub-header h1 { font-family: 'Tiro Bangla', serif; color: #e65100; font-size: 2rem; margin-bottom: 0.8rem; line-height: 1.4; }
-.hub-header p { color: #546e7a; font-size: 1.1rem; font-family: 'Tiro Bangla', serif; font-weight: bold; }
-.set-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-.set-card { background: white; border: 2px solid #ffcc80; border-radius: 14px; padding: 1.8rem; text-align: center; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 15px rgba(230, 81, 0, 0.08);}
-.set-card:hover { transform: translateY(-5px); background: #fff8e1; border-color: #e65100; box-shadow: 0 8px 25px rgba(230, 81, 0, 0.15); }
-.set-card .icon { font-size: 2.8rem; margin-bottom: 0.5rem; }
-.set-card .set-num { font-weight: 800; font-size: 1.4rem; color: #e65100; margin-bottom: 8px; font-family: 'Tiro Bangla', serif;}
-.set-card .set-title { font-family: 'Tiro Bangla', serif; font-size: 1.05rem; color: #455a64; margin: 0.2rem 0 1rem; font-weight: bold;}
-.set-card .set-meta { display: flex; gap: 1rem; font-size: 0.9rem; color: white; justify-content: center; font-weight: bold;}
-.set-card .set-meta span { background: #00897b; padding: 0.4rem 1rem; border-radius: 6px; }
-.free-badge { background: #d32f2f; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; display: inline-block; margin-bottom: 12px; animation: pulse 1.5s infinite; letter-spacing: 1px;}
+.hub-header { text-align: center; margin-bottom: 2rem; }
+.hub-header h1 { font-family: 'Tiro Bangla', serif; color: #e65100; font-size: 1.6rem; margin-bottom: 0.5rem; line-height: 1.4; }
+.hub-header p { color: #546e7a; font-size: 0.95rem; font-family: 'Tiro Bangla', serif; font-weight: bold; }
+.set-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; }
+.set-card { background: white; border: 2px solid #ffcc80; border-radius: 12px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 12px rgba(230, 81, 0, 0.05);}
+.set-card:hover { transform: translateY(-4px); background: #fff8e1; border-color: #e65100; box-shadow: 0 6px 20px rgba(230, 81, 0, 0.12); }
+.set-card .icon { font-size: 2.2rem; margin-bottom: 0.4rem; }
+.set-card .set-num { font-weight: 800; font-size: 1.2rem; color: #e65100; margin-bottom: 5px; font-family: 'Tiro Bangla', serif;}
+.set-card .set-title { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #455a64; margin: 0.2rem 0 0.8rem; font-weight: bold;}
+.set-card .set-meta { display: flex; gap: 0.8rem; font-size: 0.8rem; color: white; justify-content: center; font-weight: bold;}
+.set-card .set-meta span { background: #00897b; padding: 0.3rem 0.8rem; border-radius: 4px; }
+.free-badge { background: #d32f2f; color: white; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; display: inline-block; margin-bottom: 10px; animation: pulse 1.5s infinite; letter-spacing: 1px;}
 @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
 /* QUIZ AREA */
-.quiz-info { background: white; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; border: 1px solid #b0bec5; display: flex; gap: 1rem; flex-wrap: wrap; box-shadow: 0 4px 10px rgba(0,0,0,0.03);}
-.info-item { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: #455a64; font-weight: bold; }
-.info-item strong { color: #e65100; font-size: 1.1rem;}
+.quiz-info { background: white; border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; border: 1px solid #b0bec5; display: flex; gap: 1rem; flex-wrap: wrap; box-shadow: 0 2px 8px rgba(0,0,0,0.03);}
+.info-item { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #455a64; font-weight: bold; }
+.info-item strong { color: #e65100; font-size: 1rem;}
 
-.progress-wrap { background: #ffe0b2; border-radius: 6px; height: 8px; margin-bottom: 1.5rem; overflow: hidden; }
+.progress-wrap { background: #ffe0b2; border-radius: 6px; height: 6px; margin-bottom: 1.2rem; overflow: hidden; }
 .progress-fill { height: 100%; background: #e65100; border-radius: 6px; transition: width 0.4s ease; }
 
-.q-card { background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 25px rgba(0,0,0,0.06); }
-.q-num { font-size: 1rem; font-weight: 800; color: #e65100; margin-bottom: 1rem; background: #fff3e0; display: inline-block; padding: 5px 15px; border-radius: 8px;}
-.q-text { font-family: 'Tiro Bangla', serif; font-size: 1.3rem; color: #263238; font-weight: 700; line-height: 1.6; margin-bottom: 1.5rem; }
+.q-card { background: white; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.04); }
+.q-num { font-size: 0.85rem; font-weight: 800; color: #e65100; margin-bottom: 0.8rem; background: #fff3e0; display: inline-block; padding: 4px 12px; border-radius: 6px;}
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1.05rem; color: #263238; font-weight: 700; line-height: 1.6; margin-bottom: 1.2rem; }
 
-.opts { display: flex; flex-direction: column; gap: 0.8rem; }
-.opt { display: flex; align-items: flex-start; gap: 15px; padding: 1rem 1.2rem; border: 2px solid #cfd8dc; border-radius: 12px; background: transparent; cursor: pointer; text-align: left; transition: all 0.2s; width: 100%; }
+.opts { display: flex; flex-direction: column; gap: 0.7rem; }
+.opt { display: flex; align-items: flex-start; gap: 12px; padding: 0.8rem 1rem; border: 1.5px solid #cfd8dc; border-radius: 10px; background: transparent; cursor: pointer; text-align: left; transition: all 0.2s; width: 100%; }
 .opt:hover:not(.disabled) { border-color: #00897b; background: #e0f2f1; }
-.opt-circle { min-width: 32px; height: 32px; border-radius: 50%; border: 2px solid #90a4ae; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: #546e7a; flex-shrink: 0; background: white;}
-.opt-text { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; color: #37474f; line-height: 1.5; font-weight: 600; padding-top: 2px; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #90a4ae; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #546e7a; flex-shrink: 0; background: white;}
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #37474f; line-height: 1.5; font-weight: 600; padding-top: 2px; }
 
 .opt.correct { border-color: #00897b; background: #e0f2f1; }
 .opt.correct .opt-circle { background: #00897b; border-color: #00897b; color: white; }
@@ -57,36 +57,36 @@ body { font-family: 'Syne', sans-serif; background: #f4f9f9; min-height: 100vh; 
 .opt.disabled { cursor: default; }
 
 /* BEAUTIFUL EXPLANATION BOX */
-.explanation { background: #fff8e1; border: 2px solid #ffe0b2; border-left: 6px solid #f9a825; border-radius: 10px; padding: 1.5rem; margin-top: 1.5rem; display: none; box-shadow: 0 4px 15px rgba(249, 168, 37, 0.1); position: relative;}
+.explanation { background: #fff8e1; border: 1.5px solid #ffe0b2; border-left: 5px solid #f9a825; border-radius: 8px; padding: 1.2rem; margin-top: 1.2rem; display: none; box-shadow: 0 2px 10px rgba(249, 168, 37, 0.08); position: relative;}
 .explanation.show { display: block; animation: fadeIn 0.4s; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.explanation-title { font-family: 'Tiro Bangla', serif; color: #e65100; font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;}
-.explanation p { font-family: 'Tiro Bangla', serif; font-size: 1.05rem; color: #424242; line-height: 1.8; font-weight: bold;}
+.explanation-title { font-family: 'Tiro Bangla', serif; color: #e65100; font-size: 0.95rem; font-weight: 800; margin-bottom: 6px; display: flex; align-items: center; gap: 5px;}
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #424242; line-height: 1.6; font-weight: bold;}
 
-.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; border-top: 1px solid #eceff1; padding-top: 1.5rem;}
-.score-show { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: #546e7a; font-weight: bold; background: #eceff1; padding: 6px 15px; border-radius: 8px;}
-.next-btn { background: #e65100; color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 10px rgba(230, 81, 0, 0.3);}
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; border-top: 1px solid #eceff1; padding-top: 1.2rem;}
+.score-show { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #546e7a; font-weight: bold; background: #eceff1; padding: 5px 12px; border-radius: 6px;}
+.next-btn { background: #e65100; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: all 0.2s; box-shadow: 0 3px 8px rgba(230, 81, 0, 0.25);}
 .next-btn:hover:not(:disabled) { background: #bf360c; transform: translateY(-2px);}
 .next-btn:disabled { background: #ffcc80; cursor: not-allowed; box-shadow: none; transform: none;}
 
 /* RESULT AREA */
-.result-wrap { background: white; border-radius: 16px; padding: 3rem 2rem; text-align: center; border: 1px solid #cfd8dc; display: none; max-width: 650px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+.result-wrap { background: white; border-radius: 14px; padding: 2rem; text-align: center; border: 1px solid #cfd8dc; display: none; max-width: 550px; margin: 0 auto; box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
 .result-wrap.show { display: block; }
-.result-icon { font-size: 4rem; margin-bottom: 1rem; line-height: 1; }
-.result-score { font-size: 4rem; font-weight: 800; color: #00897b; line-height: 1; margin-bottom: 5px; }
-.result-total { font-size: 1.1rem; color: #546e7a; margin-bottom: 1rem; font-family: 'Tiro Bangla', serif; font-weight: bold;}
-.result-grade { font-size: 1.5rem; font-weight: 800; margin-bottom: 2rem; font-family: 'Tiro Bangla', serif; color: #e65100; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.8rem; line-height: 1; }
+.result-score { font-size: 3.5rem; font-weight: 800; color: #00897b; line-height: 1; margin-bottom: 5px; }
+.result-total { font-size: 1rem; color: #546e7a; margin-bottom: 1rem; font-family: 'Tiro Bangla', serif; font-weight: bold;}
+.result-grade { font-size: 1.3rem; font-weight: 800; margin-bottom: 1.5rem; font-family: 'Tiro Bangla', serif; color: #e65100; }
 
-.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
-.result-bar { background: #f4f9f9; border-radius: 12px; padding: 1.5rem; text-align: center; border: 1px solid #cfd8dc; }
-.rb-num { font-size: 2.2rem; font-weight: 800; }
-.rb-label { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: #546e7a; margin-top: 0.5rem; font-weight: bold;}
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-bottom: 1.5rem; }
+.result-bar { background: #f4f9f9; border-radius: 10px; padding: 1.2rem; text-align: center; border: 1px solid #cfd8dc; }
+.rb-num { font-size: 1.8rem; font-weight: 800; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #546e7a; margin-top: 0.3rem; font-weight: bold;}
 
-.result-actions { display: flex; flex-direction: column; gap: 12px; width: 100%; }
-.result-actions button, .result-actions a { width: 100%; padding: 16px; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-size: 1.15rem; font-weight: 800; cursor: pointer; border: none; transition: 0.2s; text-decoration: none; display: block;}
-.btn-review { background: #00897b; color: white; box-shadow: 0 4px 10px rgba(0, 137, 123, 0.3);}
+.result-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+.result-actions button, .result-actions a { width: 100%; padding: 12px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 800; cursor: pointer; border: none; transition: 0.2s; text-decoration: none; display: block;}
+.btn-review { background: #00897b; color: white; box-shadow: 0 3px 8px rgba(0, 137, 123, 0.25);}
 .btn-review:hover { background: #00695c; }
-.btn-home { background: transparent; color: #455a64; border: 2px solid #b0bec5 !important; }
+.btn-home { background: transparent; color: #455a64; border: 1.5px solid #b0bec5 !important; }
 .btn-home:hover { background: #eceff1; }
 
 .hidden { display: none !important; }
@@ -96,7 +96,7 @@ body { font-family: 'Syne', sans-serif; background: #f4f9f9; min-height: 100vh; 
 
 <div class="top-bar">
   <div class="top-logo" onclick="goToHub()">Test<span>Bazar</span> (PRO DEMO)</div>
-  <div class="timer-box hidden" id="timerBox">⏱ <span id="timerDisplay">15:00</span></div>
+  <div class="timer-box hidden" id="timerBox">⏱ <span id="timerDisplay">10:00</span></div>
 </div>
 
 <div class="main">
@@ -109,7 +109,7 @@ body { font-family: 'Syne', sans-serif; background: #f4f9f9; min-height: 100vh; 
     </div>
     <div class="set-grid" id="setGrid"></div>
     <br><br>
-    <a href="Index_3rdSem.html" style="display: block; text-align: center; font-family: 'Tiro Bangla', serif; color: #00897b; font-weight: bold; font-size: 1.1rem; text-decoration: underline;">← মূল ড্যাশবোর্ডে ফিরে যান</a>
+    <a href="Index_3rdSem.html" style="display: block; text-align: center; font-family: 'Tiro Bangla', serif; color: #00897b; font-weight: bold; font-size: 1rem; text-decoration: underline;">← মূল ড্যাশবোর্ডে ফিরে যান</a>
   </div>
 
   <!-- ===== TEST AREA ===== -->
@@ -159,7 +159,7 @@ body { font-family: 'Syne', sans-serif; background: #f4f9f9; min-height: 100vh; 
     <div class="result-actions">
       <button class="btn-review" onclick="showReview()">👀 সঠিক উত্তর ও ব্যাখ্যা দেখুন</button>
       <button class="btn-home" onclick="goToHub()">🏠 অন্যান্য বিষয়ের ডেমো দিন</button>
-      <a href="Index_3rdSem.html" class="btn-home" style="background: #e65100; color: white; border-color: #e65100 !important; margin-top: 10px;">🚀 মূল টেস্ট ড্যাশবোর্ডে প্রবেশ করুন</a>
+      <a href="Index_3rdSem.html" class="btn-home" style="background: #e65100; color: white; border-color: #e65100 !important; margin-top: 5px;">🚀 মূল টেস্ট ড্যাশবোর্ডে প্রবেশ করুন</a>
     </div>
   </div>
 
@@ -169,7 +169,7 @@ body { font-family: 'Syne', sans-serif; background: #f4f9f9; min-height: 100vh; 
 // ============================================================
 // গ্লোবাল ভেরিয়েবল
 // ============================================================
-const TIME_LIMIT = 15 * 60; // 15 Minutes for 15 Questions
+const TIME_LIMIT = 10 * 60; // 10 Minutes
 const LABELS = ['ক', 'খ', 'গ', 'ঘ'];
 
 let currentSetId = 1;
@@ -191,7 +191,7 @@ const allSets = {
       { q: "৩. তিব্বতকে কেন্দ্র করে ভারত ও চীনের মধ্যে 'পঞ্চশীল চুক্তি' কবে স্বাক্ষরিত হয়?", opts: ["১৯৫০ খ্রিস্টাব্দে", "১৯৫৩ খ্রিস্টাব্দে", "১৯৫৪ খ্রিস্টাব্দের ২৯ এপ্রিল", "১৯৫৬ খ্রিস্টাব্দে"], ans: 2, exp: "১৯৫৪ সালে ভারতের প্রধানমন্ত্রী জওহরলাল নেহরু এবং চীনের প্রধানমন্ত্রী চৌ এন-লাইয়ের মধ্যে তিব্বতকে কেন্দ্র করে এই ঐতিহাসিক চুক্তি স্বাক্ষরিত হয়।" },
       { q: "৪. 'ঠান্ডা লড়াইয়ের পরিসমাপ্তি এবং সোভিয়েত ইউনিয়নের ঐক্য বিনষ্ট হওয়ার পর জোটনিরপেক্ষতা অর্থহীন হয়ে পড়েছে'- এই মন্তব্য কে করেছেন?", opts: ["বারাক ওবামা", "টনি ব্লেয়ার", "শ্রীমতী কন্ডোলিজা রাইস (মার্কিন পররাষ্ট্রমন্ত্রী)", "জর্জ বুশ"], ans: 2, exp: "২০০৭ সালে হাভানা সম্মেলনের পর মার্কিন পররাষ্ট্রমন্ত্রী রাইস এই মন্তব্য করে ভারতকে মার্কিন মৈত্রীজোটে যোগদানের পরামর্শ দিয়েছিলেন।" },
       { q: "৫. জোটনিরপেক্ষ দেশগুলি কোন্ মারণাস্ত্র সম্পূর্ণ ধ্বংস করার দাবিতে সর্বদা সোচ্চার হয়েছে?", opts: ["সাধারণ রাইফেল", "যুদ্ধবিমান", "পারমাণবিক অস্ত্র ও মারণাস্ত্র", "নৌ-যুদ্ধজাহাজ"], ans: 2, exp: "বিশ্বশান্তি প্রতিষ্ঠার জন্য নিরস্ত্রীকরণ ও পারমাণবিক অস্ত্রমুক্ত বিশ্ব গঠন জোটনিরপেক্ষ আন্দোলনের মূল লক্ষ্যগুলির একটি।" },
-      { q: "৬. 'America for the Americans' (আমেরিকা কেবল আমেরিকানদের জন্য) - এটি কোন্ নীতির মূল কথা?", opts: ["ট্রুম্যান নীতি", "মনরো নীতি", "মার্শাল পরিকল্পনা", "নিক্সন ডকট্রিন"], ans: 1, exp: "১৮২৩ খ্রিস্টাব্দে মার্কিন রাষ্ট্রপতি মনরো এই নীতি ঘোষণা করেন, যার অর্থ আমেরিকা ইউরোপের রাজনীতিতে হস্তক্ষেপ করবে না এবং ইউরোপও আমেরিকায় হস্তক্ষেপ করবে না।" },
+      { q: "৬. 'America for the Americans' (আমেরিকা কেবল আমেরিকানদের জন্য) - এটি কোন্ নীতির মূল কথা?", opts: ["ট্রুম্যান নীতি", "মনরো নীতি", "মার্শাল পরিকল্পনা", "নিক্সন ডকট্রিন"], ans: 1, exp: "১৮২৩ খ্রিস্টাব্দে মার্কিন রাষ্ট্রপতি মনরো এই নীতি ঘোষণা করেন, যার অর্থ আমেরিকা ইউরোপের রাজনীতিতে হস্তক্ষেপ করবে না এবং ইউরোপও আমেরিকায় হস্তক্ষেপ করবে ভাবনা।" },
       { q: "৭. 'নিরস্ত্রীকরণ বলতে অস্ত্র প্রতিযোগিতা বন্ধ করার জন্য সকল প্রকার বা কয়েক প্রকার সমরাস্ত্র হ্রাস বা বর্জন করাকে বোঝায়।' — উক্তিটি কার?", opts: ["স্যামুয়েল হান্টিংটন", "হ্যান্স মরগেনথাউ", "কোফি আন্নান", "জওহরলাল নেহরু"], ans: 1, exp: "বিখ্যাত রাষ্ট্রবিজ্ঞানী অধ্যাপক হ্যান্স মরগেনথাউ বিশ্বশান্তি প্রতিষ্ঠায় নিরস্ত্রীকরণের (Disarmament) সংজ্ঞা দিতে গিয়ে এই মন্তব্যটি করেছিলেন।" },
       { q: "৮. 'অস্ত্র আছে বলেই মানুষ যুদ্ধ করে না, বরং তারা যুদ্ধ করা প্রয়োজন মনে করে বলেই অস্ত্র সংগ্রহ ও উৎপাদন করে।' — এটি কার অভিমত?", opts: ["হ্যান্স মরগেনথাউ", "লর্ড ক্যাসেলরিগ", "মহাত্মা গান্ধি", "বার্ট্রান্ড রাসেল"], ans: 0, exp: "নৈতিক দিক থেকে নিরস্ত্রীকরণের প্রয়োজনীয়তা বোঝাতে গিয়ে মরগেনথাউ এই উক্তিটি করেছিলেন, যেখানে মানুষের যুদ্ধংদেহী মানসিকতাকে মূল কারণ বলা হয়েছে।" },
       { q: "৯. অপ্রথাগত নিরাপত্তার (Non-traditional Security) প্রধান লক্ষ্য কী?", opts: ["কেবল রাষ্ট্রের ভৌগোলিক সীমানা রক্ষা করা", "সামরিক জোট গঠন করা", "প্রতিটি ব্যক্তির, সম্প্রদায়ের ও মানব সমাজের সার্বিক সুরক্ষা সুনিশ্চিত করা", "বিদেশি শক্তির বিরুদ্ধে যুদ্ধ ঘোষণা করা"], ans: 2, exp: "অপ্রথাগত নিরাপত্তা শুধু রাষ্ট্রের সামরিক সুরক্ষার মধ্যে সীমাবদ্ধ নয়, এটি বিশ্বব্যাপী মানুষের খাদ্য, স্বাস্থ্য, পরিবেশ এবং জীবনযাত্রার সার্বিক সুরক্ষার সাথে যুক্ত।" },
@@ -253,7 +253,7 @@ const allSets = {
       { q: "৫. পৃথিবীর মেরুভ্রমণ বা পোলার ওয়ান্ডারিং নিয়ে কে গবেষণা করেন?", opts: ["আর্থার হোমস", "জে এ স্টিয়ার্স", "ডি এইচ টার্লিং", "এফ বি টেলর"], ans: 2, exp: "ইংরেজ ভূপদার্থবিদ ডোনাল্ড হার্ভে টার্লিং (D H Tarling) আফ্রিকা ও দক্ষিণ আমেরিকার মেরুভ্রমণ নিয়ে গবেষণা করেছেন।" },
       { q: "৬. ১৮৫৮ সালে কে প্রথম মহাদেশগুলির সংযুক্তি মানচিত্রের মাধ্যমে উপস্থাপন করেছিলেন?", opts: ["অ্যানটোনিও স্নাইডার পেলিগ্রিনি", "ফ্রান্সিস বেকন", "এফ বি টেলর", "টমাস চেম্বারলিন"], ans: 0, exp: "১৮৫৮ সালে অ্যানটোনিও স্নাইডার পেলিগ্রিনি প্রথম মহাদেশগুলির সংযুক্তি মানচিত্রের মাধ্যমে উপস্থাপন করেন এবং মহাদেশগুলি বিচ্ছিন্ন হওয়ার কথা বলেন।" },
       { q: "৭. ড্যু টয়েট-এর মতে মহাদেশগুলি উপকূলরেখার বদলে কোন্ অংশের সাদৃশ্য দেখলে আরও ভালোভাবে জোড়া লাগে?", opts: ["পাহাড়ের চূড়া", "মহীসোপান অঞ্চল", "গভীর সমুদ্রখাত", "নদীর মোহনা"], ans: 1, exp: "ড্যু টয়েট বিশ্বাস করতেন যে উপকূলরেখার বদলে মহীসোপান অঞ্চলের মধ্যে সাদৃশ্য দেখলে মহাদেশগুলি আরও নিখুঁতভাবে মিলে যায়।" },
-      { q: "৮. গ্লোসোপটেরিস কাঠের জীবাশ্মে কী পাওয়া গেছে, যা প্রমাণ করে যে সেসময় আর্দ্র ও শুষ্ক ঋতু পরিবর্তন ছিল?", opts: ["খনিজ তেল", "বরফের দাগ", "ট্রি-রিং (Tree ring)", "চৌম্বক রেখা"], ans: 2, exp: "গ্লোসোপটেরিস কাঠের জীবাশ্মে ট্রি-রিং বা বর্ষবলয় পাওয়া গেছে, যার থেকে মনে করা হয় সে সময় আর্দ্র ও শুষ্ক ঋতু পরিবর্তন ছিল।" },
+      { q: "৮. গ্লোসোপটেরিস কাঠের জীবাশ্মে কী পাওয়া গেছে, যা প্রমাণ করে যে সেসময় আর্দ্র ও শুষ্ক ঋতু পরিবর্তন ছিল?", opts: ["খনিজ তেল", "বরফের দাগ", "ট্রি-রিং (Tree ring)", "চৌম্বক রেখা"], ans: 2, exp: "গ্লোসোপটেরিস কাঠের জীবাশ্মে ট্রি-রিং বা বর্ষবলয় পাওয়া গেছে, যার থেকে মনে করা হয় সে সময় আর্দ্র ও শুষ্ক ঋতু পরিবর্তন ছিল।" },
       { q: "৯. ১৯২৭ সালে আলফ্রেড ওয়েগনারের সমর্থনে 'Our Wandering Continents' গবেষণাপত্রটি কে প্রকাশ করেন?", opts: ["এফ বি টেলর", "আর্থার হোমস", "আলেকজান্ডার ড্যু টয়েট", "টমাস চেম্বারলিন"], ans: 2, exp: "আফ্রিকান ভূতত্ত্ববিদ আলেকজান্ডার ড্যু টয়েট ওয়েগনারের তত্ত্বকে সমর্থন করে ১৯২৭ সালে 'Our Wandering Continents' নামের গবেষণাপত্রটি প্রকাশ করেন।" },
       { q: "১০. ড্যু টয়েটের মতে কোন্ যুগের শুরু থেকে লরেশিয়া ও গন্ডোয়ানাল্যান্ডের বিচ্ছিন্নতা শুরু হয় অর্থাৎ টেথিসের জন্ম হয়?", opts: ["ট্রায়াসিক", "কার্বোনিফেরাস", "টার্সিয়ারি", "ক্রিটেশিয়াস"], ans: 2, exp: "ড্যু টয়েটের মতে টার্সিয়ারি যুগের শুরু থেকে লরেশিয়া ও গন্ডোয়ানাল্যান্ড-এর বিচ্ছিন্নতা শুরু হয় এবং টেথিসের জন্ম হয়।" },
       { q: "১১. উচ্চ অক্ষাংশের বিভিন্ন দেশে লিমোনাইট থেকে রূপান্তরিত হেমাটাইট খনিজের উপস্থিতি কীসের প্রমাণ দেয়?", opts: ["অতীতের মেরু অবস্থান", "অতীতের নিরক্ষীয় অবস্থান", "সমুদ্রের তলদেশের অবস্থান", "হিমবাহের প্রভাব"], ans: 1, exp: "লিমোনাইট থেকে হেমাটাইটে রূপান্তর এমন এক প্রক্রিয়া যা নিরক্ষীয় অঞ্চলে ঘটে। উচ্চ অক্ষাংশে এর উপস্থিতি প্রমাণ করে যে তারা একসময় নিরক্ষীয় অঞ্চলে ছিল।" },
@@ -283,7 +283,7 @@ function initHub() {
       <div class="icon">${set.icon}</div>
       <div class="set-num">${set.subject}</div>
       <div class="set-title">${set.topic}</div>
-      <div class="set-meta"><span>${set.questions.length} প্রশ্ন</span><span>১৫ মিনিট</span></div>
+      <div class="set-meta"><span>${set.questions.length} প্রশ্ন</span><span>১০ মিনিট</span></div>
     `;
 
     card.onclick = () => startQuiz(setId);
@@ -458,4 +458,7 @@ window.onload = initHub;
 
 </body>
 </html>
+
+
+
 
