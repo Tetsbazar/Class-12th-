@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Bazar — Human Geography | Unit 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ================== CSS STYLES ================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: #f0faf4; min-height: 100vh; color: #1c2e24; }
+.en-font { font-family: 'Syne', sans-serif; }
+
+.top-bar { background: #1a7a4a; padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.top-logo { font-size: 1.2rem; font-weight: 800; color: white; cursor: pointer; }
+.top-logo span { color: #f9a825; }
+.timer-box { background: rgba(255,255,255,0.2); padding: 0.3rem 0.8rem; border-radius: 6px; color: white; font-weight: 700; font-size: 0.95rem; }
+.timer-box.danger { background: #dc3545; animation: pulse 1s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+.main { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
+
+/* HUB PAGE */
+.hub-header { text-align: center; margin-bottom: 2rem; }
+.hub-header h1 { font-family: 'Tiro Bangla', serif; color: #1a7a4a; font-size: 1.6rem; margin-bottom: 0.5rem; line-height: 1.4; }
+.hub-header p { color: #5a7a66; font-size: 0.95rem; font-family: 'Tiro Bangla', serif; font-weight: bold; }
+.set-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+.set-card { background: white; border: 2px solid #c5dccb; border-radius: 12px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s; }
+.set-card:hover { transform: translateY(-3px); border-color: #1a7a4a; box-shadow: 0 6px 20px rgba(26,122,74,0.12); }
+.set-card .icon { font-size: 2.2rem; margin-bottom: 0.3rem; }
+.set-card .set-num { font-weight: 700; font-size: 1.1rem; color: #1a7a4a; }
+.set-card .set-title { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: #5a7a66; margin: 0.2rem 0 0.5rem; }
+.set-card .set-meta { display: flex; gap: 1rem; font-size: 0.75rem; color: #5a7a66; justify-content: center; font-weight: bold;}
+.set-card .set-meta span { background: #f0faf4; padding: 0.2rem 0.6rem; border-radius: 4px; }
+.attempt-badge { font-size: 0.8rem; color: #dc3545; font-weight: 700; margin-top: 0.6rem; font-family: 'Tiro Bangla', serif; }
+
+/* QUIZ AREA */
+.quiz-info { background: white; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; border: 1px solid #c5dccb; display: flex; gap: 1rem; flex-wrap: wrap; }
+.info-item { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #5a7a66; font-weight: 600; }
+.info-item strong { color: #1a7a4a; }
+
+.progress-wrap { background: #c5dccb; border-radius: 4px; height: 6px; margin-bottom: 1.2rem; overflow: hidden; }
+.progress-fill { height: 100%; background: #1a7a4a; border-radius: 4px; transition: width 0.3s; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.q-num { font-size: 0.9rem; font-weight: 700; color: #1a7a4a; margin-bottom: 0.8rem; }
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; color: #1c2e24; font-weight: 700; line-height: 1.6; margin-bottom: 1.2rem; }
+
+.opts { display: flex; flex-direction: column; gap: 0.6rem; }
+.opt { display: flex; align-items: flex-start; gap: 12px; padding: 0.8rem 1rem; border: 1.5px solid #c5dccb; border-radius: 10px; background: transparent; cursor: pointer; text-align: left; transition: all 0.2s; width: 100%; }
+.opt:hover:not(.disabled) { border-color: #1a7a4a; background: #f0faf4; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #c5dccb; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #5a7a66; flex-shrink: 0; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1c2e24; line-height: 1.6; font-weight: 600; padding-top: 2px; }
+
+.opt.correct { border-color: #1a7a4a; background: #e8f7ef; }
+.opt.correct .opt-circle { background: #1a7a4a; border-color: #1a7a4a; color: white; }
+.opt.wrong { border-color: #dc3545; background: #fdf0f0; }
+.opt.wrong .opt-circle { background: #dc3545; border-color: #dc3545; color: white; }
+.opt.disabled { cursor: default; }
+
+.explanation { background: #f0faf4; border-left: 4px solid #1a7a4a; border-radius: 0 8px 8px 0; padding: 1rem; margin-top: 1rem; display: none; }
+.explanation.show { display: block; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #2c4035; line-height: 1.7; }
+
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
+.score-show { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: #5a7a66; font-weight: bold; }
+.next-btn { background: #1a7a4a; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+.next-btn:hover:not(:disabled) { background: #2aad68; }
+.next-btn:disabled { background: #c5dccb; cursor: not-allowed; }
+
+/* RESULT AREA */
+.result-wrap { background: white; border-radius: 14px; padding: 2rem; text-align: center; border: 1px solid #c5dccb; display: none; max-width: 600px; margin: 0 auto; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; line-height: 1; }
+.result-score { font-size: 3.5rem; font-weight: 800; color: #1a7a4a; line-height: 1; margin-bottom: 5px; }
+.result-total { font-size: 1rem; color: #5a7a66; margin-bottom: 0.5rem; font-family: 'Tiro Bangla', serif; font-weight: bold;}
+.result-grade { font-size: 1.2rem; font-weight: 700; color: #1c2e24; margin-bottom: 1.5rem; font-family: 'Tiro Bangla', serif; color: #e8730a; }
+
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: #f0faf4; border-radius: 10px; padding: 1rem; text-align: center; border: 1px solid #c5dccb; }
+.rb-num { font-size: 1.8rem; font-weight: 800; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: #5a7a66; margin-top: 0.2rem; font-weight: bold;}
+
+.attempt-info { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #1a7a4a; font-weight: bold; margin-bottom: 1.5rem; background: #e8f7ef; padding: 10px; border-radius: 8px; }
+
+/* ACTION BUTTONS */
+.result-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+.result-actions button { width: 100%; padding: 14px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 800; cursor: pointer; border: none; transition: 0.2s; }
+.btn-retry { background: #17a2b8; color: white; }
+.btn-retry:hover { background: #138496; }
+.btn-review { background: #28a745; color: white; }
+.btn-review:hover { background: #218838; }
+.btn-home { background: transparent; color: #5a7a66; border: 2px solid #c5dccb !important; }
+.btn-home:hover { background: #f0faf4; }
+
+/* LOGIN MODAL */
+.login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px); }
+.login-overlay.active { display: flex; }
+.login-modal { background: white; padding: 2rem; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+.login-modal h2 { font-family: 'Tiro Bangla', serif; color: #1a7a4a; font-size: 1.4rem; margin-bottom: 0.5rem; text-align: center; }
+.login-modal p { font-family: 'Tiro Bangla', serif; color: #5a7a66; font-size: 0.9rem; margin-bottom: 1.5rem; text-align: center; }
+.input-group { margin-bottom: 1.2rem; }
+.input-group label { display: block; font-size: 0.85rem; font-weight: 700; color: #1c2e24; margin-bottom: 5px; font-family: 'Tiro Bangla', serif; }
+.input-group input { width: 100%; padding: 12px; border: 1.5px solid #c5dccb; border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 0.95rem; outline: none; transition: 0.2s; }
+.input-group input:focus { border-color: #1a7a4a; box-shadow: 0 0 0 3px rgba(26,122,74,0.1); }
+.login-btn { width: 100%; background: #1a7a4a; color: white; border: none; padding: 12px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: 0.2s; margin-bottom: 8px; }
+.cancel-btn { width: 100%; background: transparent; color: #5a7a66; border: 1.5px solid #c5dccb; padding: 10px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; cursor: pointer; }
+.error-msg { color: #dc3545; font-size: 0.85rem; font-weight: 700; margin-top: 10px; font-family: 'Tiro Bangla', serif; display: none; text-align: center; }
+.set-name-display { background: #f0faf4; border-radius: 8px; padding: 0.6rem; text-align: center; margin-bottom: 1rem; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1a7a4a; font-weight: 700; }
+
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-logo" onclick="goToHub()">Test<span>Bazar</span></div>
+  <div class="timer-box hidden" id="timerBox">⏱ <span id="timerDisplay">10:00</span></div>
+</div>
+
+<div class="main">
+
+  <!-- ===== LOGIN OVERLAY ===== -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-modal">
+      <h2>🔐 লগইন করুন</h2>
+      <p>Test শুরু করতে আপনার ইউজারনেম ও পাসওয়ার্ড দিন</p>
+      <div class="set-name-display" id="loginSetName">📚 Set 1</div>
+
+      <div class="input-group">
+        <label>ইউজারনেম</label>
+        <input type="text" id="loginUsername" placeholder="আপনার ইউজারনেম লিখুন">
+      </div>
+      <div class="input-group">
+        <label>পাসওয়ার্ড</label>
+        <input type="password" id="loginPassword" placeholder="আপনার পাসওয়ার্ড লিখুন" onkeydown="if(event.key==='Enter') doLogin()">
+      </div>
+
+      <button class="login-btn" onclick="doLogin()">✅ লগইন করে Test শুরু করো</button>
+      <button class="cancel-btn" onclick="closeLogin()">বাতিল</button>
+      <div class="error-msg" id="loginError">❌ ভুল ইউজারনেম বা পাসওয়ার্ড।</div>
+    </div>
+  </div>
+
+  <!-- ===== HUB PAGE ===== -->
+  <div id="hubPage">
+    <div class="hub-header">
+      <h1>মানবীয় ভূগোলের মৌলিক বিষয়সমূহ<br>Unit 2: জনবসতি (Settlement)</h1>
+      <p>নিচের সেটগুলো থেকে বেছে নিন।</p>
+      <div id="hubUserInfo" style="font-family:'Tiro Bangla',serif;font-size:1rem;color:#1a7a4a;margin-top:0.8rem;font-weight:bold;"></div>
+    </div>
+    <div class="set-grid" id="setGrid"></div>
+  </div>
+
+  <!-- ===== TEST AREA ===== -->
+  <div id="testArea" class="hidden">
+    <div class="quiz-info">
+      <div class="info-item">🎓 <strong id="testSetName">ভূগোল</strong> — 3rd Sem | Unit 2 | <span id="testSetLabel">Set 1</span></div>
+      <div class="info-item">📝 <span id="testTopic">Topic</span></div>
+    </div>
+
+    <div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+    <div class="q-card" id="qCard">
+      <div class="q-num" id="qNum">প্রশ্ন ১ / ১৫</div>
+      <div class="q-text" id="qText"></div>
+      <div class="opts" id="qOpts"></div>
+      <div class="explanation" id="explanation"><p id="explanationText"></p></div>
+
+      <div class="nav-row">
+        <div class="score-show" id="scoreShow">সঠিক: ০ | ভুল: ০</div>
+        <button class="next-btn" id="nextBtn" onclick="nextQ()" disabled>পরবর্তী →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RESULT AREA ===== -->
+  <div class="result-wrap" id="resultWrap">
+    <div class="result-icon" id="resultIcon">🏆</div>
+    <div class="result-score en-font" id="finalScore">100%</div>
+    <div class="result-total">স্কোর</div>
+    <div class="result-grade" id="resultGrade">অসাধারণ!</div>
+
+    <div class="result-bars">
+      <div class="result-bar">
+        <div class="rb-num en-font" id="rbCorrect" style="color:#1a7a4a">0</div>
+        <div class="rb-label">সঠিক</div>
+      </div>
+      <div class="result-bar">
+        <div class="rb-num en-font" id="rbWrong" style="color:#dc3545">0</div>
+        <div class="rb-label">ভুল/স্কিপ</div>
+      </div>
+    </div>
+
+    <div class="attempt-info" id="attemptInfo">👤 user — Set 1: বাকি আছে 9 বার Test দেওয়ার সুযোগ</div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="result-actions">
+      <button class="btn-retry" onclick="restartQuiz()">🔄 আবার চেষ্টা করো</button>
+      <button class="btn-review" onclick="showReview()">👀 উত্তর দেখো</button>
+      <button class="btn-home" onclick="goToHub()">🏠 ← Hub এ ফিরে যাও</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// গ্লোবাল ভেরিয়েবল
+// ============================================================
+const MAX_ATTEMPTS = 10;
+const TIME_LIMIT = 10 * 60; // 10 Minutes
+const LABELS = ['ক', 'খ', 'গ', 'ঘ'];
+const STORAGE_KEY = "testBazarAttempts_Geo_Human_Unit2_5Sets";
+
+let currentUser = "";
+let currentSetId = 1;
+let pendingSetId = null;
+let cur = 0, score = 0, wrong = 0, answered = false;
+let timerInterval, timeLeft = TIME_LIMIT;
+let userAnswers = [];
+let isReviewMode = false;
+let TOTAL_QS = 0;
+
+// ============================================================
+// Unit 2: জনবসতি (৫টি সেটের প্রশ্নাবলি)
+// ============================================================
+const allSets = {
+  1: {
+    name: 'Set 1', icon: '🏡', topic: 'জনবসতির প্রাথমিক ধারণা ও গ্রামীণ বসতি (Rural Settlements)',
+    questions: [
+      { q: "১. প্রাচীন গ্রিকদের মতে এবং বর্তমান ভূগোলের ভাষায় পৃথিবীর স্থায়ী জনবসতিপূর্ণ অংশকে কী বলা হয়?", opts: ["নন্-এক্যুমেন (Non-ecumene)", "বায়োম (Biome)", "এক্যুমেন (Ecumene)", "ইকোটোন (Ecotone)"], ans: 2, exp: "প্রাচীনকালে গ্রিকরা বাসযোগ্য পৃথিবীকে এক্যুমেন বলত। বর্তমানে পৃথিবীর স্থায়ী জনবসতি অংশকে এক্যুমেন এবং জনবসতিহীন এলাকাকে নন্-এক্যুমেন বলা হয়।" },
+      { q: "২. 'বাসগৃহ ও পথের বিন্যাসের বহিঃপ্রকাশই হল জনবসতি' — এই সংজ্ঞাটি কে দিয়েছেন?", opts: ["স্মিথ (Smith)", "ব্রনহেস (Brunhes)", "ডিকেন্স (Dickens)", "পিটস (Pitts)"], ans: 1, exp: "ভূগোলবিদ ব্রনহেসের মতে, মানুষের প্রয়োজনীয় দুটি মৌলিক উপাদান— বাসগৃহ ও পথের বিন্যাসের বহিঃপ্রকাশই হল জনবসতি।" },
+      { q: "৩. গ্রামীণ বসতি গড়ে ওঠার ক্ষেত্রে কোন বিষয়টির প্রভাব সবচেয়ে বেশি থাকে?", opts: ["ভূখণ্ড বা স্থল (Site)", "অবস্থান বা স্থিতি (Situation)", "প্রশাসনিক সুযোগসুবিধা", "শিল্পায়ন"], ans: 0, exp: "যে-কোনো স্থানের জনবসতি গ্রামীণ অথবা পৌর বসতি গড়ে ওঠে স্থল (Site) এবং অবস্থানের (Situation) উপর। তবে গ্রাম্য বসতিতে অবস্থান অপেক্ষা স্থল বা ভূখণ্ডের প্রভাব বেশি থাকে।" },
+      { q: "৪. ভারতীয় জনগণনা আয়োগের মতে, একটি গ্রামীণ বসতির জনঘনত্ব প্রতি বর্গকিমিতে কত হওয়া উচিত?", opts: ["১০০ জনের কম", "৪০০ জনের কম", "৫০০ জনের কম", "১০০০ জনের কম"], ans: 1, exp: "ভারতীয় জনগণনা আয়োগের মতে, গ্রামীণ বসতি নির্ধারণের অন্যতম মানদণ্ড হল এখানকার জনসংখ্যার ঘনত্ব প্রতি বর্গকিমিতে ৪০০ জনের কম হবে।" },
+      { q: "৫. ভারতীয় জনগণনা অনুযায়ী একটি গ্রাম হতে গেলে মোট পুরুষকর্মীর কত শতাংশকে কৃষি ও সংশ্লিষ্ট কাজে নিযুক্ত থাকতে হবে?", opts: ["৫০ শতাংশ", "৬০ শতাংশ", "৭৫ শতাংশ বা তার বেশি", "৯০ শতাংশ"], ans: 2, exp: "গ্রামীণ বসতি নির্ধারণের মানদণ্ড অনুযায়ী, ওই এলাকার মোট পুরুষকর্মীর ৭৫ শতাংশ বা তার বেশি কৃষি এবং তৎসংশ্লিষ্ট কাজে নিযুক্ত থাকতে হবে।" },
+      { q: "৬. ভারতের মোট গ্রামের মধ্যে আয়তনের দিক দিয়ে কোন শ্রেণির গ্রামের সংখ্যা সবচেয়ে বেশি?", opts: ["খুব বড়ো গ্রাম", "মাঝারি গ্রাম", "ছোটো গ্রাম", "খুব ছোটো গ্রাম"], ans: 3, exp: "ভারতে মোট যত গ্রাম আছে, তার মধ্যে শতকরা প্রায় ৫৫ ভাগই হলো খুব ছোটো গ্রাম। অর্থাৎ এই শ্রেণির গ্রামের সংখ্যাই সবচেয়ে বেশি।" },
+      { q: "৭. 'খুব ছোটো গ্রাম' শ্রেণির বসতিগুলিতে সাধারণত অধিবাসীর সংখ্যা কত হয়ে থাকে?", opts: ["৫০০ জনের কম", "৫০০-১,৯৯৯ জন", "২,০০০-৪,৯৯৯ জন", "৫,০০০ জনের বেশি"], ans: 0, exp: "খুব ছোটো গ্রামগুলির জনসংখ্যা সাধারণত ৫০০ জনের কম হয়ে থাকে।" },
+      { q: "৮. কেন্দ্রীভবনের প্রকৃতি অনুযায়ী গ্রামীণ বসতিকে প্রধানত কয়টি ভাগে ভাগ করা যায়?", opts: ["২ টি", "৩ টি", "৪ টি", "৫ টি"], ans: 0, exp: "কেন্দ্রীভবনের প্রকৃতি অনুযায়ী গ্রামীণ বসতিকে প্রধানত দুটি ভাগে ভাগ করা যায়— গোষ্ঠীবদ্ধ (Agglomerated) এবং বিক্ষিপ্ত (Degglomerated)।" },
+      { q: "৯. অনুন্নত কৃষিব্যবস্থা, অনুর্বর মাটি বা প্রতিকূল অরণ্যাবৃত পরিবেশে সাধারণত কী ধরনের বসতি গড়ে ওঠে?", opts: ["রৈখিক বসতি", "গোষ্ঠীবদ্ধ বসতি", "বিক্ষিপ্ত বসতি", "বৃত্তাকার বসতি"], ans: 2, exp: "অরণ্যাবৃত বন্ধুর ভূপ্রাকৃতিক অঞ্চলে, অনুর্বর কৃষিক্ষেত্রে এবং প্রতিকূল জলবায়ু অঞ্চলে জনবসতি বিক্ষিপ্তভাবে গড়ে ওঠে।" },
+      { q: "১০. পৃথিবীর বৃহত্তম গোষ্ঠীবদ্ধ বসতি কান্টো সমভূমিতে গড়ে উঠেছে। এটি কোন দেশে অবস্থিত?", opts: ["চিন", "জাপান", "ভারত", "ইন্দোনেশিয়া"], ans: 1, exp: "পৃথিবীর বৃহত্তম গোষ্ঠীবদ্ধ বসতি গড়ে উঠেছে জাপানের কান্টো সমভূমিতে।" },
+      { q: "১১. হ্যামলেট (Hamlet) বা ক্ষুদ্র গ্রামের নামের শেষে সাধারণত কোন শব্দ যুক্ত থাকে?", opts: ["পুর বা গঞ্জ", "টোলা বা টুলি", "আবাদ", "নগর"], ans: 1, exp: "প্রধান বসতির নামের শেষে টোলা বা টুলি যোগ করে ক্ষুদ্র গ্রাম বা হ্যামলেটগুলির নামকরণ করা হয় (যেমন— কুমোরটুলি বা আহিরিটোলা)।" },
+      { q: "১২. হ্যামলেট বা ক্ষুদ্র গ্রাম বলতে কী বোঝায়?", opts: ["শহরের বস্তি এলাকা", "গ্রামের প্রধান অংশ থেকে সম্পূর্ণ বিচ্ছিন্ন এক-একটি পাড়া", "বাজার সংলগ্ন গ্রাম", "উন্নত যোগাযোগ ব্যবস্থাযুক্ত গ্রাম"], ans: 1, exp: "হ্যামলেট (Hamlet) বা ক্ষুদ্র গ্রাম হল প্রকৃতপক্ষে গ্রামের প্রধান অংশ থেকে সম্পূর্ণ বিচ্ছিন্ন এক-একটি পাড়া বা উপগ্রাম।" },
+      { q: "১৩. শুষ্ক অঞ্চলে বা মরুভূমিতে জলের উৎসকে কেন্দ্র করে গড়ে ওঠা গোষ্ঠীবদ্ধ বসতিকে কী বলে?", opts: ["শুষ্ক বিন্দু বসতি", "জলবিন্দু বসতি", "দণ্ডাকৃতি বসতি", "সবুজগ্রাম"], ans: 1, exp: "শুষ্ক অঞ্চলে বা মরুভূমিতে জলের অভাবের কারণে সাধারণত ভৌমজলের উৎসকে বা জলাশয়কে ঘিরে এই ধরনের বসতি গড়ে ওঠায় একে জলবিন্দু বসতি বলে।" },
+      { q: "১৪. বন্যা প্লাবিত অঞ্চলে বন্যার প্রকোপ থেকে রক্ষা পাওয়ার জন্য অপেক্ষাকৃত উঁচু স্থানে কী ধরনের বসতি গড়ে ওঠে?", opts: ["জলবিন্দু বসতি", "শুষ্ক বিন্দু বসতি", "রৈখিক বসতি", "নক্ষত্রাকার বসতি"], ans: 1, exp: "বন্যা প্লাবিত অঞ্চলের অধিবাসীরা বন্যার প্রকোপ থেকে বাঁচার জন্য অপেক্ষাকৃত উঁচু এবং শুষ্ক স্থানগুলিতে বসতি স্থাপন করে, যাকে শুষ্ক বিন্দু বসতি বলে।" },
+      { q: "১৫. বনের মধ্যে গড়ে ওঠা বসতিগুলিকে ভূগোলের ভাষায় কী বলা হয়?", opts: ["হ্যামলেট", "এক্যুমেন", "সবুজগ্রাম", "সেন্সাস গ্রাম"], ans: 2, exp: "বনের মধ্যে গড়ে ওঠা বসতিগুলি 'সবুজগ্রাম' নামে পরিচিত।" }
+    ]
+  },
+  2: {
+    name: 'Set 2', icon: '💠', topic: 'গ্রামীণ বসতির ধাঁচ বা প্যাটার্ন (Patterns of Rural Settlements)',
+    questions: [
+      { q: "১. আয়তাকার জনবসতির প্রাথমিক রূপ কোনটি?", opts: ["বৃত্তাকার জনবসতি", "দণ্ডাকৃতি জনবসতি", "বর্গাকার জনবসতি", "রৈখিক জনবসতি"], ans: 2, exp: "আয়তাকার জনবসতির প্রাথমিক রূপই হল বর্গাকার জনবসতি, যা পরবর্তীকালে বর্ধিত হয়ে আয়তাকার বসতিতে পরিণত হয়।" },
+      { q: "২. ছোটোনাগপুর মালভূমির আদিবাসীদের মধ্যে কুসংস্কারের কারণে কোন প্রকার বসতি নির্মাণের প্রবণতা বেশি দেখা যায়?", opts: ["বৃত্তাকার জনবসতি", "আয়তাকার জনবসতি", "বর্গাকার জনবসতি", "রৈখিক জনবসতি"], ans: 1, exp: "ছোটোনাগপুর মালভূমি অঞ্চলের আদিবাসীদের কুসংস্কার আছে যে বর্গাকার বাড়িঘর নির্মাণ করলে গৃহস্থের অকল্যাণ হয়, তাই তারা আয়তাকার গৃহনির্মাণে বিশেষ উৎসাহী।" },
+      { q: "৩. কোনো মন্দির, মসজিদ বা জলাশয়কে কেন্দ্র করে চারদিকে কোন আকারের বসতি গড়ে ওঠে?", opts: ["বৃত্তাকার জনবসতি", "দণ্ডাকৃতি জনবসতি", "রৈখিক জনবসতি", "আয়তাকার জনবসতি"], ans: 0, exp: "বসতি স্থাপনের আকর্ষণীয় উপাদান, যেমন— মন্দির, মসজিদ, পুকুর প্রভৃতির অবস্থানকে কেন্দ্র করে চারদিকে বৃত্তাকারে জনবসতি গড়ে ওঠে।" },
+      { q: "৪. বৃত্তাকার বসতি যখন পায়ে চলা পথ বা সড়কপথ বরাবর কেন্দ্র থেকে বাইরের দিকে বিস্তৃত হয়, তখন তাকে কী বলে?", opts: ["শূন্যগর্ভ বসতি", "নক্ষত্রাকার জনবসতি", "'T' আকৃতির বসতি", "হেরিং বোন প্যাটার্ন"], ans: 1, exp: "বৃত্তাকার বসতি যখন পায়ে চলা পথ বা অন্য সড়কপথ বরাবর কেন্দ্র থেকে বাইরের দিকে বিস্তৃত হয়, তখনই ওই বসতির আকার নক্ষত্রের মতো বা নক্ষত্রাকার হয়।" },
+      { q: "৫. অতীতকালে রাজা বা সম্রাটের দুর্গ বা সংরক্ষিত জায়গাকে মাঝখানে রেখে চারদিকে যে বসতি গড়ে উঠত তাকে কী বলে?", opts: ["শূন্যগর্ভ আয়তাকার বা বর্গাকার বসতি", "বৃত্তাকার বসতি", "রৈখিক বসতি", "দণ্ডাকৃতি বসতি"], ans: 0, exp: "বর্গাকার ও আয়তাকার জনবসতির মাঝখানে দুর্গ, জলাশয়, মন্দির বা সাংস্কৃতিক অনুষ্ঠানের জন্য সংরক্ষিত জায়গা থাকলে তাকে কেন্দ্র করে শূন্যগর্ভ বর্গাকার বা আয়তাকার বসতি গড়ে ওঠে।" },
+      { q: "৬. চিনের ইয়াংসি-কিয়াং সমভূমিতে সাধারণত কোন প্রকার বসতির বিন্যাস দেখা যায়?", opts: ["দাবার ছকের মতো বসতি", "নক্ষত্রাকার জনবসতি", "রৈখিক বসতি", "বর্গাকার জনবসতি"], ans: 1, exp: "উত্তর পশ্চিম ইউরোপ, ইয়াংসি-কিয়াং সমভূমি ও পাকিস্তানের পাঞ্জাব প্রদেশে নক্ষত্রাকার জনবসতি গড়ে উঠতে দেখা যায়।" },
+      { q: "৭. বৃহদাকার রৈখিক বসতিকে ভূগোলের পরিভাষায় কী প্যাটার্ন বসতি বলা হয়?", opts: ["হেরিং বোন প্যাটার্ন", "String-প্যাটার্ন", "Y-প্যাটার্ন", "রিবন প্যাটার্ন"], ans: 1, exp: "বৃহদাকার রৈখিক বসতিকে String-প্যাটার্ন বসতি বলে।" },
+      { q: "৮. রৈখিক বসতির দৈর্ঘ্য সাধারণত কত দূর পর্যন্ত বিস্তৃত হতে পারে?", opts: ["প্রায় ২ ফার্লং", "প্রায় ২ কিমি", "প্রায় ৫ কিমি", "প্রায় ১০ ফার্লং"], ans: 0, exp: "রৈখিক বসতিতে আড়াআড়িভাবে দু-একটা বাড়ি থাকে, কিন্তু এর দৈর্ঘ্য প্রায় ২ ফার্লং (১ ফার্লং= ২০০ মিটার) পর্যন্ত বিস্তৃত হয়।" },
+      { q: "৯. গ্রামের মধ্যে যেখানে দুটি রাস্তা পরস্পরকে সমকোণে ছেদ করে, সেখানে কী আকৃতির বসতি গড়ে ওঠে?", opts: ["'T' আকৃতি", "'Y' আকৃতি", "'L' আকৃতি", "দণ্ডাকৃতি"], ans: 2, exp: "গ্রাম অঞ্চলে যেখানে দুটি রাস্তা পরস্পরকে সমকোণে ছেদ করে বা সমকোণে বেঁকে যায়, সেখানে 'L' আকৃতির জনবসতি গড়ে ওঠে।" },
+      { q: "১০. গ্রামের মধ্যে তিনদিক থেকে তিনটি রাস্তা এসে একটি বিন্দুতে মিলিত হলে কোন আকৃতির বসতি গড়ে ওঠে?", opts: ["'T' আকৃতি", "'L' আকৃতি", "নক্ষত্রাকার", "'Y' আকৃতি"], ans: 3, exp: "কোনো কোনো ক্ষেত্রে গ্রামের মধ্যে তিনদিক থেকে তিনটি রাস্তা এসে একটি বিন্দুতে মিলিত হলে এবং রাস্তা বরাবর জনবসতি গড়ে উঠলে বসতির আকার 'Y' আকৃতির হয়।" },
+      { q: "১১. নদীর স্বাভাবিক বাঁধ বা পাহাড়ের মৃদু ঢালবিশিষ্ট অভিক্ষিপ্তাংশ বরাবর কোন বসতি গড়ে ওঠে?", opts: ["বৃত্তাকার বসতি", "দণ্ডাকৃতি জনবসতি", "শূন্যগর্ভ বসতি", "হেরিং বোন প্যাটার্ন"], ans: 1, exp: "স্থানীয় আকর্ষণ ও প্রতিবন্ধকতার কারণে নদীর স্বাভাবিক বাঁধ বরাবর অথবা পাহাড়ের মৃদু ঢালবিশিষ্ট অভিক্ষিপ্তাংশ বরাবর দণ্ডাকৃতি জনবসতি গড়ে ওঠে।" },
+      { q: "১২. একটি প্রধান রাস্তা ও কতকগুলি অপ্রধান রাস্তার মিলনস্থলে কোন প্যাটার্নের বসতি গড়ে ওঠে?", opts: ["হেরিং বোন প্যাটার্ন", "String প্যাটার্ন", "দণ্ডাকৃতি প্যাটার্ন", "বর্গাকার প্যাটার্ন"], ans: 0, exp: "এইপ্রকার বসতি একটি প্রধান রাস্তা ও কতকগুলি অপ্রধান রাস্তার মিলনস্থলে গড়ে ওঠে, একে হেরিং বোন প্যাটার্ন বলে।" },
+      { q: "১৩. সুবর্ণরেখা নদীর তীরবর্তী অঞ্চলের বুরাবুকি গ্রাম কোন বসতির উল্লেখযোগ্য উদাহরণ?", opts: ["বৃত্তাকার বসতি", "নক্ষত্রাকার বসতি", "দণ্ডাকৃতি বসতি", "শূন্যগর্ভ বসতি"], ans: 2, exp: "সুবর্ণরেখা নদীর তীরবর্তী অঞ্চলের বুরাবুকি গ্রাম দণ্ডাকৃতি বসতির উল্লেখযোগ্য উদাহরণ।" },
+      { q: "১৪. গ্রামীণ পরিবেশে বাসগৃহের বিন্যাসের ফলে বসতির যে বাহ্যিক রূপ ফুটে ওঠে, তাকে কী বলে?", opts: ["বসতির স্থিতি (Situation)", "বসতির স্থল (Site)", "গ্রামীণ বসতির ধাঁচ বা আকার (Pattern)", "এক্যুমেন"], ans: 2, exp: "গ্রামীণ পরিবেশে বাসগৃহের বিন্যাসের ফলে বসতির যে বাহ্যিক রূপ ফুটে ওঠে, তাকে গ্রামীণ বসতির ধাঁচ বা আকার বলে।" },
+      { q: "১৫. গ্রামীণ বসতির প্যাটার্ন সম্পর্কে সর্বপ্রথম ধারণা দেন কে?", opts: ["প্যাট্রিক গেডেস", "জাঁ গটম্যান", "মেইটজেন", "লুই মামফোর্ড"], ans: 2, exp: "গ্রামীণ বসতির প্যাটার্ন সম্পর্কে সর্বপ্রথম ধারণা দেন মেইটজেন।" }
+    ]
+  },
+  3: {
+    name: 'Set 3', icon: '🏙️', topic: 'পৌর বসতি ও শহরের শ্রেণিবিভাগ (Urban Settlements & Classification)',
+    questions: [
+      { q: "১. ভারতীয় জনগণনা আয়োগ অনুযায়ী পৌর বসতির ন্যূনতম জনসংখ্যা কত হওয়া উচিত?", opts: ["২,৫০০ জন", "৫,০০০ জন", "১০,০০০ জন", "২০,০০০ জন"], ans: 1, exp: "ভারতীয় জনগণনা আয়োগ কর্তৃক নির্দেশিত পৌর বসতি নির্ধারণের মানদণ্ড অনুযায়ী পৌর বসতির ন্যূনতম জনসংখ্যা ৫,০০০ জন হওয়া প্রয়োজন।" },
+      { q: "২. ভারতীয় জনগণনা আয়োগের নিয়মানুযায়ী পৌর বসতিতে অকৃষিকাজে নিযুক্ত পুরুষকর্মীর হার কত হওয়া বাঞ্ছনীয়?", opts: ["কমপক্ষে ৫০ শতাংশ", "কমপক্ষে ৬০ শতাংশ", "কমপক্ষে ৭৫ শতাংশ", "কমপক্ষে ৯০ শতাংশ"], ans: 2, exp: "পৌর বসতির মানদণ্ড হিসেবে মোট পুরুষকর্মীর কমপক্ষে ৭৫ শতাংশ অকৃষিকাজের সঙ্গে যুক্ত থাকতে হবে।" },
+      { q: "৩. কোনো বড়ো গ্রামের জনসংখ্যা ৫০০০-এর বেশি, জনঘনত্ব ৪০০ জন/বর্গকিমি এবং ৭৫% পুরুষ অকৃষিকাজে যুক্ত থাকলে, প্রশাসনিক স্বীকৃতি না পাওয়া পর্যন্ত তাকে কী বলে?", opts: ["সেন্সাস শহর (Census Town)", "মেগাসিটি", "স্মার্ট সিটি", "হ্যামলেট"], ans: 0, exp: "যতদিন না ওই গ্রাম সরকারিভাবে বা প্রশাসনিকভাবে সংবিধিবদ্ধ হচ্ছে, ততদিন ওই গ্রাম শহরের তকমার পরিবর্তে সেন্সাস শহর হিসেবে গণ্য হবে।" },
+      { q: "৪. ভারতের শহরগুলিকে জনসংখ্যার আয়তন অনুযায়ী কয়টি শ্রেণিতে ভাগ করা হয়েছে?", opts: ["৪ টি", "৫ টি", "৬ টি", "৭ টি"], ans: 2, exp: "জনসংখ্যার আয়তন অনুযায়ী ভারতীয় জনগণনা বিভাগ ভারতের শহরগুলিকে ছয়ভাগে (Class I থেকে Class VI) ভাগ করেছেন।" },
+      { q: "৫. প্রথম শ্রেণির শহরের (Class I town) ন্যূনতম জনসংখ্যা কত হয়ে থাকে?", opts: ["৫০,০০০ জন বা তার বেশি", "১,০০,০০০ জন বা তার বেশি", "৫,০০,০০০ জন বা তার বেশি", "১০,০০,০০০ জন বা তার বেশি"], ans: 1, exp: "প্রথম শ্রেণির শহরের (Class I town) জনসংখ্যা ১,০০,০০০ (এক লক্ষ) জন বা তার বেশি হয়ে থাকে।" },
+      { q: "৬. ২০,০০০ থেকে ৪৯,৯৯৯ জন জনসংখ্যাবিশিষ্ট শহরকে কোন শ্রেণির শহর বলা হয়?", opts: ["প্রথম শ্রেণির শহর", "দ্বিতীয় শ্রেণির শহর", "তৃতীয় শ্রেণির শহর", "চতুর্থ শ্রেণির শহর"], ans: 2, exp: "২০,০০০-৪৯,৯৯৯ জন জনসংখ্যাবিশিষ্ট শহরকে তৃতীয় শ্রেণির শহর (Class III town) বলা হয় (যেমন- কার্শিয়াং, কালিম্পং)।" },
+      { q: "৭. হাইওয়ে বা সড়কপথের ধারে গড়ে ওঠা গাড়ি রাখার ব্যবস্থাযুক্ত হোটেলকে কী বলা হয়?", opts: ["রিসর্ট", "লজ", "মোটেল (Motel)", "ক্যারাভান"], ans: 2, exp: "সড়ক পার্শ্ববর্তী বসতির সাথে যুক্ত গাড়ি রাখার ব্যবস্থাযুক্ত হোটেলকে মোটেল (মোটরগাড়ি + হোটেল = মোটেল) বলে।" },
+      { q: "৮. ১০,০০০-এর কম জনসংখ্যা সম্পর্কিত পৌর বসতিগুলিকে সাধারণত কী বলা হয়?", opts: ["ছোটো শহর", "মাঝারি শহর", "নগর", "মহানগর"], ans: 0, exp: "১০,০০০-এর কম জনসংখ্যা সম্পর্কিত পৌর বসতিগুলিকে ছোটো শহর বলা হয়।" },
+      { q: "৯. ১,০০,০০০ থেকে ৯,৯৯,৯৯৯ পর্যন্ত জনসংখ্যার পৌর বসতিকে কী বলে?", opts: ["ছোটো শহর", "মাঝারি শহর", "নগর (City)", "মেগাসিটি"], ans: 2, exp: "১,০০,০০০ থেকে ৯,৯৯,৯৯৯ জনসংখ্যার শহরকে নগর বা City বলে।" },
+      { q: "১০. 'মহানগর' বা 'মেট্রোপলিস' (Metropolis) বলতে ভারতে ন্যূনতম কত জনসংখ্যা বিশিষ্ট পৌর বসতিকে বোঝায়?", opts: ["১ লক্ষের বেশি", "৫ লক্ষের বেশি", "১০ লক্ষের বেশি", "৫০ লক্ষের বেশি"], ans: 2, exp: "ভারতে ১০ লক্ষের বেশি (১ মিলিয়ন বা তার বেশি) জনসংখ্যাবিশিষ্ট পৌর জনবসতিকে মহানগর বা মেট্রোপলিস বলে।" },
+      { q: "১১. 'Metropolis' শব্দটি কোন ভাষার শব্দ এবং এর অর্থ কী?", opts: ["লাতিন শব্দ, অর্থ বড়ো শহর", "গ্রিক শব্দ, অর্থ মূল নগরী বা Mother City", "ফরাসি শব্দ, অর্থ বাণিজ্য কেন্দ্র", "রোমান শব্দ, অর্থ রাজধানী"], ans: 1, exp: "গ্রিক শব্দ 'Metropolis' কথার অর্থ হল মূল নগরী বা Mother City।" },
+      { q: "১২. ৫০ লক্ষের বেশি জনসংখ্যাবিশিষ্ট শহরকে ভূগোলের ভাষায় কী বলা হয়?", opts: ["নগর", "মহানগর", "মেগাসিটি (Megacity)", "পৌরপুঞ্জ"], ans: 2, exp: "৫০ লক্ষের বেশি জনসংখ্যাবিশিষ্ট শহরকে মেগাসিটি বলা হয়।" },
+      { q: "১৩. গ্রাম ও শহরের বৈশিষ্ট্যসম্পন্ন মিশ্র বা অন্তর্বর্তী এলাকাকে কী বলে?", opts: ["সেন্সাস টাউন", "শহর প্রান্ত বা আরবান ফ্রিঞ্জ (Urban Fringe)", "পৌর বিক্ষেপ", "সিবিডি"], ans: 1, exp: "গ্রাম ও শহরের বৈশিষ্ট্যসম্পন্ন মিশ্র বা অন্তর্বর্তী এলাকা হল শহর প্রান্ত বা আরবান ফ্রিঞ্জ (Urban Fringe)।" }
+    ]
+  },
+  4: {
+    name: 'Set 4', icon: '📈', topic: 'নগরায়ণ ও নগরের বিবর্তন পর্যায় (Urbanization & Stages of Urban Growth)',
+    questions: [
+      { q: "১. মূল নগরের চারপাশে থাকা ছোটো ছোটো পৌর এলাকাগুলি আয়তনে বেড়ে যখন মূল নগরের সঙ্গে মিশে যায়, তখন তাকে কী বলে?", opts: ["মেগালোপলিস", "পৌরপিন্ড (Urban Agglomeration)", "টাইরানোপলিস", "এক্যুইনোপলিস"], ans: 1, exp: "মূল নগরের চারপাশে ছোটো ছোটো পৌর এলাকা থাকে। আয়তনে বাড়তে বাড়তে এদের যখন মূল নগরের সঙ্গে একত্রীভবন ঘটে, তখন তাকে পৌরপিন্ড বলে (যেমন- বৃহত্তর কলকাতা)।" },
+      { q: "২. দুটি মূল নগর একত্রে যুক্ত হলে তাকে কী বলে?", opts: ["মেগাসিটি", "কনারবেশন", "দ্বৈত নগর বা যমজ শহর (Twin City)", "নেক্রোপলিস"], ans: 2, exp: "দুটি মূল নগর একত্রে যুক্ত হলে তাকে দ্বৈত নগর বা যমজ শহর (Twin City) বলে।" },
+      { q: "৩. ভারতের একটি উল্লেখযোগ্য দ্বৈত নগর বা যমজ শহরের উদাহরণ কোনটি?", opts: ["শিলিগুড়ি-দার্জিলিং", "সিমলা-মানালি", "কলকাতা-হাওড়া", "দিল্লি-নয়ডা"], ans: 2, exp: "কলকাতা-হাওড়া এবং সেকেন্দ্রাবাদ-হায়দ্রাবাদ হল দ্বৈত নগর বা যমজ শহরের প্রকৃষ্ট উদাহরণ।" },
+      { q: "৪. একই পথের দ্বারা যুক্ত অথচ বিচ্ছিন্ন একাধিক শহর আয়তনে বাড়তে বাড়তে পরস্পর মিলিত হয়ে যে ছেদহীন বহুদূর বিস্তৃত পৌর অঞ্চল গড়ে ওঠে তাকে কী বলে?", opts: ["মেগাসিটি", "পৌরপুঞ্জ বা কনারবেশন (Conurbation)", "মেগালোপলিস", "আরবান ফ্রিঞ্জ"], ans: 1, exp: "একাধিক শহর আয়তনে বাড়তে বাড়তে পরস্পর মিলিত হয়ে যে ছেদহীন বহুদূর বিস্তৃত পৌর অঞ্চল গড়ে ওঠে তাকে পৌরপুঞ্জ বা কনারবেশন বলে।" },
+      { q: "৫. 'কনারবেশন' (Conurbation) শব্দটি ১৯১৫ সালে সর্বপ্রথম কে ব্যবহার করেন?", opts: ["লুই মামফোর্ড", "জাঁ গটম্যান", "প্যাট্রিক গেডেস", "সি জে গ্যালপিন"], ans: 2, exp: "'কনারবেশন' বা নগরমালা শব্দটি প্রথম ব্যবহার করেন প্যাট্রিক গেডেস 1915 সালে।" },
+      { q: "৬. 'মেগালোপলিস' (Megalopolis) শব্দটি প্রথম কে ব্যবহার করেন?", opts: ["প্যাট্রিক গেডেস", "জাঁ গটম্যান", "লুই মামফোর্ড", "সি জে গ্যালপিন"], ans: 1, exp: "'মেগালোপলিস' শব্দটি প্রথম ব্যবহার করেন জাঁ গটম্যান।" },
+      { q: "৭. পৌরবসতির উদ্ভবের প্রথম পর্যায় কোনটি, যেখানে কৃষিজ, বনজ ও খনিজ সম্পদের ভিত্তিতে শহর ধীরে ধীরে গড়ে ওঠে?", opts: ["পলিস", "মেট্রোপলিস", "ইয়োপলিস (Eopolis)", "নেক্রোপলিস"], ans: 2, exp: "ইয়োপলিস হল পৌরবসতির উদ্ভবের প্রথম পর্যায়। এখানে কৃষিজ, বনজ, খনিজ সম্পদের ভিত্তিতে শহর ধীরে ধীরে গড়ে ওঠে।" },
+      { q: "৮. গ্রিসের এথেন্স নগরী কোন পর্যায়ের পৌর বসতির উদাহরণ, যেখানে গ্রাম্য সমাজ ভেঙে হস্ত ও কুটির শিল্পের বিকাশ ঘটে?", opts: ["ইয়োপলিস", "পলিস (Polis)", "টাইরানোপলিস", "এক্যুইনোপলিস"], ans: 1, exp: "পলিস পর্যায়ে গ্রাম্য সমাজ ভেঙে পৌরবসতির বৈশিষ্ট্য প্রকাশিত হয় এবং হস্ত ও কুটির শিল্পের বিকাশ ঘটে। উদাহরণ- গ্রিসের এথেন্স।" },
+      { q: "৯. যখন প্রায় গোটা দেশ নগরে পরিণত হয় (যেমন- ব্রিটিশ যুক্তরাজ্য), তখন সেই অবস্থাকে কী বলে?", opts: ["মেগালোপলিস", "এক্যুইনোপলিস", "টাইরানোপলিস (Tyranopolis)", "পলিস"], ans: 2, exp: "যখন প্রায় গোটা দেশ নগরে পরিণত হয়, তখন সেটি হয় টাইরানোপলিস। ব্রিটিশ যুক্তরাজ্যে এরকম অবস্থা হয়েছে।" },
+      { q: "১০. পৃথিবীর সিংহভাগ মানুষ শহরে বসবাস করলে অর্থাৎ গোটা বিশ্বজুড়ে নগরায়ণ ঘটলে তাকে কী বলা হবে?", opts: ["নেক্রোপলিস", "মেগাসিটি", "এক্যুইনোপলিস (Ecuinopolis)", "কনারবেশন"], ans: 2, exp: "এই বসতি তখনই গড়ে উঠবে যখন গোটা বিশ্বজুড়ে নগরায়ণ ঘটবে। এই ধরনের বসতি বাস্তবে এখনও পর্যন্ত গড়ে ওঠেনি।" },
+      { q: "১১. বিনাশপ্রাপ্ত পৌর বসতি বা 'মৃতের নগরী', যেখানে কোনো মানুষ থাকে না, তাকে কী বলা হয়?", opts: ["ইয়োপলিস", "টাইরানোপলিস", "নেক্রোপলিস (Necropolis)", "মেগালোপলিস"], ans: 2, exp: "বিনাশপ্রাপ্ত পৌর বসতি বা মৃতের নগরী হল নেক্রোপলিস। এখানে কোনো মানুষ থাকে না, কোনো অর্থনৈতিক কাজকর্ম হয় না।" },
+      { q: "১২. প্রাচীন সিন্ধু সভ্যতার মহেন-জো-দারো বা হরপ্পা কোন ধরনের বসতির উদাহরণ?", opts: ["পলিস", "নেক্রোপলিস", "মেট্রোপলিস", "এক্যুইনোপলিস"], ans: 1, exp: "বিনাশপ্রাপ্ত পৌর বসতি বা নেক্রোপলিসের প্রকৃষ্ট উদাহরণ হল অতীত ভারতের মহেঞ্জোদারো, হরপ্পা বা ব্যাবিলন।" },
+      { q: "১৩. বয়সক্রম বা বয়সের ভিত্তিতে পৌর বসতিকে কয়টি ভাগে ভাগ করা যায়?", opts: ["২ টি", "৩ টি", "৪ টি", "৫ টি"], ans: 1, exp: "বয়সক্রম অনুযায়ী পৌর বসতিকে তিনটি ভাগে ভাগ করা যায়— প্রাচীন যুগের বসতি, মধ্যযুগের বসতি ও আধুনিক যুগের বসতি।" },
+      { q: "১৪. আগ্রা, কানপুর, লখনউ, প্যারিস বা রোম - এগুলি কোন যুগের বসতির উদাহরণ?", opts: ["প্রাচীন যুগের বসতি", "মধ্যযুগের বসতি", "আধুনিক যুগের বসতি", "প্রাগৈতিহাসিক বসতি"], ans: 1, exp: "ভারতের আগ্রা, কানপুর, লখনউ, ইটালির রোম, ফ্রান্সের প্যারিস প্রভৃতি মধ্যযুগের বসতির উদাহরণ।" },
+      { q: "১৫. চণ্ডীগড়, নতুন দিল্লি বা পাকিস্তানের ইসলামাবাদ - এগুলি কোন যুগের বসতির উদাহরণ?", opts: ["প্রাচীন যুগের বসতি", "মধ্যযুগের বসতি", "আধুনিক যুগের বসতি", "ভবিষ্যৎ বসতি"], ans: 2, exp: "পরিকল্পিত ও অপরিকল্পিতভাবে গড়ে ওঠা আধুনিক যুগের বসতির উদাহরণ হল ভারতের চণ্ডীগড়, নতুন দিল্লি, পাকিস্তানের ইসলামাবাদ প্রভৃতি।" }
+    ]
+  },
+  5: {
+    name: 'Set 5', icon: '📍', topic: 'কার্যাবলি ভিত্তিক শহর ও বসতির বিবিধ ধারণা (Functional Cities & Misc)',
+    questions: [
+      { q: "১. বারাণসী, হরিদ্বার বা মক্কা শহরগুলি কী ধরনের শহরের উদাহরণ?", opts: ["প্রশাসনিক শহর", "প্রতিরক্ষা শহর", "ধর্মীয় শহর", "আবাসিক শহর"], ans: 2, exp: "মানুষের ধর্মবিশ্বাসের ওপর ভিত্তি করে বারাণসী, হরিদ্বার, মক্কা প্রভৃতি স্থানে যে শহরগুলি গড়ে উঠেছে, সেগুলি ধর্মীয় শহর নামে পরিচিত।" },
+      { q: "২. চণ্ডীগড় বা নতুন দিল্লি কী ধরনের শহরের উদাহরণ?", opts: ["শিল্প শহর", "প্রশাসনিক শহর", "সামরিক শহর", "পর্যটন শহর"], ans: 1, exp: "চণ্ডীগড়, নতুন দিল্লি, ওয়াশিংটন ডিসি, লন্ডন প্রভৃতি শহরগুলি মূলত শাসনকার্য পরিচালনার জন্য গঠিত হওয়ায় এগুলি প্রশাসনিক শহরের উদাহরণ।" },
+      { q: "৩. ভারতের আম্বালা বা জব্বলপুর কী ধরনের শহর?", opts: ["আবাসিক শহর", "পর্যটন শহর", "প্রতিরক্ষা শহর", "উৎপাদন শহর"], ans: 2, exp: "প্রতিরক্ষামূলক কাজকর্ম এবং মিলিটারিদের অবস্থানের ওপর ভিত্তি করে আম্বালা, জব্বলপুর প্রভৃতি স্থানে প্রতিরক্ষা শহর গড়ে উঠেছে।" },
+      { q: "৪. হিমাচল প্রদেশের কুলু ও মানালি কী ধরনের শহর?", opts: ["পর্যটন শহর", "শিল্প শহর", "সাংস্কৃতিক শহর", "প্রশাসনিক শহর"], ans: 0, exp: "প্রাকৃতিক সৌন্দর্য উপভোগ ও ভ্রমণের উদ্দেশ্যে কুলু, মানালি প্রভৃতি স্থানে যে শহর গড়ে উঠেছে তা পর্যটন শহর নামে খ্যাত।" },
+      { q: "৫. কেবল বসবাসের জন্য যে-সমস্ত শহর গড়ে ওঠে, তাদের কী বলে?", opts: ["স্যাটেলাইট শহর", "সেন্সাস শহর", "আবাসিক শহর", "প্রশাসনিক শহর"], ans: 2, exp: "কোনো বিশেষ কার্যাবলির পরিবর্তে কেবল মানুষের বসবাসের উদ্দেশ্যে যে-সমস্ত শহর গড়ে ওঠে, তাদের আবাসিক শহর বলে।" },
+      { q: "৬. শিল্পের ওপর ভিত্তি করে গড়ে ওঠা ভারতের 'ইস্পাত নগরী' কোনটি?", opts: ["দুর্গাপুর", "জামশেদপুর", "ভিলাই", "বোকারো"], ans: 1, exp: "ভারতের জামশেদপুর শহরটি লৌহ-ইস্পাত শিল্পের ওপর ভিত্তি করে গড়ে উঠেছে বলে এটি 'ইস্পাত নগরী' বা একটি শিল্প শহরের উদাহরণ।" },
+      { q: "৭. ভারতের শান্তিনিকেতন কোন ধরনের শহরের উদাহরণ?", opts: ["পর্যটন শহর", "প্রশাসনিক শহর", "প্রতিরক্ষা শহর", "সাংস্কৃতিক বা শিক্ষা শহর"], ans: 3, exp: "শিক্ষাদীক্ষা ও সংস্কৃতির প্রসারের জন্য পশ্চিমবঙ্গের শান্তিনিকেতন একটি উল্লেখযোগ্য সাংস্কৃতিক বা শিক্ষা শহর হিসেবে গড়ে উঠেছে।" },
+      { q: "৮. গ্রামের মধ্যে শহর বা নগরের প্রসারিত অংশকে কী বলা হয়?", opts: ["পৌরপিন্ড", "পৌর বিক্ষেপ (Urban Sprawl)", "আরবান ফ্রিঞ্জ", "মেগালোপলিস"], ans: 1, exp: "গ্রামের মধ্যে শহর বা নগরের প্রসারিত অংশকে পৌর বিক্ষেপ বা Urban Sprawl বলা হয়।" },
+      { q: "৯. 'Ecumene' শব্দটি কোন গ্রিক শব্দ থেকে এসেছে?", opts: ["Oikoumene", "Oikos", "Ecology", "Ecuinopolis"], ans: 0, exp: "'Ecumene' শব্দটি এসেছে গ্রিক শব্দ 'Oikoumene' থেকে, যার অর্থ হল বসতি অধ্যুষিত বা inhabited।" },
+      { q: "১০. শম্পু উপজাতিদের ক্ষুদ্র গ্রাম বা হ্যামলেটকে কী বলা হয়?", opts: ["টোলা", "ক্যারাভান", "ধানাস", "মোটেল"], ans: 2, exp: "শম্পু উপজাতিদের ক্ষুদ্র গ্রাম বা হ্যামলেটকে ধানাস বলা হয়।" },
+      { q: "১১. নদীর সঙ্গমস্থলে সাধারণত কী ধরনের বসতি বিন্যাস গড়ে ওঠে?", opts: ["রৈখিক", "ত্রিভুজাকার", "দণ্ডাকার", "আয়তাকার"], ans: 1, exp: "একাধিক নদী যেখানে এসে মেশে অর্থাৎ নদীর সঙ্গমস্থলে সাধারণত ত্রিভুজাকার বসতি বিন্যাস গড়ে ওঠে।" },
+      { q: "১২. কোনো আকর্ষণীয় স্থানকে কেন্দ্র করে যাতায়াতের পথ অনুসরণ করে কুণ্ডলী আকারে যে বসতি বিন্যাস গড়ে ওঠে, তাকে কী বলে?", opts: ["নীহারিকা বিন্যাস", "দণ্ডাকৃতি বিন্যাস", "ত্রিভুজাকৃতি বিন্যাস", "নক্ষত্রাকার বিন্যাস"], ans: 0, exp: "কোনো আকর্ষণীয় স্থানকে কেন্দ্র করে যাতায়াতের পথ অনুসরণ করে কুণ্ডলী আকারে যে বসতি বিন্যাস গড়ে ওঠে, তাকে নীহারিকা বিন্যাস বলে।" },
+      { q: "১৩. সুতানুটি, গোবিন্দপুর ও কলকাতা—এই তিনটি গ্রাম মিলে বর্তমানে কোন মহানগরীতে পরিণত হয়েছে?", opts: ["দিল্লি", "চেন্নাই", "কলকাতা", "মুম্বাই"], ans: 2, exp: "সুতানুটি, গোবিন্দপুর ও কলকাতা—এই তিনটি গ্রাম একত্রে মিলিত ও বর্ধিত হয়ে বর্তমানের কলকাতা মহানগরীতে পরিণত হয়েছে।" },
+      { q: "১৪. শুষ্ক অঞ্চলে, মরুভূমি বা মরূদ্যানে জলের অভাবের কারণে কোনো নির্দিষ্ট জলাশয়কে কেন্দ্র করে গড়ে ওঠা বসতিকে কী বলে?", opts: ["শুষ্ক বিন্দু বসতি", "জলবিন্দু বসতি", "আয়তাকার বসতি", "নীহারিকা বসতি"], ans: 1, exp: "শুষ্ক অঞ্চলে জলের অভাবের কারণে সাধারণত মরূদ্যানে প্লায়াকে ঘিরে অথবা ভৌমজলের উৎসকে ঘিরে গোষ্ঠীবদ্ধ জনবসতি বিকাশ লাভ করে, একে জলবিন্দু বসতি বলে।" },
+      { q: "১৫. বন্যা প্লাবিত অঞ্চলে বন্যার প্রকোপ থেকে রক্ষা পাওয়ার জন্য অপেক্ষাকৃত উঁচু এবং শুষ্ক স্থানগুলিতে গড়ে ওঠা বসতিকে কী বলে?", opts: ["শুষ্ক বিন্দু বসতি", "জলবিন্দু বসতি", "রৈখিক বসতি", "সেন্সাস গ্রাম"], ans: 0, exp: "বন্যা প্লাবিত অঞ্চলের অধিবাসীরা বন্যার প্রকোপ থেকে রক্ষা পাওয়ার জন্য অপেক্ষাকৃত উঁচু এবং শুষ্ক অঞ্চলগুলিতে বসতি স্থাপন করে। শুষ্ক স্থানের ওপর নির্ভর করে এই বসতি স্থাপিত হয় বলে একে শুষ্ক বিন্দু বসতি বলে।" }
+    ]
+  }
+};
+
+// ============================================================
+// মূল লজিক (লগইন, টাইমার, কুইজ পরিচালনা এবং রেজাল্ট)
+// ============================================================
+
+function initHub() {
+  const grid = document.getElementById('setGrid');
+  grid.innerHTML = '';
+
+  Object.keys(allSets).forEach(setId => {
+    const set = allSets[setId];
+    const card = document.createElement('div');
+    card.className = 'set-card';
+
+    let attemptCount = 0;
+    if (currentUser) {
+      let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+      attemptCount = (data[currentUser] && data[currentUser][setId]) || 0;
+    }
+
+    card.innerHTML = `
+      <div class="icon">${set.icon}</div>
+      <div class="set-num">${set.name}</div>
+      <div class="set-title">${set.topic}</div>
+      <div class="set-meta"><span>${set.questions.length} প্রশ্ন</span><span>১০ মিনিট</span></div>
+      ${currentUser ? `<div class="attempt-badge">${attemptCount}/${MAX_ATTEMPTS} Attempts</div>` : ''}
+    `;
+
+    card.onclick = () => {
+      if (currentUser) {
+        if (attemptCount >= MAX_ATTEMPTS) {
+          alert(`⚠️ আপনি ${set.name} এর সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
+          return;
+        }
+        startQuiz(setId);
+      } else {
+        openLogin(setId);
+      }
+    };
+    grid.appendChild(card);
+  });
+}
+
+function openLogin(setId) {
+  pendingSetId = setId;
+  document.getElementById('loginSetName').innerText = `📚 ${allSets[setId].name}`;
+  document.getElementById('loginOverlay').classList.add('active');
+  document.getElementById('loginUsername').value = '';
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginError').style.display = 'none';
+}
+
+function closeLogin() {
+  document.getElementById('loginOverlay').classList.remove('active');
+}
+
+function doLogin() {
+  const u = document.getElementById('loginUsername').value.trim();
+  const p = document.getElementById('loginPassword').value.trim();
+  const err = document.getElementById('loginError');
+
+  const GLOBAL_USERS = JSON.parse(localStorage.getItem("testBazarGlobalUsers")) || {};
+
+  if (!u || !p) {
+    err.innerText = "❌ ইউজারনেম এবং পাসওয়ার্ড দিন!";
+    err.style.display = 'block';
+    return;
+  }
+
+  if (GLOBAL_USERS[u] && GLOBAL_USERS[u] === p) {
+    currentUser = u;
+    document.getElementById('hubUserInfo').innerText = `👤 ${u} — Test দিতে সেট সিলেক্ট করো।`;
+    closeLogin();
+    initHub();
+    if (pendingSetId) {
+      let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+      let attemptCount = (data[u] && data[u][pendingSetId]) || 0;
+      if (attemptCount < MAX_ATTEMPTS) {
+        startQuiz(pendingSetId);
+      } else {
+        alert(`⚠️ আপনি ${allSets[pendingSetId].name} এর সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
+      }
+      pendingSetId = null;
+    }
+  } else {
+    err.innerText = "❌ ভুল ইউজারনেম বা পাসওয়ার্ড।";
+    err.style.display = 'block';
+  }
+}
+
+function startQuiz(setId) {
+  currentSetId = setId;
+  TOTAL_QS = allSets[setId].questions.length;
+
+  let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  if (!data[currentUser]) data[currentUser] = {};
+  data[currentUser][setId] = (data[currentUser][setId] || 0) + 1;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+  initHub();
+
+  cur = 0; score = 0; wrong = 0; answered = false; userAnswers = [];
+  timeLeft = TIME_LIMIT;
+  isReviewMode = false;
+
+  document.getElementById('hubPage').classList.add('hidden');
+  document.getElementById('resultWrap').classList.remove('show');
+  document.getElementById('testArea').classList.remove('hidden');
+  document.getElementById('timerBox').classList.remove('hidden');
+  document.getElementById('timerBox').classList.remove('danger');
+
+  const set = allSets[setId];
+  document.getElementById('testSetLabel').innerText = set.name;
+  document.getElementById('testTopic').innerText = set.topic;
+
+  startTimer();
+  loadQuestion();
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      showResult();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+  const s = (timeLeft % 60).toString().padStart(2, '0');
+  document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+  if (timeLeft < 60) document.getElementById('timerBox').classList.add('danger');
+}
+
+function loadQuestion() {
+  answered = false;
+  const set = allSets[currentSetId];
+  const q = set.questions[cur];
+
+  document.getElementById('qNum').innerText = isReviewMode ? `Review: প্রশ্ন ${cur + 1} / ${TOTAL_QS}` : `প্রশ্ন ${cur + 1} / ${TOTAL_QS}`;
+  document.getElementById('qText').innerText = q.q;
+  document.getElementById('progressFill').style.width = `${((cur + 1) / TOTAL_QS) * 100}%`;
+
+  const optsContainer = document.getElementById('qOpts');
+  optsContainer.innerHTML = '';
+
+  q.opts.forEach((optText, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.innerHTML = `<div class="opt-circle">${LABELS[idx]}</div> <div class="opt-text">${optText}</div>`;
+
+    if (isReviewMode) {
+      btn.classList.add('disabled');
+      if (idx === q.ans) btn.classList.add('correct');
+      else if (userAnswers[cur] === idx) btn.classList.add('wrong');
+    } else {
+      btn.onclick = () => selectAnswer(idx, btn);
+    }
+    optsContainer.appendChild(btn);
+  });
+
+  const nextBtn = document.getElementById('nextBtn');
+  document.getElementById('explanation').classList.remove('show');
+  document.getElementById('scoreShow').innerText = isReviewMode ? "সবুজ = সঠিক উত্তর | লাল = আপনার ভুল উত্তর" : `সঠিক: ${score} | ভুল: ${wrong}`;
+
+  if (isReviewMode) {
+    document.getElementById('explanationText').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+    document.getElementById('explanation').classList.add('show');
+    nextBtn.disabled = false;
+    nextBtn.innerText = cur === set.questions.length - 1 ? 'ফলাফল পেজে ফিরুন' : 'পরবর্তী →';
+  } else {
+    nextBtn.disabled = true;
+    nextBtn.innerText = cur === set.questions.length - 1 ? 'ফলাফল দেখো 🏆' : 'পরবর্তী →';
+  }
+}
+
+function selectAnswer(selectedIdx, btnElement) {
+  if (answered) return;
+  answered = true;
+
+  const set = allSets[currentSetId];
+  const q = set.questions[cur];
+  userAnswers[cur] = selectedIdx;
+
+  const allBtns = document.getElementById('qOpts').children;
+  for (let i = 0; i < allBtns.length; i++) {
+    allBtns[i].classList.add('disabled');
+    if (i === q.ans) allBtns[i].classList.add('correct');
+  }
+
+  if (selectedIdx === q.ans) {
+    score++;
+  } else {
+    btnElement.classList.add('wrong');
+    wrong++;
+  }
+
+  document.getElementById('scoreShow').innerText = `সঠিক: ${score} | ভুল: ${wrong}`;
+  document.getElementById('explanationText').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+  document.getElementById('explanation').classList.add('show');
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQ() {
+  const set = allSets[currentSetId];
+  if (cur < set.questions.length - 1) {
+    cur++;
+    loadQuestion();
+  } else {
+    if (isReviewMode) {
+      document.getElementById('testArea').classList.add('hidden');
+      document.getElementById('resultWrap').classList.add('show');
+    } else {
+      clearInterval(timerInterval);
+      showResult();
+    }
+  }
+}
+
+function showResult() {
+  document.getElementById('testArea').classList.add('hidden');
+  document.getElementById('timerBox').classList.add('hidden');
+  document.getElementById('resultWrap').classList.add('show');
+
+  const total = allSets[currentSetId].questions.length;
+  const pct = Math.round((score / total) * 100);
+
+  document.getElementById('finalScore').innerText = `${pct}%`;
+  document.getElementById('rbCorrect').innerText = score;
+  document.getElementById('rbWrong').innerText = total - score;
+
+  let msg = "অসাধারণ!"; let icon = "🏆";
+  if (pct < 50) { msg = "আরও অনুশীলন প্রয়োজন!"; icon = "📚"; }
+  else if (pct < 80) { msg = "খুব ভালো চেষ্টা!"; icon = "👍"; }
+
+  document.getElementById('resultGrade').innerText = msg;
+  document.getElementById('resultIcon').innerText = icon;
+
+  let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  let count = data[currentUser][currentSetId] || 0;
+  let remaining = MAX_ATTEMPTS - count;
+
+  document.getElementById('attemptInfo').innerText = `👤 ${currentUser} — ${allSets[currentSetId].name}: বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ`;
+}
+
+function showReview() {
+  document.getElementById('resultWrap').classList.remove('show');
+  document.getElementById('testArea').classList.remove('hidden');
+  isReviewMode = true;
+  cur = 0;
+  loadQuestion();
+}
+
+function restartQuiz() {
+  let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  let count = data[currentUser][currentSetId] || 0;
+  if (count >= MAX_ATTEMPTS) {
+    alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+    return;
+  }
+  document.getElementById('resultWrap').classList.remove('show');
+  startQuiz(currentSetId);
+}
+
+function goToHub() {
+  document.getElementById('resultWrap').classList.remove('show');
+  document.getElementById('testArea').classList.add('hidden');
+  document.getElementById('timerBox').classList.add('hidden');
+  document.getElementById('hubPage').classList.remove('hidden');
+  initHub();
+}
+
+window.onload = initHub;
+</script>
+
+</body>
+</html>
+
+
