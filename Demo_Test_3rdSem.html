@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Bazar — Free Demo Test | 3rd Sem (Full Length)</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ================== CSS STYLES ================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: #f4f9f9; min-height: 100vh; color: #2c3e50; }
+.en-font { font-family: 'Syne', sans-serif; }
+
+.top-bar { background: #e65100; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 15px rgba(230, 81, 0, 0.2); }
+.top-logo { font-size: 1.4rem; font-weight: 800; color: white; cursor: pointer; letter-spacing: 1px;}
+.timer-box { background: rgba(255,255,255,0.25); padding: 0.4rem 1rem; border-radius: 8px; color: white; font-weight: 800; font-size: 1.05rem; }
+
+.main { max-width: 850px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+/* HUB PAGE */
+.hub-header { text-align: center; margin-bottom: 2.5rem; }
+.hub-header h1 { font-family: 'Tiro Bangla', serif; color: #e65100; font-size: 2rem; margin-bottom: 0.8rem; line-height: 1.4; }
+.hub-header p { color: #546e7a; font-size: 1.1rem; font-family: 'Tiro Bangla', serif; font-weight: bold; }
+.set-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+.set-card { background: white; border: 2px solid #ffcc80; border-radius: 14px; padding: 1.8rem; text-align: center; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 15px rgba(230, 81, 0, 0.08);}
+.set-card:hover { transform: translateY(-5px); background: #fff8e1; border-color: #e65100; box-shadow: 0 8px 25px rgba(230, 81, 0, 0.15); }
+.set-card .icon { font-size: 2.8rem; margin-bottom: 0.5rem; }
+.set-card .set-num { font-weight: 800; font-size: 1.4rem; color: #e65100; margin-bottom: 8px; font-family: 'Tiro Bangla', serif;}
+.set-card .set-title { font-family: 'Tiro Bangla', serif; font-size: 1.05rem; color: #455a64; margin: 0.2rem 0 1rem; font-weight: bold;}
+.set-card .set-meta { display: flex; gap: 1rem; font-size: 0.9rem; color: white; justify-content: center; font-weight: bold;}
+.set-card .set-meta span { background: #00897b; padding: 0.4rem 1rem; border-radius: 6px; }
+.free-badge { background: #d32f2f; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; display: inline-block; margin-bottom: 12px; animation: pulse 1.5s infinite; letter-spacing: 1px;}
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+/* QUIZ AREA */
+.quiz-info { background: white; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; border: 1px solid #b0bec5; display: flex; gap: 1rem; flex-wrap: wrap; box-shadow: 0 4px 10px rgba(0,0,0,0.03);}
+.info-item { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: #455a64; font-weight: bold; }
+.info-item strong { color: #e65100; font-size: 1.1rem;}
+
+.progress-wrap { background: #ffe0b2; border-radius: 6px; height: 8px; margin-bottom: 1.5rem; overflow: hidden; }
+.progress-fill { height: 100%; background: #e65100; border-radius: 6px; transition: width 0.4s ease; }
+
+.q-card { background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 25px rgba(0,0,0,0.06); }
+.q-num { font-size: 1rem; font-weight: 800; color: #e65100; margin-bottom: 1rem; background: #fff3e0; display: inline-block; padding: 5px 15px; border-radius: 8px;}
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1.3rem; color: #263238; font-weight: 700; line-height: 1.6; margin-bottom: 1.5rem; }
+
+.opts { display: flex; flex-direction: column; gap: 0.8rem; }
+.opt { display: flex; align-items: flex-start; gap: 15px; padding: 1rem 1.2rem; border: 2px solid #cfd8dc; border-radius: 12px; background: transparent; cursor: pointer; text-align: left; transition: all 0.2s; width: 100%; }
+.opt:hover:not(.disabled) { border-color: #00897b; background: #e0f2f1; }
+.opt-circle { min-width: 32px; height: 32px; border-radius: 50%; border: 2px solid #90a4ae; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: #546e7a; flex-shrink: 0; background: white;}
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; color: #37474f; line-height: 1.5; font-weight: 600; padding-top: 2px; }
+
+.opt.correct { border-color: #00897b; background: #e0f2f1; }
+.opt.correct .opt-circle { background: #00897b; border-color: #00897b; color: white; }
+.opt.wrong { border-color: #d32f2f; background: #ffebee; }
+.opt.wrong .opt-circle { background: #d32f2f; border-color: #d32f2f; color: white; }
+.opt.disabled { cursor: default; }
+
+/* BEAUTIFUL EXPLANATION BOX */
+.explanation { background: #fff8e1; border: 2px solid #ffe0b2; border-left: 6px solid #f9a825; border-radius: 10px; padding: 1.5rem; margin-top: 1.5rem; display: none; box-shadow: 0 4px 15px rgba(249, 168, 37, 0.1); position: relative;}
+.explanation.show { display: block; animation: fadeIn 0.4s; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.explanation-title { font-family: 'Tiro Bangla', serif; color: #e65100; font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;}
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 1.05rem; color: #424242; line-height: 1.8; font-weight: bold;}
+
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; border-top: 1px solid #eceff1; padding-top: 1.5rem;}
+.score-show { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: #546e7a; font-weight: bold; background: #eceff1; padding: 6px 15px; border-radius: 8px;}
+.next-btn { background: #e65100; color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 10px rgba(230, 81, 0, 0.3);}
+.next-btn:hover:not(:disabled) { background: #bf360c; transform: translateY(-2px);}
+.next-btn:disabled { background: #ffcc80; cursor: not-allowed; box-shadow: none; transform: none;}
+
+/* RESULT AREA */
+.result-wrap { background: white; border-radius: 16px; padding: 3rem 2rem; text-align: center; border: 1px solid #cfd8dc; display: none; max-width: 650px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 4rem; margin-bottom: 1rem; line-height: 1; }
+.result-score { font-size: 4rem; font-weight: 800; color: #00897b; line-height: 1; margin-bottom: 5px; }
+.result-total { font-size: 1.1rem; color: #546e7a; margin-bottom: 1rem; font-family: 'Tiro Bangla', serif; font-weight: bold;}
+.result-grade { font-size: 1.5rem; font-weight: 800; margin-bottom: 2rem; font-family: 'Tiro Bangla', serif; color: #e65100; }
+
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+.result-bar { background: #f4f9f9; border-radius: 12px; padding: 1.5rem; text-align: center; border: 1px solid #cfd8dc; }
+.rb-num { font-size: 2.2rem; font-weight: 800; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: #546e7a; margin-top: 0.5rem; font-weight: bold;}
+
+.result-actions { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+.result-actions button, .result-actions a { width: 100%; padding: 16px; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-size: 1.15rem; font-weight: 800; cursor: pointer; border: none; transition: 0.2s; text-decoration: none; display: block;}
+.btn-review { background: #00897b; color: white; box-shadow: 0 4px 10px rgba(0, 137, 123, 0.3);}
+.btn-review:hover { background: #00695c; }
+.btn-home { background: transparent; color: #455a64; border: 2px solid #b0bec5 !important; }
+.btn-home:hover { background: #eceff1; }
+
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-logo" onclick="goToHub()">Test<span>Bazar</span> (PRO DEMO)</div>
+  <div class="timer-box hidden" id="timerBox">⏱ <span id="timerDisplay">15:00</span></div>
+</div>
+
+<div class="main">
+
+  <!-- ===== HUB PAGE ===== -->
+  <div id="hubPage">
+    <div class="hub-header">
+      <h1>🎁 3rd Semester — Full Length Free Demo Test</h1>
+      <p>পাসওয়ার্ড ছাড়াই নিচের যেকোনো বিষয়ের সম্পূর্ণ ১৫টি প্রশ্নের ডেমো টেস্ট শুরু করুন!</p>
+    </div>
+    <div class="set-grid" id="setGrid"></div>
+    <br><br>
+    <a href="Index_3rdSem.html" style="display: block; text-align: center; font-family: 'Tiro Bangla', serif; color: #00897b; font-weight: bold; font-size: 1.1rem; text-decoration: underline;">← মূল ড্যাশবোর্ডে ফিরে যান</a>
+  </div>
+
+  <!-- ===== TEST AREA ===== -->
+  <div id="testArea" class="hidden">
+    <div class="quiz-info">
+      <div class="info-item">🎓 <strong id="testSetName">বিষয়</strong> — Free Demo | <span id="testSetLabel">Full Set</span></div>
+      <div class="info-item">📝 <span id="testTopic">Topic</span></div>
+    </div>
+
+    <div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+    <div class="q-card" id="qCard">
+      <div class="q-num" id="qNum">প্রশ্ন ১ / ১৫</div>
+      <div class="q-text" id="qText"></div>
+      <div class="opts" id="qOpts"></div>
+
+      <div class="explanation" id="explanation">
+        <div class="explanation-title">💡 বিস্তারিত ব্যাখ্যা:</div>
+        <p id="explanationText"></p>
+      </div>
+
+      <div class="nav-row">
+        <div class="score-show" id="scoreShow">সঠিক: ০ | ভুল: ০</div>
+        <button class="next-btn" id="nextBtn" onclick="nextQ()" disabled>পরবর্তী প্রশ্ন →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RESULT AREA ===== -->
+  <div class="result-wrap" id="resultWrap">
+    <div class="result-icon" id="resultIcon">🏆</div>
+    <div class="result-score en-font" id="finalScore">100%</div>
+    <div class="result-total">সম্পূর্ণ স্কোর</div>
+    <div class="result-grade" id="resultGrade">অসাধারণ!</div>
+
+    <div class="result-bars">
+      <div class="result-bar">
+        <div class="rb-num en-font" id="rbCorrect" style="color:#00897b">0</div>
+        <div class="rb-label">সঠিক উত্তর</div>
+      </div>
+      <div class="result-bar">
+        <div class="rb-num en-font" id="rbWrong" style="color:#d32f2f">0</div>
+        <div class="rb-label">ভুল/স্কিপ</div>
+      </div>
+    </div>
+
+    <div class="result-actions">
+      <button class="btn-review" onclick="showReview()">👀 সঠিক উত্তর ও ব্যাখ্যা দেখুন</button>
+      <button class="btn-home" onclick="goToHub()">🏠 অন্যান্য বিষয়ের ডেমো দিন</button>
+      <a href="Index_3rdSem.html" class="btn-home" style="background: #e65100; color: white; border-color: #e65100 !important; margin-top: 10px;">🚀 মূল টেস্ট ড্যাশবোর্ডে প্রবেশ করুন</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// গ্লোবাল ভেরিয়েবল
+// ============================================================
+const TIME_LIMIT = 15 * 60; // 15 Minutes for 15 Questions
+const LABELS = ['ক', 'খ', 'গ', 'ঘ'];
+
+let currentSetId = 1;
+let cur = 0, score = 0, wrong = 0, answered = false;
+let timerInterval, timeLeft = TIME_LIMIT;
+let userAnswers = [];
+let isReviewMode = false;
+let TOTAL_QS = 0;
+
+// ============================================================
+// ৪ টি বিষয়ের ফ্রি ডেমো প্রশ্ন (১৫টি করে)
+// ============================================================
+const allSets = {
+  1: {
+    subject: 'রাষ্ট্রবিজ্ঞান', icon: '🏛️', topic: 'আন্তর্জাতিক সম্পর্ক, নিরাপত্তা ও জোটনিরপেক্ষতা',
+    questions: [
+      { q: "১. সাধারণভাবে মনে করা হয় যে, 'ঠান্ডা লড়াই' কথাটি প্রথম কে প্রয়োগ করেছিলেন?", opts: ["উইনস্টন চার্চিল", "ওয়াল্টার লিপম্যান", "বার্নার্ড বারুচ", "নিকোলাই বুলগানিন"], ans: 1, exp: "মার্কিন সাংবাদিক ওয়াল্টার লিপম্যান 'দ্য ওয়াশিংটন পোস্ট' পত্রিকায় প্রকাশিত তাঁর প্রবন্ধগুলিতে সর্বপ্রথম 'ঠান্ডা লড়াই' (Cold War) কথাটি প্রয়োগ করেছিলেন বলে সাধারণভাবে মনে করা হয়।" },
+      { q: "২. 'জোটনিরপেক্ষতার বিকাশ ও তত্ত্বের ব্যাখ্যা ছাড়া আন্তর্জাতিক সম্পর্কের কোনো তত্ত্ব পূর্ণতা লাভ করতে পারে না।' - উক্তিটি কার?", opts: ["জোসেফ ফ্র্যাঙ্কেল", "জে. ডাবলিউ. বার্টন (J.W. Burton)", "হ্যান্স মরগেনথাউ", "জওহরলাল নেহরু"], ans: 1, exp: "আন্তর্জাতিক রাজনীতিতে জোটনিরপেক্ষতার গুরুত্ব বোঝাতে জে. ডাবলিউ. বার্টন এই বিখ্যাত মন্তব্য করেছেন।" },
+      { q: "৩. তিব্বতকে কেন্দ্র করে ভারত ও চীনের মধ্যে 'পঞ্চশীল চুক্তি' কবে স্বাক্ষরিত হয়?", opts: ["১৯৫০ খ্রিস্টাব্দে", "১৯৫৩ খ্রিস্টাব্দে", "১৯৫৪ খ্রিস্টাব্দের ২৯ এপ্রিল", "১৯৫৬ খ্রিস্টাব্দে"], ans: 2, exp: "১৯৫৪ সালে ভারতের প্রধানমন্ত্রী জওহরলাল নেহরু এবং চীনের প্রধানমন্ত্রী চৌ এন-লাইয়ের মধ্যে তিব্বতকে কেন্দ্র করে এই ঐতিহাসিক চুক্তি স্বাক্ষরিত হয়।" },
+      { q: "৪. 'ঠান্ডা লড়াইয়ের পরিসমাপ্তি এবং সোভিয়েত ইউনিয়নের ঐক্য বিনষ্ট হওয়ার পর জোটনিরপেক্ষতা অর্থহীন হয়ে পড়েছে'- এই মন্তব্য কে করেছেন?", opts: ["বারাক ওবামা", "টনি ব্লেয়ার", "শ্রীমতী কন্ডোলিজা রাইস (মার্কিন পররাষ্ট্রমন্ত্রী)", "জর্জ বুশ"], ans: 2, exp: "২০০৭ সালে হাভানা সম্মেলনের পর মার্কিন পররাষ্ট্রমন্ত্রী রাইস এই মন্তব্য করে ভারতকে মার্কিন মৈত্রীজোটে যোগদানের পরামর্শ দিয়েছিলেন।" },
+      { q: "৫. জোটনিরপেক্ষ দেশগুলি কোন্ মারণাস্ত্র সম্পূর্ণ ধ্বংস করার দাবিতে সর্বদা সোচ্চার হয়েছে?", opts: ["সাধারণ রাইফেল", "যুদ্ধবিমান", "পারমাণবিক অস্ত্র ও মারণাস্ত্র", "নৌ-যুদ্ধজাহাজ"], ans: 2, exp: "বিশ্বশান্তি প্রতিষ্ঠার জন্য নিরস্ত্রীকরণ ও পারমাণবিক অস্ত্রমুক্ত বিশ্ব গঠন জোটনিরপেক্ষ আন্দোলনের মূল লক্ষ্যগুলির একটি।" },
+      { q: "৬. 'America for the Americans' (আমেরিকা কেবল আমেরিকানদের জন্য) - এটি কোন্ নীতির মূল কথা?", opts: ["ট্রুম্যান নীতি", "মনরো নীতি", "মার্শাল পরিকল্পনা", "নিক্সন ডকট্রিন"], ans: 1, exp: "১৮২৩ খ্রিস্টাব্দে মার্কিন রাষ্ট্রপতি মনরো এই নীতি ঘোষণা করেন, যার অর্থ আমেরিকা ইউরোপের রাজনীতিতে হস্তক্ষেপ করবে না এবং ইউরোপও আমেরিকায় হস্তক্ষেপ করবে না।" },
+      { q: "৭. 'নিরস্ত্রীকরণ বলতে অস্ত্র প্রতিযোগিতা বন্ধ করার জন্য সকল প্রকার বা কয়েক প্রকার সমরাস্ত্র হ্রাস বা বর্জন করাকে বোঝায়।' — উক্তিটি কার?", opts: ["স্যামুয়েল হান্টিংটন", "হ্যান্স মরগেনথাউ", "কোফি আন্নান", "জওহরলাল নেহরু"], ans: 1, exp: "বিখ্যাত রাষ্ট্রবিজ্ঞানী অধ্যাপক হ্যান্স মরগেনথাউ বিশ্বশান্তি প্রতিষ্ঠায় নিরস্ত্রীকরণের (Disarmament) সংজ্ঞা দিতে গিয়ে এই মন্তব্যটি করেছিলেন।" },
+      { q: "৮. 'অস্ত্র আছে বলেই মানুষ যুদ্ধ করে না, বরং তারা যুদ্ধ করা প্রয়োজন মনে করে বলেই অস্ত্র সংগ্রহ ও উৎপাদন করে।' — এটি কার অভিমত?", opts: ["হ্যান্স মরগেনথাউ", "লর্ড ক্যাসেলরিগ", "মহাত্মা গান্ধি", "বার্ট্রান্ড রাসেল"], ans: 0, exp: "নৈতিক দিক থেকে নিরস্ত্রীকরণের প্রয়োজনীয়তা বোঝাতে গিয়ে মরগেনথাউ এই উক্তিটি করেছিলেন, যেখানে মানুষের যুদ্ধংদেহী মানসিকতাকে মূল কারণ বলা হয়েছে।" },
+      { q: "৯. অপ্রথাগত নিরাপত্তার (Non-traditional Security) প্রধান লক্ষ্য কী?", opts: ["কেবল রাষ্ট্রের ভৌগোলিক সীমানা রক্ষা করা", "সামরিক জোট গঠন করা", "প্রতিটি ব্যক্তির, সম্প্রদায়ের ও মানব সমাজের সার্বিক সুরক্ষা সুনিশ্চিত করা", "বিদেশি শক্তির বিরুদ্ধে যুদ্ধ ঘোষণা করা"], ans: 2, exp: "অপ্রথাগত নিরাপত্তা শুধু রাষ্ট্রের সামরিক সুরক্ষার মধ্যে সীমাবদ্ধ নয়, এটি বিশ্বব্যাপী মানুষের খাদ্য, স্বাস্থ্য, পরিবেশ এবং জীবনযাত্রার সার্বিক সুরক্ষার সাথে যুক্ত।" },
+      { q: "১০. বর্তমান বিশ্বে জনসংখ্যার একটি বিশাল অংশ মূলত কোন্ দেশগুলিতে বসবাস করে?", opts: ["মার্কিন যুক্তরাষ্ট্র, ব্রিটেন ও ফ্রান্স", "ভারত, চীন, পাকিস্তান, নাইজেরিয়া, বাংলাদেশ এবং ইন্দোনেশিয়া", "জাপান, জার্মানি ও ইটালি", "রাশিয়া, কানাডা ও অস্ট্রেলিয়া"], ans: 1, exp: "বিশ্বের মোট জনসংখ্যার প্রায় অর্ধেক এই ছয়টি উন্নয়নশীল ও দরিদ্র দেশেই সীমায়িত, যা বৈশ্বিক সম্পদের ওপর ব্যাপক চাপ সৃষ্টি করে।" },
+      { q: "১১. ২০১৯ খ্রিস্টাব্দে 'বিশ্ব স্থিতিশীল উন্নয়ন শীর্ষ সম্মেলন' (World Sustainable Development Summit) কোথায় অনুষ্ঠিত হয়েছিল?", opts: ["প্যারিস", "জেনেভা", "নতুন দিল্লি (ভারত)", "টোকিও"], ans: 2, exp: "২০১৯ সালের ১১ থেকে ১৩ ফেব্রুয়ারি ভারতের নতুন দিল্লিতে এই সম্মেলন অনুষ্ঠিত হয়, যার স্লোগান ছিল 'Attaining the 2030 Agenda: Delivering on our promise'।" },
+      { q: "১২. বিশ্ব উষ্ণায়নের (Global Warming) মূল কারণ কী?", opts: ["বনায়ন বৃদ্ধি", "গ্রিন হাউস গ্যাস (যেমন কার্বন ডাইঅক্সাইড, মিথেন) নিঃসরণ বৃদ্ধি", "সৌরশক্তির ব্যবহার", "জৈব কৃষিকাজ"], ans: 1, exp: "শিল্পায়ন, বৃক্ষচ্ছেদন ও জীবাশ্ম জ্বালানি পোড়ানোর কারণে বায়ুমণ্ডলে ক্ষতিকর গ্রিন হাউস গ্যাস বাড়ছে, যা পৃথিবীর তাপমাত্রা বাড়িয়ে দিচ্ছে।" },
+      { q: "১৩. অপ্রথাগত নিরাপত্তার ক্ষেত্রে বিশ্ব দারিদ্র্য মূলত কী ধরনের সংকট সৃষ্টি করে?", opts: ["কেবল সামরিক শক্তি হ্রাস", "খাদ্য, স্বাস্থ্য, শিক্ষা এবং সামাজিক নিরাপত্তার সংকট", "মহাকাশ গবেষণায় বাধা", "শুধু উন্নত দেশগুলোর ক্ষতি"], ans: 1, exp: "দারিদ্র্যের কারণে অপুষ্টি, রোগব্যাধি, অশিক্ষা বাড়ে এবং মানুষ অপরাধমূলক কাজে জড়িয়ে পড়ে, যা সামগ্রিকভাবে মানব নিরাপত্তাকে বিঘ্নিত করে।" },
+      { q: "১৪. স্বাস্থ্য মহামারি হিসেবে পরিচিত 'বার্ড ফ্লু' (Bird Flu) রোগটি অন্য কী নামে পরিচিত?", opts: ["সোয়াইন ফ্লু", "সার্স (SARS)", "এভিয়ান ফ্লু (Avian Flu)", "লাসা জ্বর"], ans: 2, exp: "পাখিদের মাধ্যমে ছড়ানো এই সংক্রামক ব্যাধিটি এভিয়ান ফ্লু নামেও ব্যাপকভাবে পরিচিত, যা মানব স্বাস্থ্যের জন্য অত্যন্ত ঝুঁকিপূর্ণ।" },
+      { q: "১৫. সহযোগিতামূলক নিরাপত্তার (Cooperative Security) প্রধান বৈশিষ্ট্য কী?", opts: ["সামরিক শক্তির ব্যবহারকে প্রথম পছন্দ হিসেবে নেওয়া", "পারমাণবিক অস্ত্রের উৎপাদন বাড়ানো", "অপ্রচলিত হুমকি মোকাবিলায় সামরিক শক্তির পরিবর্তে পারস্পরিক সহযোগিতার ওপর গুরুত্ব আরোপ", "কেবল প্রতিবেশী রাষ্ট্রের সাথে যুদ্ধ করা"], ans: 2, exp: "সহযোগিতামূলক নিরাপত্তা সামরিক বলপ্রয়োগকে শেষ অবলম্বন হিসেবে দেখে এবং বিশ্বব্যাপী সমস্যা সমাধানে বিভিন্ন দেশের যৌথ পদক্ষেপকে গুরুত্ব দেয়।" }
+    ]
+  },
+  2: {
+    subject: 'ইতিহাস', icon: '📜', topic: 'মধ্যযুগের ভারত: সমাজ, ধর্ম ও রাজনীতি',
+    questions: [
+      { q: "১. বার্নিয়ের বর্ণনায় মুঘল যুগের কোন্ স্থাপত্যের অসামান্য বিবরণ পাওয়া যায়?", opts: ["কুতুব মিনার", "আগ্রার তাজমহল ও সেকেন্দ্রাবাদে আকবরের স্মৃতিসৌধ", "লালকেল্লা", "ফতেহপুর সিক্রি"], ans: 1, exp: "বার্নিয়ে তাঁর ভ্রমণকাহিনিতে সমকালীন এই দুই সুবিখ্যাত মুঘল স্থাপত্যের অসাধারণ বর্ণনা দিয়েছেন।" },
+      { q: "২. পাল রাজারা নিজেদের মর্যাদা বৃদ্ধির জন্য মূলত কী উপাধি ধারণ করতেন?", opts: ["জিলিল্লাহ", "পরমেশ্বর, পরমভট্টারক, মহারাজাধিরাজ", "অরিরাজমর্দনশঙ্কর", "চোলমার্তণ্ড"], ans: 1, exp: "প্রাচীন ভারতে পাল রাজারা নিজেদের ঈশ্বরের অবতার হিসেবে প্রতিষ্ঠা করতে এবং অপ্রতিহত ক্ষমতা বোঝাতে এই বিশাল উপাধিগুলি ধারণ করতেন।" },
+      { q: "৩. কলহনের 'রাজতরঙ্গিনী' থেকে কোন্ অঞ্চলে জাফরান চাষের কথা জানা যায়?", opts: ["গুজরাট", "মালব", "কাশ্মীর", "বাংলা"], ans: 2, exp: "প্রাচীন গ্রন্থ 'রাজতরঙ্গিনী'-তে দ্বাদশ শতকে কাশ্মীরে মূল্যবান মসলা জাফরান চাষের সুস্পষ্ট উল্লেখ রয়েছে।" },
+      { q: "৪. প্রাচীন বাংলায় উৎপাদিত শস্যের এক-ষষ্ঠাংশ কর হিসেবে নেওয়া হত, একে কী বলা হত?", opts: ["ভোগ", "হিরণ্য", "উপরিকর", "ভাগ"], ans: 3, exp: "পাল যুগের লিপি অনুযায়ী পাঁচ রকম করের মধ্যে উৎপাদিত শস্যের এক-ষষ্ঠাংশকে 'ভাগ' বলা হত, যা আদায় করতেন 'ষষ্ঠ অধিকৃত' নামক কর্মচারী।" },
+      { q: "৫. হিন্দি ভাষায় 'রামচরিত মানস' কে রচনা করেন?", opts: ["কবির", "তুলসীদাস", "সুরদাস", "চাঁদ বরদৈ"], ans: 1, exp: "আকবরের আমলে শ্রেষ্ঠ হিন্দি কবি তুলসীদাস এই অসামান্য গ্রন্থটি রচনা করেন, যা হিন্দি সাহিত্যের চরম বিকাশ নির্দেশ করে।" },
+      { q: "৬. সেন যুগে হিসাবরক্ষা বিভাগের সর্বময় কর্তাকে কী বলা হত?", opts: ["মহাদণ্ডনায়ক", "মহাক্ষপটলিক", "মহাসন্ধিবিগ্রহিক", "মহাপ্রতিহার"], ans: 1, exp: "পাল ও সেন যুগে রাষ্ট্রের আয়-ব্যয় অর্থাৎ হিসাবরক্ষা বিভাগের সর্বময় কর্তা ছিলেন 'মহাক্ষপটলিক'।" },
+      { q: "৭. খ্রিস্টীয় দশম শতকে লেখা 'কামসূত্রের' টীকা 'জয়মঙ্গলা'-তে তৈল নিষ্কাশনের জন্য কোন্ দুটি যন্ত্রের উল্লেখ আছে?", opts: ["অরঘট্ট ও ঘটিযন্ত্র", "ঔদ্র ও চক্রিক", "হস্তযন্ত্র ও পীড়নযন্ত্র", "লাঙল ও নিড়ানি"], ans: 1, exp: "'জয়মঙ্গলা' টীকায় তৈল নিষ্কাশনের জন্য 'ঔদ্র' এবং ঘানি জাতীয় 'চক্রিক' নামক দুটি যন্ত্রের উল্লেখ আছে।" },
+      { q: "৮. একাদশ শতকের লেখক ক্ষেমেন্দ্রর 'নীতিকল্পতরু'-তে কৃষকদের কী বলে উল্লেখ করা হয়েছে?", opts: ["আশ্রিতহালিক", "বদ্ধমূল", "লাঙলোপজীবী", "দাশ-গ্রামিক"], ans: 0, exp: "কৃষকদের নিজস্ব জমির মালিকানা না থাকা এবং স্বাধীন অস্তিত্বের অভাব বোঝাতে ক্ষেমেন্দ্রর গ্রন্থে তাদের 'আশ্রিতহালিক' বলা হয়েছে।" },
+      { q: "৯. সুলতান ফিরোজ তুঘলক ভারতীয় রাগ সংগীতের ক্লাসিক গ্রন্থ 'রাগদর্পণ' কোন্ ভাষায় অনুবাদ করান?", opts: ["আরবি", "ফারসি", "হিন্দি", "উর্দু"], ans: 1, exp: "ফিরোজ তুঘলকের উদ্যোগে ভারতীয় সংগীতের ধ্রুপদী গ্রন্থ 'রাগদর্পণ' ফারসি ভাষায় অনূদিত হয়েছিল।" },
+      { q: "১০. প্রথম কোন মুঘল সম্রাট তাঁর আত্মজীবনীতে ভারতের সাধারণ মানুষের খালি পায়ে হাঁটা ও সামান্য বস্ত্র ব্যবহারের বর্ণনা দিয়েছেন?", opts: ["হুমায়ুন", "আকবর", "বাবর", "জাহাঙ্গির"], ans: 2, exp: "মুঘল সম্রাট বাবর তাঁর আত্মজীবনী 'তুজুক-ই-বাবরি'-তে ভারতের সাধারণ মানুষের অত্যন্ত সাধারণ জীবনযাত্রা ও খালি পায়ে হাঁটার কথা উল্লেখ করেছেন।" },
+      { q: "১১. কোন মুঘল সম্রাট সেকেন্দ্রায় আকবরের স্মৃতিসৌধের চিত্রগুলি বিনষ্ট করেছিলেন?", opts: ["শাহজাহান", "জাহাঙ্গির", "দ্বিতীয় বাহাদুর শাহ", "ঔরঙ্গজেব"], ans: 3, exp: "ঔরঙ্গজেব সর্বপ্রকার শিল্পের বিরোধী ছিলেন এবং তিনিই সেকেন্দ্রায় আকবরের স্মৃতিসৌধের চিত্রগুলি বিনষ্ট করেছিলেন।" },
+      { q: "১২. চোল রাজারা নিজেদের অপ্রতিহত ক্ষমতা ও প্রতিপত্তি বোঝাতে কোন্ উপাধিগুলি ধারণ করতেন?", opts: ["পরমেশ্বর ও পরমভট্টারক", "চোলমার্তণ্ড ও পাণ্ড্যকুলাশনি", "অরিরাজমর্দনশঙ্কর ও গজপতি", "নায়েবৎ-ই-খুদাই ও জিলিল্লাহ"], ans: 1, exp: "চোল রাজারা নিজেদের ঐশ্বরিক অধিকার ও পরাক্রম দাবি করার জন্য 'চোলমার্তণ্ড', 'পাণ্ড্যকুলাশনি' প্রভৃতি বিশাল উপাধি ধারণ করতেন।" },
+      { q: "১৩. কোন্ মুঘল সম্রাট তাঁর রাজস্বমন্ত্রী টোডরমলকে দিয়ে ১৫৮২ খ্রিস্টাব্দে জাবতি বা দহসালা রাজস্ব ব্যবস্থার প্রবর্তন করেছিলেন?", opts: ["বাবর", "হুমায়ুন", "আকবর", "শাহজাহান"], ans: 2, exp: "সম্রাট আকবরের নির্দেশ ও উদ্যোগে তাঁর সুযোগ্য রাজস্বমন্ত্রী রাজা টোডরমল ১৫৮২ খ্রিস্টাব্দে জমি জরিপ করে এই নতুন রাজস্ব ব্যবস্থার প্রবর্তন করেন।" },
+      { q: "১৪. ইকতা ব্যবস্থার প্রধান দুর্বলতা কী ছিল যা রুখতে সুলতানি রাষ্ট্র সর্বদা সচেষ্ট ছিল?", opts: ["কৃষকদের বিদ্রোহ", "সামন্ততান্ত্রিক প্রবণতার বিকাশ", "রাজস্ব ঘাটতি", "বিদেশি আক্রমণ"], ans: 1, exp: "ইকতা প্রথা বংশানুক্রমিক না হলেও মাকতি বা ইকতাদারদের মধ্যে নিজেদের ক্ষমতা বৃদ্ধি করে সামন্ততান্ত্রিক প্রবণতা গড়ে ওঠার সম্ভাবনা ছিল।" },
+      { q: "১৫. সেন রাজা বিশ্বরূপ সেন তাঁর তাম্রশাসনে পণ্ডিত হলায়ুধকে ১১টি ভূখণ্ড নিষ্কর হিসেবে দান করেছিলেন—এটি কোন্ প্রথার অন্তর্গত ছিল?", opts: ["ইকতা প্রথা", "মনসবদারি প্রথা", "অগ্রহার ব্যবস্থা", "জায়গির প্রথা"], ans: 2, exp: "প্রাচীন ও আদি মধ্যযুগে ব্রাহ্মণ বা পণ্ডিতদের এই নিষ্কর জমিদানের প্রথাটি অগ্রহার ব্যবস্থারই (ব্রহ্মদেয়) একটি সুস্পষ্ট নিদর্শন।" }
+    ]
+  },
+  3: {
+    subject: 'শিক্ষাবিজ্ঞান', icon: '🎓', topic: 'জাতীয় শিক্ষানীতি ১৯৮৬ ও অন্যান্য',
+    questions: [
+      { q: "১. 1986 খ্রিস্টাব্দের জাতীয় শিক্ষানীতিতে কয়টি অংশ আছে?", opts: ["10টি", "12টি", "11টি", "13টি"], ans: 1, exp: "1986 খ্রিস্টাব্দে ঘোষিত জাতীয় শিক্ষানীতি সর্বমোট বারোটি অংশে বিভক্ত।" },
+      { q: "২. 1986 খ্রিস্টাব্দের জাতীয় শিক্ষানীতির কোন্ অংশে ‘সাম্যের জন্য শিক্ষা’-র কথা বলা আছে?", opts: ["প্রথম", "দ্বিতীয়", "চতুর্থ", "দ্বাদশ"], ans: 2, exp: "শিক্ষানীতির চতুর্থ অংশে সাম্যের জন্য শিক্ষার কথা উল্লেখ করা হয়েছে, যার লক্ষ্য হলো নারী, তপশিলি জাতি, উপজাতি ও প্রতিবন্ধীদের শিক্ষায় সমসুযোগ প্রদান।" },
+      { q: "৩. জাতীয় শিক্ষানীতির কোন্ অংশে ‘শিক্ষার বিষয়বস্তু ও শিক্ষা প্রক্রিয়ার পুনবিন্যাস’-এর কথা বলা হয়েছে?", opts: ["অষ্টম", "দ্বিতীয়", "একাদশ", "দশম"], ans: 0, exp: "শিক্ষানীতির অষ্টম অংশে শিক্ষার বিষয়বস্তু ও শিক্ষা প্রক্রিয়ার পুনবিন্যাস নিয়ে বিস্তারিত আলোচনা করা হয়েছে।" },
+      { q: "৪. সমগ্র জাতীয় শিক্ষানীতির প্রতিবেদনে কয়টি Paragraph আছে?", opts: ["158 টি", "149 টি", "102 টি", "157 টি"], ans: 3, exp: "1986 সালের জাতীয় শিক্ষানীতির বারোটি অংশে সর্বমোট 157টি স্তবক বা প্যারাগ্রাফ রয়েছে।" },
+      { q: "৫. ECCE-এর সম্পূর্ণ নাম কী?", opts: ["Early Childhood Care and Education", "Elementary Childhood Care and Education", "Early Child Care and Educare", "Early Childhood Care and Educatum"], ans: 0, exp: "পঞ্চম অংশে শিশুর সামগ্রিক বিকাশের জন্য 'Early Childhood Care and Education' বা সুসংহত শিশুকল্যাণ কর্মসূচির কথা বলা হয়েছে।" },
+      { q: "৬. POA কথাটির অর্থ কী?", opts: ["Programme of Action", "Programme of Act", "Progress of Action", "Progress of Act"], ans: 0, exp: "1986 খ্রিস্টাব্দের শিক্ষানীতি 1992 সালে সংশোধিত হয়, যা Programme of Action - 1992 (POA) নামে পরিচিত।" },
+      { q: "৭. জাতীয় শিক্ষানীতির কোন্ অংশে ভবিষ্যতের কথা বলা হয়েছে?", opts: ["প্রথম", "দ্বিতীয়", "দ্বাদশ", "দশম"], ans: 2, exp: "জাতীয় শিক্ষানীতির দ্বাদশ বা সর্বশেষ অংশে ভারতের ভাবী শিক্ষাব্যবস্থার ভবিষ্যৎ নিয়ে আলোচনা করা হয়েছে।" },
+      { q: "৮. জাতীয় শিক্ষানীতির পঞ্চম অংশে কোন্ বিষয় নিয়ে আলোচনা করা হয়?", opts: ["ভূমিকা", "শিক্ষক", "শিক্ষাব্যবস্থাকে সক্রিয়করণ", "বিভিন্ন স্তরের শিক্ষার পুনর্গঠন"], ans: 3, exp: "পঞ্চম অংশে প্রাথমিক, মাধ্যমিক ও উচ্চশিক্ষার মতো বিভিন্ন স্তরের শিক্ষার পুনর্গঠন নিয়ে আলোচনা করা হয়েছে।" },
+      { q: "৯. অপারেশন ব্ল্যাকবোর্ডের উদ্দেশ্য কী?", opts: ["প্রাথমিক শিক্ষার পরিমাণগত ও গুণগতমান উন্নয়ন", "প্রাথমিক শিক্ষার পরিমাণগত উন্নয়ন", "প্রাথমিক শিক্ষার সুযোগ বৃদ্ধি", "বিদ্যালয়ে ব্ল্যাকবোর্ডের ব্যবস্থা"], ans: 0, exp: "প্রাথমিক শিক্ষার মান উন্নয়ন ও প্রয়োজনীয় শিক্ষোপকরণ সরবরাহের জন্য অপারেশন ব্ল্যাকবোর্ড কর্মসূচি গৃহীত হয়।" },
+      { q: "১০. নবোদয় বিদ্যালয় গড়ে তোলার উদ্দেশ্য কী?", opts: ["দরিদ্র শিশুদের শিক্ষা", "নারীদের শিক্ষা", "অনুন্নত শ্রেণির শিক্ষা", "মেধাসম্পন্ন শিশুদের শিক্ষা"], ans: 3, exp: "দেশের অত্যন্ত মেধাসম্পন্ন শিশুদের উন্নতমানের মাধ্যমিক শিক্ষা প্রদানের জন্য নবোদয় বিদ্যালয় প্রতিষ্ঠার সুপারিশ করা হয়।" },
+      { q: "১১. সম্পদ ও পুনঃপরীক্ষা পর্যালোচনায় কী বলা হয়েছে?", opts: ["প্রতি ছয় বছর অন্তর মূল্যায়ন", "প্রতি পাঁচ বছর অন্তর মূল্যায়ন", "প্রতি তিন বছর অন্তর মূল্যায়ন", "প্রতি দু-বছর অন্তর মূল্যায়ন"], ans: 1, exp: "প্রতি পাঁচ বছর অন্তর শিক্ষানীতির মূল্যায়ন করে এর বাস্তবায়নের ফলাফল খতিয়ে দেখতে বলা হয়েছে।" },
+      { q: "১২. CABE-এর কোন্ ভূমিকার কথা বলা হয়েছে?", opts: ["সমন্বয় সাধন করা", "সমন্বয় বিচ্ছিন্ন করা", "শিক্ষার মাধ্যম পরিবর্তন", "কোনটিই নয়"], ans: 0, exp: "জাতীয় স্তরে শিক্ষার উন্নয়নের জন্য কেন্দ্রীয় শিক্ষা উপদেষ্টা বোর্ড (CABE) মানবসম্পদ উন্নয়নের বিভিন্ন ক্ষেত্রের মধ্যে সমন্বয় সাধনের দায়িত্ব পালন করবে।" },
+      { q: "১৩. 1986 খ্রিস্টাব্দের জাতীয় শিক্ষানীতি যে নামে প্রকাশিত হয়:", opts: ["Challenge of Education", "Challenge on Education", "Change of Education", "Education Policy"], ans: 0, exp: "1985 সালে রাজীব গান্ধীর উদ্যোগে 'Challenge of Education-A Policy Perspective' নামে প্রতিবেদন প্রকাশিত হয়।" },
+      { q: "১৪. DIKSHA-র সম্পূর্ণ নাম কী?", opts: ["Distance Infrastructure for Knowledge Sharing", "Digital Infrastructure for Knowledge Sharing", "Digital India for Knowledge Sharing", "Digital India for Knowledge Share"], ans: 1, exp: "এটি শিক্ষার্থীদের বুনিয়াদি সাক্ষরতা ও গাণিতিক ধারণার বিকাশের জন্য উন্নত গুণমানসম্পন্ন রিসোর্স প্রদানকারী একটি ডিজিটাল পোর্টাল।" },
+      { q: "১৫. শিক্ষার মানোন্নয়নের জন্য এলাকার জনগণ এবং বিদ্যালয়ের প্রাক্তন শিক্ষার্থীদের কোন্ কাজে নিযুক্ত করা হবে?", opts: ["একজন বনাম একজন শিক্ষাদান", "সাক্ষরতার পাঠদান", "শিক্ষার্থীদের ক্যারিয়ার নির্দেশনা", "সব ক-টি"], ans: 3, exp: "শিক্ষায় স্থানীয় সম্প্রদায়কে যুক্ত করে ওয়ান-টু-ওয়ান শিক্ষাদান, সাক্ষরতার পাঠদান এবং ক্যারিয়ার নির্দেশনার মতো সকল কাজে নিযুক্ত করা হবে।" }
+    ]
+  },
+  4: {
+    subject: 'ভূগোল', icon: '🌍', topic: 'প্রাকৃতিক ভূগোল: ভূসংস্থান ও পাত সংস্থান',
+    questions: [
+      { q: "১. সর্বপ্রথম সুসংগতভাবে পৃথিবীর মহাদেশসমূহের চলন মতবাদটি কে প্রতিষ্ঠা করেন?", opts: ["ফ্রান্সিস বেকন", "স্নাইডার পেলিগ্রিনি", "আলফ্রেড ওয়েগনার", "আর্থার হোমস"], ans: 2, exp: "১৯১২ সালে জার্মান জলবায়ুবিদ ও আবহবিদ আলফ্রেড ওয়েগনার সর্বপ্রথম সুসংগতভাবে পৃথিবীর মহাদেশসমূহের চলন বা মহীসঞ্চরণ মতবাদটি উপস্থাপন করেন।" },
+      { q: "২. কার্বোনিফেরাস যুগের আগে পৃথিবীর সমস্ত ভূভাগ একত্রে একটি অতিকায় মহাদেশ রূপে অবস্থান করত, ওয়েগনার এর কী নাম দিয়েছিলেন?", opts: ["প্যানথালাসা", "লরেশিয়া", "গন্ডোয়ানাল্যান্ড", "প্যানজিয়া"], ans: 3, exp: "ওয়েগনার এই অতিকায় মহাদেশের নাম দিয়েছিলেন 'প্যানজিয়া', যা একটি গ্রিক শব্দ এবং এর অর্থ 'সমগ্র পৃথিবী'।" },
+      { q: "৩. আধুনিক পাত ভূগাঠনিক তত্ত্ব অনুযায়ী মহাদেশীয় খণ্ডগুলি বা সিয়াল কোন্ স্তরের ওপর ভাসছে?", opts: ["সিমা", "ম্যাগমা", "নিফে", "অ্যাসথেনোস্ফিয়ার"], ans: 3, exp: "ওয়েগনার বলেছিলেন সিয়াল সিমার ওপর ভাসছে, কিন্তু আধুনিক তত্ত্বে জানা গেছে যে সিয়াল ও সিমা উভয়েই অ্যাসথেনোস্ফিয়ারের ওপর ভাসমান।" },
+      { q: "৪. বর্তমানে প্রশান্ত মহাসাগর কোন্ আদিম জলভাগের অবশিষ্ট অংশ?", opts: ["টেথিস", "আটলান্টিক", "প্যানজিয়া", "প্যানথালাসা"], ans: 3, exp: "প্যানজিয়ার চতুর্দিকে যে প্যানথালাসা মহাসাগর ছিল, তা বর্তমানে প্রশান্ত মহাসাগর রূপে অবশিষ্ট রয়েছে।" },
+      { q: "৫. পৃথিবীর মেরুভ্রমণ বা পোলার ওয়ান্ডারিং নিয়ে কে গবেষণা করেন?", opts: ["আর্থার হোমস", "জে এ স্টিয়ার্স", "ডি এইচ টার্লিং", "এফ বি টেলর"], ans: 2, exp: "ইংরেজ ভূপদার্থবিদ ডোনাল্ড হার্ভে টার্লিং (D H Tarling) আফ্রিকা ও দক্ষিণ আমেরিকার মেরুভ্রমণ নিয়ে গবেষণা করেছেন।" },
+      { q: "৬. ১৮৫৮ সালে কে প্রথম মহাদেশগুলির সংযুক্তি মানচিত্রের মাধ্যমে উপস্থাপন করেছিলেন?", opts: ["অ্যানটোনিও স্নাইডার পেলিগ্রিনি", "ফ্রান্সিস বেকন", "এফ বি টেলর", "টমাস চেম্বারলিন"], ans: 0, exp: "১৮৫৮ সালে অ্যানটোনিও স্নাইডার পেলিগ্রিনি প্রথম মহাদেশগুলির সংযুক্তি মানচিত্রের মাধ্যমে উপস্থাপন করেন এবং মহাদেশগুলি বিচ্ছিন্ন হওয়ার কথা বলেন।" },
+      { q: "৭. ড্যু টয়েট-এর মতে মহাদেশগুলি উপকূলরেখার বদলে কোন্ অংশের সাদৃশ্য দেখলে আরও ভালোভাবে জোড়া লাগে?", opts: ["পাহাড়ের চূড়া", "মহীসোপান অঞ্চল", "গভীর সমুদ্রখাত", "নদীর মোহনা"], ans: 1, exp: "ড্যু টয়েট বিশ্বাস করতেন যে উপকূলরেখার বদলে মহীসোপান অঞ্চলের মধ্যে সাদৃশ্য দেখলে মহাদেশগুলি আরও নিখুঁতভাবে মিলে যায়।" },
+      { q: "৮. গ্লোসোপটেরিস কাঠের জীবাশ্মে কী পাওয়া গেছে, যা প্রমাণ করে যে সেসময় আর্দ্র ও শুষ্ক ঋতু পরিবর্তন ছিল?", opts: ["খনিজ তেল", "বরফের দাগ", "ট্রি-রিং (Tree ring)", "চৌম্বক রেখা"], ans: 2, exp: "গ্লোসোপটেরিস কাঠের জীবাশ্মে ট্রি-রিং বা বর্ষবলয় পাওয়া গেছে, যার থেকে মনে করা হয় সে সময় আর্দ্র ও শুষ্ক ঋতু পরিবর্তন ছিল।" },
+      { q: "৯. ১৯২৭ সালে আলফ্রেড ওয়েগনারের সমর্থনে 'Our Wandering Continents' গবেষণাপত্রটি কে প্রকাশ করেন?", opts: ["এফ বি টেলর", "আর্থার হোমস", "আলেকজান্ডার ড্যু টয়েট", "টমাস চেম্বারলিন"], ans: 2, exp: "আফ্রিকান ভূতত্ত্ববিদ আলেকজান্ডার ড্যু টয়েট ওয়েগনারের তত্ত্বকে সমর্থন করে ১৯২৭ সালে 'Our Wandering Continents' নামের গবেষণাপত্রটি প্রকাশ করেন।" },
+      { q: "১০. ড্যু টয়েটের মতে কোন্ যুগের শুরু থেকে লরেশিয়া ও গন্ডোয়ানাল্যান্ডের বিচ্ছিন্নতা শুরু হয় অর্থাৎ টেথিসের জন্ম হয়?", opts: ["ট্রায়াসিক", "কার্বোনিফেরাস", "টার্সিয়ারি", "ক্রিটেশিয়াস"], ans: 2, exp: "ড্যু টয়েটের মতে টার্সিয়ারি যুগের শুরু থেকে লরেশিয়া ও গন্ডোয়ানাল্যান্ড-এর বিচ্ছিন্নতা শুরু হয় এবং টেথিসের জন্ম হয়।" },
+      { q: "১১. উচ্চ অক্ষাংশের বিভিন্ন দেশে লিমোনাইট থেকে রূপান্তরিত হেমাটাইট খনিজের উপস্থিতি কীসের প্রমাণ দেয়?", opts: ["অতীতের মেরু অবস্থান", "অতীতের নিরক্ষীয় অবস্থান", "সমুদ্রের তলদেশের অবস্থান", "হিমবাহের প্রভাব"], ans: 1, exp: "লিমোনাইট থেকে হেমাটাইটে রূপান্তর এমন এক প্রক্রিয়া যা নিরক্ষীয় অঞ্চলে ঘটে। উচ্চ অক্ষাংশে এর উপস্থিতি প্রমাণ করে যে তারা একসময় নিরক্ষীয় অঞ্চলে ছিল।" },
+      { q: "১২. ১৬২০ সালে কে 'নোভাম অরগ্যানাম' বইতে মানচিত্রের সাহায্যে দেখিয়েছিলেন যে আফ্রিকা ও দক্ষিণ আমেরিকা খাঁজে খাঁজে মিলে যায়?", opts: ["ফ্রান্সিস বেকন", "আব্রাহাম অরটেলিয়াস", "অ্যানটোনিও স্নাইডার পেলিগ্রিনি", "আলফ্রেড ওয়েগনার"], ans: 0, exp: "১৬২০ সালে বিজ্ঞানী ফ্রান্সিস বেকন তাঁর 'নোভাম অরগ্যানাম' বইতে মানচিত্রের মাধ্যমে দেখিয়েছিলেন যে আফ্রিকা ও দক্ষিণ আমেরিকার উপকূলরেখা খাঁজে খাঁজে মিলে যায়।" },
+      { q: "১৩. কোন্ বিজ্ঞানীর মতে, মহাদেশগুলোর আবর্তন অক্ষ সমগ্র পৃথিবীর আবর্তন অক্ষের থেকে আলাদা ছিল?", opts: ["শেওয়েডার (Schweder)", "আর্থার হোমস", "কিথ রানকর্ন", "হ্যারল্ড জেফ্রিস"], ans: 0, exp: "বিজ্ঞানী শেওয়েডার-এর মতে মহাদেশগুলোর আবর্তন অক্ষ সমগ্র পৃথিবীর আবর্তন অক্ষের থেকে আলাদা ছিল।" },
+      { q: "১৪. ১৯১০ সালে টার্সিয়ারি যুগের পর্বতমালার বিন্যাস দেখে মহাদেশের পার্শ্বগতির কথা প্রথম কে বলেন?", opts: ["অ্যানটোনিও স্নাইডার পেলিগ্রিনি", "এফ বি টেলর", "ফ্রান্সিস বেকন", "আলফ্রেড ওয়েগনার"], ans: 1, exp: "১৯১০ সালে ভূতত্ত্ববিদ এফ বি টেলর টার্সিয়ারি যুগের পর্বতমালার বিন্যাস দেখে বলেন যে, ভূত্বক তথা মহাদেশের পার্শ্বগতির প্রমাণ হিসেবে একটি পর্বত এক দিকে বেঁকে আছে।" },
+      { q: "১৫. প্রাচীন মেরু চুম্বকত্ব বা শিলার চৌম্বকীয় ধর্ম নিয়ে গবেষণাকে কী বলা হয়?", opts: ["জিগ-স-ফিট", "মেরুভ্রমণ", "পুরাচুম্বকত্ব (Paleomagnetism)", "পরিচলন স্রোত"], ans: 2, exp: "প্রাচীনকালে শিলাস্তরের মধ্যে সংরক্ষিত চৌম্বক ধর্ম বা প্রাচীন মেরু চুম্বকত্ব নিয়ে গবেষণাই হলো পুরাচুম্বকত্ব বা Paleomagnetism।" }
+    ]
+  }
+};
+
+// ============================================================
+// মূল লজিক (সরাসরি টেস্ট শুরু)
+// ============================================================
+
+function initHub() {
+  const grid = document.getElementById('setGrid');
+  grid.innerHTML = '';
+
+  Object.keys(allSets).forEach(setId => {
+    const set = allSets[setId];
+    const card = document.createElement('div');
+    card.className = 'set-card';
+
+    card.innerHTML = `
+      <div class="free-badge">FREE DEMO FULL</div>
+      <div class="icon">${set.icon}</div>
+      <div class="set-num">${set.subject}</div>
+      <div class="set-title">${set.topic}</div>
+      <div class="set-meta"><span>${set.questions.length} প্রশ্ন</span><span>১৫ মিনিট</span></div>
+    `;
+
+    card.onclick = () => startQuiz(setId);
+    grid.appendChild(card);
+  });
+}
+
+function startQuiz(setId) {
+  currentSetId = setId;
+  TOTAL_QS = allSets[setId].questions.length;
+
+  cur = 0; score = 0; wrong = 0; answered = false; userAnswers = [];
+  timeLeft = TIME_LIMIT;
+  isReviewMode = false;
+
+  document.getElementById('hubPage').classList.add('hidden');
+  document.getElementById('resultWrap').classList.remove('show');
+  document.getElementById('testArea').classList.remove('hidden');
+  document.getElementById('timerBox').classList.remove('hidden');
+
+  const set = allSets[setId];
+  document.getElementById('testSetName').innerText = set.subject;
+  document.getElementById('testSetLabel').innerText = 'Demo Set';
+  document.getElementById('testTopic').innerText = set.topic;
+
+  startTimer();
+  loadQuestion();
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      showResult();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+  const s = (timeLeft % 60).toString().padStart(2, '0');
+  document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+}
+
+function loadQuestion() {
+  answered = false;
+  const set = allSets[currentSetId];
+  const q = set.questions[cur];
+
+  document.getElementById('qNum').innerText = isReviewMode ? `Review: প্রশ্ন ${cur + 1} / ${TOTAL_QS}` : `প্রশ্ন ${cur + 1} / ${TOTAL_QS}`;
+  document.getElementById('qText').innerText = q.q;
+  document.getElementById('progressFill').style.width = `${((cur + 1) / TOTAL_QS) * 100}%`;
+
+  const optsContainer = document.getElementById('qOpts');
+  optsContainer.innerHTML = '';
+
+  q.opts.forEach((optText, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.innerHTML = `<div class="opt-circle">${LABELS[idx]}</div> <div class="opt-text">${optText}</div>`;
+
+    if (isReviewMode) {
+      btn.classList.add('disabled');
+      if (idx === q.ans) btn.classList.add('correct');
+      else if (userAnswers[cur] === idx) btn.classList.add('wrong');
+    } else {
+      btn.onclick = () => selectAnswer(idx, btn);
+    }
+    optsContainer.appendChild(btn);
+  });
+
+  const nextBtn = document.getElementById('nextBtn');
+  document.getElementById('explanation').classList.remove('show');
+  document.getElementById('scoreShow').innerText = isReviewMode ? "সবুজ = সঠিক উত্তর | লাল = আপনার ভুল উত্তর" : `সঠিক: ${score} | ভুল: ${wrong}`;
+
+  if (isReviewMode) {
+    document.getElementById('explanationText').innerHTML = q.exp;
+    document.getElementById('explanation').classList.add('show');
+    nextBtn.disabled = false;
+    nextBtn.innerText = cur === set.questions.length - 1 ? 'ফলাফল পেজে ফিরুন' : 'পরবর্তী প্রশ্ন →';
+  } else {
+    nextBtn.disabled = true;
+    nextBtn.innerText = cur === set.questions.length - 1 ? 'ফলাফল দেখো 🏆' : 'পরবর্তী প্রশ্ন →';
+  }
+}
+
+function selectAnswer(selectedIdx, btnElement) {
+  if (answered) return;
+  answered = true;
+
+  const set = allSets[currentSetId];
+  const q = set.questions[cur];
+  userAnswers[cur] = selectedIdx;
+
+  const allBtns = document.getElementById('qOpts').children;
+  for (let i = 0; i < allBtns.length; i++) {
+    allBtns[i].classList.add('disabled');
+    if (i === q.ans) allBtns[i].classList.add('correct');
+  }
+
+  if (selectedIdx === q.ans) {
+    score++;
+  } else {
+    btnElement.classList.add('wrong');
+    wrong++;
+  }
+
+  document.getElementById('scoreShow').innerText = `সঠিক: ${score} | ভুল: ${wrong}`;
+  document.getElementById('explanationText').innerHTML = q.exp;
+  document.getElementById('explanation').classList.add('show');
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQ() {
+  const set = allSets[currentSetId];
+  if (cur < set.questions.length - 1) {
+    cur++;
+    loadQuestion();
+  } else {
+    if (isReviewMode) {
+      document.getElementById('testArea').classList.add('hidden');
+      document.getElementById('resultWrap').classList.add('show');
+    } else {
+      clearInterval(timerInterval);
+      showResult();
+    }
+  }
+}
+
+function showResult() {
+  document.getElementById('testArea').classList.add('hidden');
+  document.getElementById('timerBox').classList.add('hidden');
+  document.getElementById('resultWrap').classList.add('show');
+
+  const total = allSets[currentSetId].questions.length;
+  const pct = Math.round((score / total) * 100);
+
+  document.getElementById('finalScore').innerText = `${pct}%`;
+  document.getElementById('rbCorrect').innerText = score;
+  document.getElementById('rbWrong').innerText = total - score;
+
+  let msg = "অসাধারণ!"; let icon = "🏆";
+  if (pct < 50) { msg = "আরও অনুশীলন প্রয়োজন!"; icon = "📚"; }
+  else if (pct < 80) { msg = "খুব ভালো চেষ্টা!"; icon = "👍"; }
+
+  document.getElementById('resultGrade').innerText = msg;
+  document.getElementById('resultIcon').innerText = icon;
+}
+
+function showReview() {
+  document.getElementById('resultWrap').classList.remove('show');
+  document.getElementById('testArea').classList.remove('hidden');
+  isReviewMode = true;
+  cur = 0;
+  loadQuestion();
+}
+
+function goToHub() {
+  document.getElementById('resultWrap').classList.remove('show');
+  document.getElementById('testArea').classList.add('hidden');
+  document.getElementById('timerBox').classList.add('hidden');
+  document.getElementById('hubPage').classList.remove('hidden');
+  initHub();
+}
+
+window.onload = initHub;
+</script>
+
+</body>
+</html>
+
