@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Test Bazar — Geography 3rd Sem | Unit 1</title>
+<title>Test Bazar — Physical Geography | Unit 1: Geotectonic</title>
 <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root { --primary: #1a7a4a; --primary-hover: #2aad68; --accent: #f9a825; --bg-main: #f0faf4; --bg-card: #ffffff; --bg-correct: #e8f7ef; --bg-wrong: #fdf0f0; --text-main: #1c2e24; --text-meta: #5a7a66; --text-exp: #2c4035; --alert-danger: #dc3545; --border-color: #c5dccb; }
@@ -13,6 +13,7 @@ body { font-family: 'Syne', sans-serif; background: var(--bg-main); min-height: 
 .top-bar { background: var(--primary); padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
 .top-logo { font-size: 1.2rem; font-weight: 800; color: white; cursor: pointer; }
 .top-logo span { color: var(--accent); }
+#topUserDisplay { color: white; font-weight: 700; font-size: 0.9rem; font-family: 'Tiro Bangla', serif;}
 .main { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
 .hub-header { text-align: center; margin-bottom: 2rem; }
 .hub-header h1 { font-family: 'Tiro Bangla', serif; color: var(--primary); font-size: 1.6rem; margin-bottom: 0.5rem; line-height: 1.4; }
@@ -83,6 +84,7 @@ body { font-family: 'Syne', sans-serif; background: var(--bg-main); min-height: 
 
 <header class="top-bar">
   <div class="top-logo" onclick="location.reload()">Test<span>Bazar</span></div>
+  <div id="topUserDisplay">👤 Guest</div>
 </header>
 
 <div class="main">
@@ -108,7 +110,7 @@ body { font-family: 'Syne', sans-serif; background: var(--bg-main); min-height: 
   <!-- HUB PAGE -->
   <div id="hubPage">
     <div class="hub-header">
-      <h1>ভূগোল 3rd Sem Unit 1: ভূসংস্থান (Geotectonic)</h1>
+      <h1>প্রাকৃতিক ভূগোলের মৌলিক বিষয়সমূহ<br>Unit 1: ভূসংস্থান (Geotectonic)</h1>
       <p>আপনার পছন্দের সেট নির্বাচন করে মক টেস্ট শুরু করুন</p>
     </div>
     <div class="set-grid" id="setGrid"></div>
@@ -117,7 +119,7 @@ body { font-family: 'Syne', sans-serif; background: var(--bg-main); min-height: 
   <!-- QUIZ AREA -->
   <div id="testArea" class="hidden">
     <div class="quiz-info">
-      <div class="info-item">🎓 <strong>ভূগোল</strong> — 3rd Sem | Unit-1 | <span id="testSetLabel">Set 1</span></div>
+      <div class="info-item">🎓 <strong>প্রাকৃতিক ভূগোল</strong> — 3rd Sem | Unit-1 | <span id="testSetLabel">Set 1</span></div>
       <div class="info-item">📝 <span id="testTopic">Topic Name</span></div>
     </div>
     <div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
@@ -325,13 +327,16 @@ const ALL_SETS = {
     ]
   }
 };
-
 let currentSetId = 1;
 let currentQIndex = 0;
 let scoreCorrect = 0;
 let scoreWrong = 0;
 let userAnswers = [];
 let isQuizActive = false;
+let loggedInUser = "";
+
+const STORAGE_KEY_ATTEMPTS = "testBazarAttempts_Geo_Unit1_Geotectonic";
+const MAX_ATTEMPTS = 10;
 
 function initHub() {
   const grid = document.getElementById('setGrid');
@@ -346,7 +351,7 @@ function initHub() {
       <div class="set-num">${setObj.name}</div>
       <div class="set-title">${setObj.topic}</div>
       <div class="set-meta">
-        <span>১৫ প্রশ্ন</span>
+        <span>${setObj.questions.length} প্রশ্ন</span>
         <span>১০ মিনিট</span>
       </div>
     `;
@@ -356,11 +361,21 @@ function initHub() {
 
 function openLogin(setId) {
   currentSetId = setId;
-  document.getElementById('loginOverlay').classList.add('active');
-  document.getElementById('loginUsername').value = '';
-  document.getElementById('loginPassword').value = '';
-  document.getElementById('loginError').style.display = 'none';
-  document.getElementById('loginUsername').focus();
+  if(loggedInUser !== "") {
+     let attemptsData = JSON.parse(localStorage.getItem(STORAGE_KEY_ATTEMPTS)) || {};
+     let count = attemptsData[loggedInUser + "_" + currentSetId] || 0;
+     if(count >= MAX_ATTEMPTS) {
+        alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
+        return;
+     }
+     startQuiz();
+  } else {
+     document.getElementById('loginOverlay').classList.add('active');
+     document.getElementById('loginUsername').value = '';
+     document.getElementById('loginPassword').value = '';
+     document.getElementById('loginError').style.display = 'none';
+     document.getElementById('loginUsername').focus();
+  }
 }
 
 function closeLogin() {
@@ -370,15 +385,46 @@ function closeLogin() {
 function doLogin() {
   const u = document.getElementById('loginUsername').value.trim();
   const p = document.getElementById('loginPassword').value.trim();
-  if(u === 'testbazar' && p === '1234') {
+  const err = document.getElementById('loginError');
+
+  // Index file theke save kora global user data fetch kora
+  const GLOBAL_USERS = JSON.parse(localStorage.getItem("testBazarGlobalUsers")) || {};
+
+  if(!u || !p) {
+    err.innerText = "ইউজারনেম এবং পাসওয়ার্ড দিন!";
+    err.style.display = 'block';
+    return;
+  }
+
+  // Username and password verification
+  if(GLOBAL_USERS[u] && GLOBAL_USERS[u] === p) {
+    loggedInUser = u;
+
+    // Check attempts limit
+    let attemptsData = JSON.parse(localStorage.getItem(STORAGE_KEY_ATTEMPTS)) || {};
+    let count = attemptsData[loggedInUser + "_" + currentSetId] || 0;
+
+    if(count >= MAX_ATTEMPTS) {
+       err.innerText = `⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`;
+       err.style.display = 'block';
+       return;
+    }
+
+    document.getElementById('topUserDisplay').innerText = "👤 " + u;
     closeLogin();
     startQuiz();
   } else {
-    document.getElementById('loginError').style.display = 'block';
+    err.innerText = "❌ ভুল ইউজারনেম বা পাসওয়ার্ড!";
+    err.style.display = 'block';
   }
 }
 
 function startQuiz() {
+  // Save attempt count
+  let attemptsData = JSON.parse(localStorage.getItem(STORAGE_KEY_ATTEMPTS)) || {};
+  attemptsData[loggedInUser + "_" + currentSetId] = (attemptsData[loggedInUser + "_" + currentSetId] || 0) + 1;
+  localStorage.setItem(STORAGE_KEY_ATTEMPTS, JSON.stringify(attemptsData));
+
   document.getElementById('hubPage').classList.add('hidden');
   document.getElementById('testArea').classList.remove('hidden');
   document.getElementById('resultWrap').classList.remove('show');
@@ -495,6 +541,13 @@ function showResult() {
 }
 
 function restartQuiz() {
+  let attemptsData = JSON.parse(localStorage.getItem(STORAGE_KEY_ATTEMPTS)) || {};
+  let count = attemptsData[loggedInUser + "_" + currentSetId] || 0;
+  if(count >= MAX_ATTEMPTS) {
+      alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+      goToHub();
+      return;
+  }
   startQuiz();
 }
 
